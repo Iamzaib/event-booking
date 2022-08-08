@@ -248,6 +248,218 @@ class PermissionsTableSeeder extends Seeder
             ],
             [
                 'id'    => 60,
+                'title' => 'country_create',
+            ],
+            [
+                'id'    => 61,
+                'title' => 'country_edit',
+            ],
+            [
+                'id'    => 62,
+                'title' => 'country_show',
+            ],
+            [
+                'id'    => 63,
+                'title' => 'country_delete',
+            ],
+            [
+                'id'    => 64,
+                'title' => 'country_access',
+            ],
+            [
+                'id'    => 65,
+                'title' => 'state_create',
+            ],
+            [
+                'id'    => 66,
+                'title' => 'state_edit',
+            ],
+            [
+                'id'    => 67,
+                'title' => 'state_show',
+            ],
+            [
+                'id'    => 68,
+                'title' => 'state_delete',
+            ],
+            [
+                'id'    => 69,
+                'title' => 'state_access',
+            ],
+            [
+                'id'    => 70,
+                'title' => 'address_access',
+            ],
+            [
+                'id'    => 71,
+                'title' => 'city_create',
+            ],
+            [
+                'id'    => 72,
+                'title' => 'city_edit',
+            ],
+            [
+                'id'    => 73,
+                'title' => 'city_show',
+            ],
+            [
+                'id'    => 74,
+                'title' => 'city_delete',
+            ],
+            [
+                'id'    => 75,
+                'title' => 'city_access',
+            ],
+            [
+                'id'    => 76,
+                'title' => 'admin_create',
+            ],
+            [
+                'id'    => 77,
+                'title' => 'admin_edit',
+            ],
+            [
+                'id'    => 78,
+                'title' => 'admin_show',
+            ],
+            [
+                'id'    => 79,
+                'title' => 'admin_delete',
+            ],
+            [
+                'id'    => 80,
+                'title' => 'admin_access',
+            ],
+            [
+                'id'    => 81,
+                'title' => 'events_management_access',
+            ],
+            [
+                'id'    => 82,
+                'title' => 'event_addon_create',
+            ],
+            [
+                'id'    => 83,
+                'title' => 'event_addon_edit',
+            ],
+            [
+                'id'    => 84,
+                'title' => 'event_addon_show',
+            ],
+            [
+                'id'    => 85,
+                'title' => 'event_addon_delete',
+            ],
+            [
+                'id'    => 86,
+                'title' => 'event_addon_access',
+            ],
+            [
+                'id'    => 87,
+                'title' => 'event_create',
+            ],
+            [
+                'id'    => 88,
+                'title' => 'event_edit',
+            ],
+            [
+                'id'    => 89,
+                'title' => 'event_show',
+            ],
+            [
+                'id'    => 90,
+                'title' => 'event_delete',
+            ],
+            [
+                'id'    => 91,
+                'title' => 'event_access',
+            ],
+            [
+                'id'    => 92,
+                'title' => 'costume_create',
+            ],
+            [
+                'id'    => 93,
+                'title' => 'costume_edit',
+            ],
+            [
+                'id'    => 94,
+                'title' => 'costume_show',
+            ],
+            [
+                'id'    => 95,
+                'title' => 'costume_delete',
+            ],
+            [
+                'id'    => 96,
+                'title' => 'costume_access',
+            ],
+            [
+                'id'    => 97,
+                'title' => 'costume_attribute_create',
+            ],
+            [
+                'id'    => 98,
+                'title' => 'costume_attribute_edit',
+            ],
+            [
+                'id'    => 99,
+                'title' => 'costume_attribute_show',
+            ],
+            [
+                'id'    => 100,
+                'title' => 'costume_attribute_delete',
+            ],
+            [
+                'id'    => 101,
+                'title' => 'costume_attribute_access',
+            ],
+            [
+                'id'    => 102,
+                'title' => 'event_ticket_create',
+            ],
+            [
+                'id'    => 103,
+                'title' => 'event_ticket_edit',
+            ],
+            [
+                'id'    => 104,
+                'title' => 'event_ticket_show',
+            ],
+            [
+                'id'    => 105,
+                'title' => 'event_ticket_delete',
+            ],
+            [
+                'id'    => 106,
+                'title' => 'event_ticket_access',
+            ],
+            [
+                'id'    => 107,
+                'title' => 'booking_access',
+            ],
+            [
+                'id'    => 108,
+                'title' => 'event_booking_create',
+            ],
+            [
+                'id'    => 109,
+                'title' => 'event_booking_edit',
+            ],
+            [
+                'id'    => 110,
+                'title' => 'event_booking_show',
+            ],
+            [
+                'id'    => 111,
+                'title' => 'event_booking_delete',
+            ],
+            [
+                'id'    => 112,
+                'title' => 'event_booking_access',
+            ],
+            [
+                'id'    => 113,
                 'title' => 'profile_password_edit',
             ],
         ];

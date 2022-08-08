@@ -16,6 +16,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     // Users
     Route::delete('users/destroy', 'UsersController@massDestroy')->name('users.massDestroy');
+    Route::post('users/media', 'UsersController@storeMedia')->name('users.storeMedia');
+    Route::post('users/ckmedia', 'UsersController@storeCKEditorImages')->name('users.storeCKEditorImages');
     Route::resource('users', 'UsersController');
 
     // Content Category
@@ -53,6 +55,48 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('blog-posts/media', 'BlogPostController@storeMedia')->name('blog-posts.storeMedia');
     Route::post('blog-posts/ckmedia', 'BlogPostController@storeCKEditorImages')->name('blog-posts.storeCKEditorImages');
     Route::resource('blog-posts', 'BlogPostController');
+
+    // Countries
+    Route::delete('countries/destroy', 'CountriesController@massDestroy')->name('countries.massDestroy');
+    Route::resource('countries', 'CountriesController');
+
+    // States
+    Route::delete('states/destroy', 'StatesController@massDestroy')->name('states.massDestroy');
+    Route::resource('states', 'StatesController');
+
+    // Cities
+    Route::delete('cities/destroy', 'CitiesController@massDestroy')->name('cities.massDestroy');
+    Route::resource('cities', 'CitiesController');
+
+    // Admin
+    Route::delete('admins/destroy', 'AdminController@massDestroy')->name('admins.massDestroy');
+    Route::resource('admins', 'AdminController');
+
+    // Event Addons
+    Route::delete('event-addons/destroy', 'EventAddonsController@massDestroy')->name('event-addons.massDestroy');
+    Route::resource('event-addons', 'EventAddonsController');
+
+    // Events
+    Route::delete('events/destroy', 'EventsController@massDestroy')->name('events.massDestroy');
+    Route::post('events/media', 'EventsController@storeMedia')->name('events.storeMedia');
+    Route::post('events/ckmedia', 'EventsController@storeCKEditorImages')->name('events.storeCKEditorImages');
+    Route::resource('events', 'EventsController');
+
+    // Costume
+    Route::delete('costumes/destroy', 'CostumeController@massDestroy')->name('costumes.massDestroy');
+    Route::resource('costumes', 'CostumeController');
+
+    // Costume Attribute
+    Route::delete('costume-attributes/destroy', 'CostumeAttributeController@massDestroy')->name('costume-attributes.massDestroy');
+    Route::resource('costume-attributes', 'CostumeAttributeController');
+
+    // Event Ticket
+    Route::delete('event-tickets/destroy', 'EventTicketController@massDestroy')->name('event-tickets.massDestroy');
+    Route::resource('event-tickets', 'EventTicketController');
+
+    // Event Booking
+    Route::delete('event-bookings/destroy', 'EventBookingController@massDestroy')->name('event-bookings.massDestroy');
+    Route::resource('event-bookings', 'EventBookingController');
 });
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {
     // Change password
@@ -76,6 +120,8 @@ Route::group(['as' => 'frontend.', 'namespace' => 'Frontend', 'middleware' => ['
 
     // Users
     Route::delete('users/destroy', 'UsersController@massDestroy')->name('users.massDestroy');
+    Route::post('users/media', 'UsersController@storeMedia')->name('users.storeMedia');
+    Route::post('users/ckmedia', 'UsersController@storeCKEditorImages')->name('users.storeCKEditorImages');
     Route::resource('users', 'UsersController');
 
     // Content Category
@@ -113,6 +159,48 @@ Route::group(['as' => 'frontend.', 'namespace' => 'Frontend', 'middleware' => ['
     Route::post('blog-posts/media', 'BlogPostController@storeMedia')->name('blog-posts.storeMedia');
     Route::post('blog-posts/ckmedia', 'BlogPostController@storeCKEditorImages')->name('blog-posts.storeCKEditorImages');
     Route::resource('blog-posts', 'BlogPostController');
+
+    // Countries
+    Route::delete('countries/destroy', 'CountriesController@massDestroy')->name('countries.massDestroy');
+    Route::resource('countries', 'CountriesController');
+
+    // States
+    Route::delete('states/destroy', 'StatesController@massDestroy')->name('states.massDestroy');
+    Route::resource('states', 'StatesController');
+
+    // Cities
+    Route::delete('cities/destroy', 'CitiesController@massDestroy')->name('cities.massDestroy');
+    Route::resource('cities', 'CitiesController');
+
+    // Admin
+    Route::delete('admins/destroy', 'AdminController@massDestroy')->name('admins.massDestroy');
+    Route::resource('admins', 'AdminController');
+
+    // Event Addons
+    Route::delete('event-addons/destroy', 'EventAddonsController@massDestroy')->name('event-addons.massDestroy');
+    Route::resource('event-addons', 'EventAddonsController');
+
+    // Events
+    Route::delete('events/destroy', 'EventsController@massDestroy')->name('events.massDestroy');
+    Route::post('events/media', 'EventsController@storeMedia')->name('events.storeMedia');
+    Route::post('events/ckmedia', 'EventsController@storeCKEditorImages')->name('events.storeCKEditorImages');
+    Route::resource('events', 'EventsController');
+
+    // Costume
+    Route::delete('costumes/destroy', 'CostumeController@massDestroy')->name('costumes.massDestroy');
+    Route::resource('costumes', 'CostumeController');
+
+    // Costume Attribute
+    Route::delete('costume-attributes/destroy', 'CostumeAttributeController@massDestroy')->name('costume-attributes.massDestroy');
+    Route::resource('costume-attributes', 'CostumeAttributeController');
+
+    // Event Ticket
+    Route::delete('event-tickets/destroy', 'EventTicketController@massDestroy')->name('event-tickets.massDestroy');
+    Route::resource('event-tickets', 'EventTicketController');
+
+    // Event Booking
+    Route::delete('event-bookings/destroy', 'EventBookingController@massDestroy')->name('event-bookings.massDestroy');
+    Route::resource('event-bookings', 'EventBookingController');
 
     Route::get('frontend/profile', 'ProfileController@index')->name('profile.index');
     Route::post('frontend/profile', 'ProfileController@update')->name('profile.update');
