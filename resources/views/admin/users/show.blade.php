@@ -33,10 +33,86 @@
                     </tr>
                     <tr>
                         <th>
+                            {{ trans('cruds.user.fields.lastname') }}
+                        </th>
+                        <td>
+                            {{ $user->lastname }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
                             {{ trans('cruds.user.fields.email') }}
                         </th>
                         <td>
                             {{ $user->email }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.user.fields.phone') }}
+                        </th>
+                        <td>
+                            {{ $user->phone }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.user.fields.gender') }}
+                        </th>
+                        <td>
+                            {{ App\Models\User::GENDER_RADIO[$user->gender] ?? '' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.user.fields.profileimage') }}
+                        </th>
+                        <td>
+                            @if($user->profileimage)
+                                <a href="{{ $user->profileimage->getUrl() }}" target="_blank" style="display: inline-block">
+                                    <img src="{{ $user->profileimage->getUrl('thumb') }}">
+                                </a>
+                            @endif
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.user.fields.address') }}
+                        </th>
+                        <td>
+                            {{ $user->address }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.user.fields.address_2') }}
+                        </th>
+                        <td>
+                            {{ $user->address_2 }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.user.fields.city') }}
+                        </th>
+                        <td>
+                            {{ $user->city->cite_name ?? '' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.user.fields.state') }}
+                        </th>
+                        <td>
+                            {{ $user->state->state_name ?? '' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.user.fields.country') }}
+                        </th>
+                        <td>
+                            {{ $user->country->name ?? '' }}
                         </td>
                     </tr>
                     <tr>
@@ -76,6 +152,22 @@
     </div>
 </div>
 
-
+<div class="card">
+    <div class="card-header">
+        {{ trans('global.relatedData') }}
+    </div>
+    <ul class="nav nav-tabs" role="tablist" id="relationship-tabs">
+        <li class="nav-item">
+            <a class="nav-link" href="#booking_by_user_event_bookings" role="tab" data-toggle="tab">
+                {{ trans('cruds.eventBooking.title') }}
+            </a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane" role="tabpanel" id="booking_by_user_event_bookings">
+            @includeIf('admin.users.relationships.bookingByUserEventBookings', ['eventBookings' => $user->bookingByUserEventBookings])
+        </div>
+    </div>
+</div>
 
 @endsection

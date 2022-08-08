@@ -13,14 +13,27 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class User extends Authenticatable
+class User extends Authenticatable implements HasMedia
 {
     use SoftDeletes;
     use Notifiable;
+    use InteractsWithMedia;
     use HasFactory;
 
+    public const GENDER_RADIO = [
+        'male'   => 'Male',
+        'female' => 'Female',
+    ];
+
     public $table = 'users';
+
+    protected $appends = [
+        'profileimage',
+    ];
 
     protected $hidden = [
         'remember_token',
@@ -37,7 +50,15 @@ class User extends Authenticatable
 
     protected $fillable = [
         'name',
+        'lastname',
         'email',
+        'phone',
+        'gender',
+        'address',
+        'address_2',
+        'city_id',
+        'state_id',
+        'country_id',
         'email_verified_at',
         'password',
         'verified',
@@ -82,6 +103,50 @@ class User extends Authenticatable
     public function getIsAdminAttribute()
     {
         return $this->roles()->where('id', 1)->exists();
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+        User::observe(new \App\Observers\UserActionObserver());
+    }
+
+    public function registerMediaConversions(Media $media = null): void
+    {
+        $this->addMediaConversion('thumb')->fit('crop', 50, 50);
+        $this->addMediaConversion('preview')->fit('crop', 120, 120);
+    }
+
+    public function bookingByUserEventBookings()
+    {
+        return $this->hasMany(EventBooking::class, 'booking_by_user_id', 'id');
+    }
+
+    public function getProfileimageAttribute()
+    {
+        $file = $this->getMedia('profileimage')->last();
+        if ($file) {
+            $file->url       = $file->getUrl();
+            $file->thumbnail = $file->getUrl('thumb');
+            $file->preview   = $file->getUrl('preview');
+        }
+
+        return $file;
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class, 'city_id');
+    }
+
+    public function state()
+    {
+        return $this->belongsTo(State::class, 'state_id');
+    }
+
+    public function country()
+    {
+        return $this->belongsTo(Country::class, 'country_id');
     }
 
     public function getEmailVerifiedAtAttribute($value)

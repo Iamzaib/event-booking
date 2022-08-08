@@ -36,10 +36,86 @@
                                 </tr>
                                 <tr>
                                     <th>
+                                        {{ trans('cruds.user.fields.lastname') }}
+                                    </th>
+                                    <td>
+                                        {{ $user->lastname }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
                                         {{ trans('cruds.user.fields.email') }}
                                     </th>
                                     <td>
                                         {{ $user->email }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        {{ trans('cruds.user.fields.phone') }}
+                                    </th>
+                                    <td>
+                                        {{ $user->phone }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        {{ trans('cruds.user.fields.gender') }}
+                                    </th>
+                                    <td>
+                                        {{ App\Models\User::GENDER_RADIO[$user->gender] ?? '' }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        {{ trans('cruds.user.fields.profileimage') }}
+                                    </th>
+                                    <td>
+                                        @if($user->profileimage)
+                                            <a href="{{ $user->profileimage->getUrl() }}" target="_blank" style="display: inline-block">
+                                                <img src="{{ $user->profileimage->getUrl('thumb') }}">
+                                            </a>
+                                        @endif
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        {{ trans('cruds.user.fields.address') }}
+                                    </th>
+                                    <td>
+                                        {{ $user->address }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        {{ trans('cruds.user.fields.address_2') }}
+                                    </th>
+                                    <td>
+                                        {{ $user->address_2 }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        {{ trans('cruds.user.fields.city') }}
+                                    </th>
+                                    <td>
+                                        {{ $user->city->cite_name ?? '' }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        {{ trans('cruds.user.fields.state') }}
+                                    </th>
+                                    <td>
+                                        {{ $user->state->state_name ?? '' }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        {{ trans('cruds.user.fields.country') }}
+                                    </th>
+                                    <td>
+                                        {{ $user->country->name ?? '' }}
                                     </td>
                                 </tr>
                                 <tr>
