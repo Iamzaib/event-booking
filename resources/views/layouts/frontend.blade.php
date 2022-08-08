@@ -77,6 +77,46 @@
 
                                     <a class="dropdown-item" href="{{ route('frontend.profile.index') }}">{{ __('My profile') }}</a>
 
+                                    @can('events_management_access')
+                                        <a class="dropdown-item disabled" href="#">
+                                            {{ trans('cruds.eventsManagement.title') }}
+                                        </a>
+                                    @endcan
+                                    @can('event_access')
+                                        <a class="dropdown-item ml-3" href="{{ route('frontend.events.index') }}">
+                                            {{ trans('cruds.event.title') }}
+                                        </a>
+                                    @endcan
+                                    @can('event_addon_access')
+                                        <a class="dropdown-item ml-3" href="{{ route('frontend.event-addons.index') }}">
+                                            {{ trans('cruds.eventAddon.title') }}
+                                        </a>
+                                    @endcan
+                                    @can('costume_access')
+                                        <a class="dropdown-item ml-3" href="{{ route('frontend.costumes.index') }}">
+                                            {{ trans('cruds.costume.title') }}
+                                        </a>
+                                    @endcan
+                                    @can('costume_attribute_access')
+                                        <a class="dropdown-item ml-3" href="{{ route('frontend.costume-attributes.index') }}">
+                                            {{ trans('cruds.costumeAttribute.title') }}
+                                        </a>
+                                    @endcan
+                                    @can('event_ticket_access')
+                                        <a class="dropdown-item ml-3" href="{{ route('frontend.event-tickets.index') }}">
+                                            {{ trans('cruds.eventTicket.title') }}
+                                        </a>
+                                    @endcan
+                                    @can('booking_access')
+                                        <a class="dropdown-item disabled" href="#">
+                                            {{ trans('cruds.booking.title') }}
+                                        </a>
+                                    @endcan
+                                    @can('event_booking_access')
+                                        <a class="dropdown-item ml-3" href="{{ route('frontend.event-bookings.index') }}">
+                                            {{ trans('cruds.eventBooking.title') }}
+                                        </a>
+                                    @endcan
                                     @can('user_management_access')
                                         <a class="dropdown-item disabled" href="#">
                                             {{ trans('cruds.userManagement.title') }}
@@ -150,6 +190,26 @@
                                     @can('blog_post_access')
                                         <a class="dropdown-item ml-3" href="{{ route('frontend.blog-posts.index') }}">
                                             {{ trans('cruds.blogPost.title') }}
+                                        </a>
+                                    @endcan
+                                    @can('address_access')
+                                        <a class="dropdown-item disabled" href="#">
+                                            {{ trans('cruds.address.title') }}
+                                        </a>
+                                    @endcan
+                                    @can('country_access')
+                                        <a class="dropdown-item ml-3" href="{{ route('frontend.countries.index') }}">
+                                            {{ trans('cruds.country.title') }}
+                                        </a>
+                                    @endcan
+                                    @can('state_access')
+                                        <a class="dropdown-item ml-3" href="{{ route('frontend.states.index') }}">
+                                            {{ trans('cruds.state.title') }}
+                                        </a>
+                                    @endcan
+                                    @can('city_access')
+                                        <a class="dropdown-item ml-3" href="{{ route('frontend.cities.index') }}">
+                                            {{ trans('cruds.city.title') }}
                                         </a>
                                     @endcan
 

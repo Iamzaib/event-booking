@@ -21,9 +21,38 @@ class UpdateUserRequest extends FormRequest
                 'string',
                 'required',
             ],
+            'lastname' => [
+                'string',
+                'nullable',
+            ],
             'email' => [
                 'required',
                 'unique:users,email,' . request()->route('user')->id,
+            ],
+            'phone' => [
+                'string',
+                'required',
+                'unique:users,phone,' . request()->route('user')->id,
+            ],
+            'address' => [
+                'string',
+                'required',
+            ],
+            'address_2' => [
+                'string',
+                'nullable',
+            ],
+            'city_id' => [
+                'required',
+                'integer',
+            ],
+            'state_id' => [
+                'required',
+                'integer',
+            ],
+            'country_id' => [
+                'required',
+                'integer',
             ],
             'roles.*' => [
                 'integer',
