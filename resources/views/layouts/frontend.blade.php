@@ -117,6 +117,36 @@
                                             {{ trans('cruds.eventBooking.title') }}
                                         </a>
                                     @endcan
+                                    @can('traveler_access')
+                                        <a class="dropdown-item ml-3" href="{{ route('frontend.travelers.index') }}">
+                                            {{ trans('cruds.traveler.title') }}
+                                        </a>
+                                    @endcan
+                                    @can('payment_access')
+                                        <a class="dropdown-item ml-3" href="{{ route('frontend.payments.index') }}">
+                                            {{ trans('cruds.payment.title') }}
+                                        </a>
+                                    @endcan
+                                    @can('hotels_management_access')
+                                        <a class="dropdown-item disabled" href="#">
+                                            {{ trans('cruds.hotelsManagement.title') }}
+                                        </a>
+                                    @endcan
+                                    @can('hotel_access')
+                                        <a class="dropdown-item ml-3" href="{{ route('frontend.hotels.index') }}">
+                                            {{ trans('cruds.hotel.title') }}
+                                        </a>
+                                    @endcan
+                                    @can('hotel_room_access')
+                                        <a class="dropdown-item ml-3" href="{{ route('frontend.hotel-rooms.index') }}">
+                                            {{ trans('cruds.hotelRoom.title') }}
+                                        </a>
+                                    @endcan
+                                    @can('amenity_access')
+                                        <a class="dropdown-item ml-3" href="{{ route('frontend.amenities.index') }}">
+                                            {{ trans('cruds.amenity.title') }}
+                                        </a>
+                                    @endcan
                                     @can('user_management_access')
                                         <a class="dropdown-item disabled" href="#">
                                             {{ trans('cruds.userManagement.title') }}

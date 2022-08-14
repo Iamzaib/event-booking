@@ -16,7 +16,7 @@
             </a>
         </li>
         @can('events_management_access')
-            <li class="c-sidebar-nav-dropdown {{ request()->is("admin/events*") ? "c-show" : "" }} {{ request()->is("admin/event-addons*") ? "c-show" : "" }} {{ request()->is("admin/costumes*") ? "c-show" : "" }} {{ request()->is("admin/costume-attributes*") ? "c-show" : "" }} {{ request()->is("admin/event-tickets*") ? "c-show" : "" }} {{ request()->is("admin/*") ? "c-show" : "" }}">
+            <li class="c-sidebar-nav-dropdown {{ request()->is("admin/events*") ? "c-show" : "" }} {{ request()->is("admin/event-addons*") ? "c-show" : "" }} {{ request()->is("admin/costumes*") ? "c-show" : "" }} {{ request()->is("admin/costume-attributes*") ? "c-show" : "" }} {{ request()->is("admin/event-tickets*") ? "c-show" : "" }} {{ request()->is("admin/*") ? "c-show" : "" }} {{ request()->is("admin/*") ? "c-show" : "" }}">
                 <a class="c-sidebar-nav-dropdown-toggle" href="#">
                     <i class="fa-fw fas fa-users c-sidebar-nav-icon">
 
@@ -75,7 +75,7 @@
                         </li>
                     @endcan
                     @can('booking_access')
-                        <li class="c-sidebar-nav-dropdown {{ request()->is("admin/event-bookings*") ? "c-show" : "" }}">
+                        <li class="c-sidebar-nav-dropdown {{ request()->is("admin/event-bookings*") ? "c-show" : "" }} {{ request()->is("admin/travelers*") ? "c-show" : "" }} {{ request()->is("admin/payments*") ? "c-show" : "" }}">
                             <a class="c-sidebar-nav-dropdown-toggle" href="#">
                                 <i class="fa-fw fas fa-calendar c-sidebar-nav-icon">
 
@@ -90,6 +90,68 @@
 
                                             </i>
                                             {{ trans('cruds.eventBooking.title') }}
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('traveler_access')
+                                    <li class="c-sidebar-nav-item">
+                                        <a href="{{ route("admin.travelers.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/travelers") || request()->is("admin/travelers/*") ? "c-active" : "" }}">
+                                            <i class="fa-fw fas fa-cogs c-sidebar-nav-icon">
+
+                                            </i>
+                                            {{ trans('cruds.traveler.title') }}
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('payment_access')
+                                    <li class="c-sidebar-nav-item">
+                                        <a href="{{ route("admin.payments.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/payments") || request()->is("admin/payments/*") ? "c-active" : "" }}">
+                                            <i class="fa-fw fas fa-cogs c-sidebar-nav-icon">
+
+                                            </i>
+                                            {{ trans('cruds.payment.title') }}
+                                        </a>
+                                    </li>
+                                @endcan
+                            </ul>
+                        </li>
+                    @endcan
+                    @can('hotels_management_access')
+                        <li class="c-sidebar-nav-dropdown {{ request()->is("admin/hotels*") ? "c-show" : "" }} {{ request()->is("admin/hotel-rooms*") ? "c-show" : "" }} {{ request()->is("admin/amenities*") ? "c-show" : "" }}">
+                            <a class="c-sidebar-nav-dropdown-toggle" href="#">
+                                <i class="fa-fw fas fa-cogs c-sidebar-nav-icon">
+
+                                </i>
+                                {{ trans('cruds.hotelsManagement.title') }}
+                            </a>
+                            <ul class="c-sidebar-nav-dropdown-items">
+                                @can('hotel_access')
+                                    <li class="c-sidebar-nav-item">
+                                        <a href="{{ route("admin.hotels.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/hotels") || request()->is("admin/hotels/*") ? "c-active" : "" }}">
+                                            <i class="fa-fw fas fa-cogs c-sidebar-nav-icon">
+
+                                            </i>
+                                            {{ trans('cruds.hotel.title') }}
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('hotel_room_access')
+                                    <li class="c-sidebar-nav-item">
+                                        <a href="{{ route("admin.hotel-rooms.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/hotel-rooms") || request()->is("admin/hotel-rooms/*") ? "c-active" : "" }}">
+                                            <i class="fa-fw fas fa-cogs c-sidebar-nav-icon">
+
+                                            </i>
+                                            {{ trans('cruds.hotelRoom.title') }}
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('amenity_access')
+                                    <li class="c-sidebar-nav-item">
+                                        <a href="{{ route("admin.amenities.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/amenities") || request()->is("admin/amenities/*") ? "c-active" : "" }}">
+                                            <i class="fa-fw fas fa-cogs c-sidebar-nav-icon">
+
+                                            </i>
+                                            {{ trans('cruds.amenity.title') }}
                                         </a>
                                     </li>
                                 @endcan

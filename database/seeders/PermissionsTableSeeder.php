@@ -460,6 +460,110 @@ class PermissionsTableSeeder extends Seeder
             ],
             [
                 'id'    => 113,
+                'title' => 'traveler_create',
+            ],
+            [
+                'id'    => 114,
+                'title' => 'traveler_edit',
+            ],
+            [
+                'id'    => 115,
+                'title' => 'traveler_show',
+            ],
+            [
+                'id'    => 116,
+                'title' => 'traveler_delete',
+            ],
+            [
+                'id'    => 117,
+                'title' => 'traveler_access',
+            ],
+            [
+                'id'    => 118,
+                'title' => 'payment_create',
+            ],
+            [
+                'id'    => 119,
+                'title' => 'payment_edit',
+            ],
+            [
+                'id'    => 120,
+                'title' => 'payment_show',
+            ],
+            [
+                'id'    => 121,
+                'title' => 'payment_delete',
+            ],
+            [
+                'id'    => 122,
+                'title' => 'payment_access',
+            ],
+            [
+                'id'    => 123,
+                'title' => 'hotel_create',
+            ],
+            [
+                'id'    => 124,
+                'title' => 'hotel_edit',
+            ],
+            [
+                'id'    => 125,
+                'title' => 'hotel_show',
+            ],
+            [
+                'id'    => 126,
+                'title' => 'hotel_delete',
+            ],
+            [
+                'id'    => 127,
+                'title' => 'hotel_access',
+            ],
+            [
+                'id'    => 128,
+                'title' => 'hotel_room_create',
+            ],
+            [
+                'id'    => 129,
+                'title' => 'hotel_room_edit',
+            ],
+            [
+                'id'    => 130,
+                'title' => 'hotel_room_show',
+            ],
+            [
+                'id'    => 131,
+                'title' => 'hotel_room_delete',
+            ],
+            [
+                'id'    => 132,
+                'title' => 'hotel_room_access',
+            ],
+            [
+                'id'    => 133,
+                'title' => 'amenity_create',
+            ],
+            [
+                'id'    => 134,
+                'title' => 'amenity_edit',
+            ],
+            [
+                'id'    => 135,
+                'title' => 'amenity_show',
+            ],
+            [
+                'id'    => 136,
+                'title' => 'amenity_delete',
+            ],
+            [
+                'id'    => 137,
+                'title' => 'amenity_access',
+            ],
+            [
+                'id'    => 138,
+                'title' => 'hotels_management_access',
+            ],
+            [
+                'id'    => 139,
                 'title' => 'profile_password_edit',
             ],
         ];
