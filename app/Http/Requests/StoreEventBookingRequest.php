@@ -17,6 +17,10 @@ class StoreEventBookingRequest extends FormRequest
     public function rules()
     {
         return [
+            'booking_details' => [
+                'string',
+                'nullable',
+            ],
             'booking_event_id' => [
                 'required',
                 'integer',

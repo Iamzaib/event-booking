@@ -14,6 +14,16 @@
                         @method('POST')
                         @csrf
                         <div class="form-group">
+                            <label for="booking_details">{{ trans('cruds.eventBooking.fields.booking_details') }}</label>
+                            <input class="form-control" type="text" name="booking_details" id="booking_details" value="{{ old('booking_details', '') }}">
+                            @if($errors->has('booking_details'))
+                                <div class="invalid-feedback">
+                                    {{ $errors->first('booking_details') }}
+                                </div>
+                            @endif
+                            <span class="help-block">{{ trans('cruds.eventBooking.fields.booking_details_helper') }}</span>
+                        </div>
+                        <div class="form-group">
                             <label class="required" for="booking_event_id">{{ trans('cruds.eventBooking.fields.booking_event') }}</label>
                             <select class="form-control select2" name="booking_event_id" id="booking_event_id" required>
                                 @foreach($booking_events as $id => $entry)

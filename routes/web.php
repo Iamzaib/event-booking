@@ -97,6 +97,28 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // Event Booking
     Route::delete('event-bookings/destroy', 'EventBookingController@massDestroy')->name('event-bookings.massDestroy');
     Route::resource('event-bookings', 'EventBookingController');
+
+    // Traveler
+    Route::delete('travelers/destroy', 'TravelerController@massDestroy')->name('travelers.massDestroy');
+    Route::resource('travelers', 'TravelerController');
+
+    // Payments
+    Route::delete('payments/destroy', 'PaymentsController@massDestroy')->name('payments.massDestroy');
+    Route::resource('payments', 'PaymentsController');
+
+    // Hotels
+    Route::delete('hotels/destroy', 'HotelsController@massDestroy')->name('hotels.massDestroy');
+    Route::resource('hotels', 'HotelsController');
+
+    // Hotel Rooms
+    Route::delete('hotel-rooms/destroy', 'HotelRoomsController@massDestroy')->name('hotel-rooms.massDestroy');
+    Route::resource('hotel-rooms', 'HotelRoomsController');
+
+    // Amenities
+    Route::delete('amenities/destroy', 'AmenitiesController@massDestroy')->name('amenities.massDestroy');
+    Route::post('amenities/media', 'AmenitiesController@storeMedia')->name('amenities.storeMedia');
+    Route::post('amenities/ckmedia', 'AmenitiesController@storeCKEditorImages')->name('amenities.storeCKEditorImages');
+    Route::resource('amenities', 'AmenitiesController');
 });
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {
     // Change password
@@ -201,6 +223,28 @@ Route::group(['as' => 'frontend.', 'namespace' => 'Frontend', 'middleware' => ['
     // Event Booking
     Route::delete('event-bookings/destroy', 'EventBookingController@massDestroy')->name('event-bookings.massDestroy');
     Route::resource('event-bookings', 'EventBookingController');
+
+    // Traveler
+    Route::delete('travelers/destroy', 'TravelerController@massDestroy')->name('travelers.massDestroy');
+    Route::resource('travelers', 'TravelerController');
+
+    // Payments
+    Route::delete('payments/destroy', 'PaymentsController@massDestroy')->name('payments.massDestroy');
+    Route::resource('payments', 'PaymentsController');
+
+    // Hotels
+    Route::delete('hotels/destroy', 'HotelsController@massDestroy')->name('hotels.massDestroy');
+    Route::resource('hotels', 'HotelsController');
+
+    // Hotel Rooms
+    Route::delete('hotel-rooms/destroy', 'HotelRoomsController@massDestroy')->name('hotel-rooms.massDestroy');
+    Route::resource('hotel-rooms', 'HotelRoomsController');
+
+    // Amenities
+    Route::delete('amenities/destroy', 'AmenitiesController@massDestroy')->name('amenities.massDestroy');
+    Route::post('amenities/media', 'AmenitiesController@storeMedia')->name('amenities.storeMedia');
+    Route::post('amenities/ckmedia', 'AmenitiesController@storeCKEditorImages')->name('amenities.storeCKEditorImages');
+    Route::resource('amenities', 'AmenitiesController');
 
     Route::get('frontend/profile', 'ProfileController@index')->name('profile.index');
     Route::post('frontend/profile', 'ProfileController@update')->name('profile.update');
