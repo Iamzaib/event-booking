@@ -111,6 +111,11 @@ class Event extends Model implements HasMedia
         $this->attributes['event_end'] = $value ? Carbon::createFromFormat(config('panel.date_format'), $value)->format('Y-m-d') : null;
     }
 
+    public function hotels()
+    {
+        return $this->belongsToMany(Hotel::class);
+    }
+
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->format('Y-m-d H:i:s');

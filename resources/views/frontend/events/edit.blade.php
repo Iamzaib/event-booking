@@ -137,6 +137,24 @@
                             <span class="help-block">{{ trans('cruds.event.fields.event_end_helper') }}</span>
                         </div>
                         <div class="form-group">
+                            <label for="hotels">{{ trans('cruds.event.fields.hotels') }}</label>
+                            <div style="padding-bottom: 4px">
+                                <span class="btn btn-info btn-xs select-all" style="border-radius: 0">{{ trans('global.select_all') }}</span>
+                                <span class="btn btn-info btn-xs deselect-all" style="border-radius: 0">{{ trans('global.deselect_all') }}</span>
+                            </div>
+                            <select class="form-control select2" name="hotels[]" id="hotels" multiple>
+                                @foreach($hotels as $id => $hotel)
+                                    <option value="{{ $id }}" {{ (in_array($id, old('hotels', [])) || $event->hotels->contains($id)) ? 'selected' : '' }}>{{ $hotel }}</option>
+                                @endforeach
+                            </select>
+                            @if($errors->has('hotels'))
+                                <div class="invalid-feedback">
+                                    {{ $errors->first('hotels') }}
+                                </div>
+                            @endif
+                            <span class="help-block">{{ trans('cruds.event.fields.hotels_helper') }}</span>
+                        </div>
+                        <div class="form-group">
                             <button class="btn btn-danger" type="submit">
                                 {{ trans('global.save') }}
                             </button>

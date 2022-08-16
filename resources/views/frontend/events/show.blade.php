@@ -118,6 +118,16 @@
                                         {{ $event->event_end }}
                                     </td>
                                 </tr>
+                                <tr>
+                                    <th>
+                                        {{ trans('cruds.event.fields.hotels') }}
+                                    </th>
+                                    <td>
+                                        @foreach($event->hotels as $key => $hotels)
+                                            <span class="label label-info">{{ $hotels->hotel_name }}</span>
+                                        @endforeach
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                         <div class="form-group">
