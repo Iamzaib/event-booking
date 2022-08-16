@@ -58,6 +58,16 @@
                             <span class="help-block">{{ trans('cruds.hotelRoom.fields.room_price_helper') }}</span>
                         </div>
                         <div class="form-group">
+                            <label class="required" for="room_capacity">{{ trans('cruds.hotelRoom.fields.room_capacity') }}</label>
+                            <input class="form-control" type="text" name="room_capacity" id="room_capacity" value="{{ old('room_capacity', $hotelRoom->room_capacity) }}" required>
+                            @if($errors->has('room_capacity'))
+                                <div class="invalid-feedback">
+                                    {{ $errors->first('room_capacity') }}
+                                </div>
+                            @endif
+                            <span class="help-block">{{ trans('cruds.hotelRoom.fields.room_capacity_helper') }}</span>
+                        </div>
+                        <div class="form-group">
                             <button class="btn btn-danger" type="submit">
                                 {{ trans('global.save') }}
                             </button>

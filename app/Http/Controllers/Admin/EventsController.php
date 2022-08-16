@@ -10,6 +10,7 @@ use App\Http\Requests\UpdateEventRequest;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\Event;
+use App\Models\Hotel;
 use App\Models\State;
 use Gate;
 use Illuminate\Http\Request;
@@ -24,7 +25,7 @@ class EventsController extends Controller
     {
         abort_if(Gate::denies('event_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $events = Event::with(['country', 'state', 'city', 'media'])->get();
+        $events = Event::with(['country', 'state', 'city', 'hotels', 'media'])->get();
 
         return view('admin.events.index', compact('events'));
     }
@@ -39,13 +40,15 @@ class EventsController extends Controller
 
         $cities = City::pluck('cite_name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.events.create', compact('cities', 'countries', 'states'));
+        $hotels = Hotel::pluck('hotel_name', 'id');
+
+        return view('admin.events.create', compact('cities', 'countries', 'hotels', 'states'));
     }
 
     public function store(StoreEventRequest $request)
     {
         $event = Event::create($request->all());
-
+        $event->hotels()->sync($request->input('hotels', []));
         if ($request->input('featured_image', false)) {
             $event->addMedia(storage_path('tmp/uploads/' . basename($request->input('featured_image'))))->toMediaCollection('featured_image');
         }
@@ -67,15 +70,17 @@ class EventsController extends Controller
 
         $cities = City::pluck('cite_name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $event->load('country', 'state', 'city');
+        $hotels = Hotel::pluck('hotel_name', 'id');
 
-        return view('admin.events.edit', compact('cities', 'countries', 'event', 'states'));
+        $event->load('country', 'state', 'city', 'hotels');
+
+        return view('admin.events.edit', compact('cities', 'countries', 'event', 'hotels', 'states'));
     }
 
     public function update(UpdateEventRequest $request, Event $event)
     {
         $event->update($request->all());
-
+        $event->hotels()->sync($request->input('hotels', []));
         if ($request->input('featured_image', false)) {
             if (!$event->featured_image || $request->input('featured_image') !== $event->featured_image->file_name) {
                 if ($event->featured_image) {
@@ -94,7 +99,7 @@ class EventsController extends Controller
     {
         abort_if(Gate::denies('event_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $event->load('country', 'state', 'city', 'bookingEventEventBookings');
+        $event->load('country', 'state', 'city', 'hotels', 'bookingEventEventBookings');
 
         return view('admin.events.show', compact('event'));
     }

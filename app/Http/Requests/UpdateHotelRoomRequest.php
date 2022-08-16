@@ -28,6 +28,10 @@ class UpdateHotelRoomRequest extends FormRequest
             'room_price' => [
                 'required',
             ],
+            'room_capacity' => [
+                'string',
+                'required',
+            ],
         ];
     }
 }
