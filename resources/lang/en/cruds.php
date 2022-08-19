@@ -307,8 +307,6 @@ return [
         'fields'         => [
             'id'                => 'ID',
             'id_helper'         => ' ',
-            'cite_name'         => 'Cite Name',
-            'cite_name_helper'  => ' ',
             'state'             => 'State',
             'state_helper'      => ' ',
             'created_at'        => 'Created at',
@@ -317,6 +315,8 @@ return [
             'updated_at_helper' => ' ',
             'deleted_at'        => 'Deleted at',
             'deleted_at_helper' => ' ',
+            'city_name'         => 'City Name',
+            'city_name_helper'  => ' ',
         ],
     ],
     'admin' => [
@@ -575,6 +575,8 @@ return [
             'deleted_at_helper'    => ' ',
             'room_capacity'        => 'Room Capacity',
             'room_capacity_helper' => '1,2,3 Person',
+            'room_quantity'        => 'Room Quantity',
+            'room_quantity_helper' => ' ',
         ],
     ],
     'amenity' => [

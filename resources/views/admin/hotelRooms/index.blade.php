@@ -35,6 +35,9 @@
                             {{ trans('cruds.hotelRoom.fields.room_price') }}
                         </th>
                         <th>
+                            {{ trans('cruds.hotelRoom.fields.room_quantity') }}
+                        </th>
+                        <th>
                             &nbsp;
                         </th>
                     </tr>
@@ -56,6 +59,9 @@
                             </td>
                             <td>
                                 {{ $hotelRoom->room_price ?? '' }}
+                            </td>
+                            <td>
+                                {{ $hotelRoom->room_quantity ?? '' }}
                             </td>
                             <td>
                                 @can('hotel_room_show')
@@ -129,7 +135,7 @@
   $.extend(true, $.fn.dataTable.defaults, {
     orderCellsTop: true,
     order: [[ 1, 'desc' ]],
-    pageLength: 100,
+    pageLength: 50,
   });
   let table = $('.datatable-HotelRoom:not(.ajaxTable)').DataTable({ buttons: dtButtons })
   $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e){

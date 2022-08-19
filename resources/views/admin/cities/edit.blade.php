@@ -11,14 +11,14 @@
             @method('PUT')
             @csrf
             <div class="form-group">
-                <label class="required" for="cite_name">{{ trans('cruds.city.fields.cite_name') }}</label>
-                <input class="form-control {{ $errors->has('cite_name') ? 'is-invalid' : '' }}" type="text" name="cite_name" id="cite_name" value="{{ old('cite_name', $city->cite_name) }}" required>
-                @if($errors->has('cite_name'))
+                <label class="required" for="city_name">{{ trans('cruds.city.fields.city_name') }}</label>
+                <input class="form-control {{ $errors->has('city_name') ? 'is-invalid' : '' }}" type="text" name="city_name" id="city_name" value="{{ old('city_name', $city->city_name) }}" required>
+                @if($errors->has('city_name'))
                     <div class="invalid-feedback">
-                        {{ $errors->first('cite_name') }}
+                        {{ $errors->first('city_name') }}
                     </div>
                 @endif
-                <span class="help-block">{{ trans('cruds.city.fields.cite_name_helper') }}</span>
+                <span class="help-block">{{ trans('cruds.city.fields.city_name_helper') }}</span>
             </div>
             <div class="form-group">
                 <label class="required" for="state_id">{{ trans('cruds.city.fields.state') }}</label>

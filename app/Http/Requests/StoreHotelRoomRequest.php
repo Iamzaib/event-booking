@@ -32,6 +32,12 @@ class StoreHotelRoomRequest extends FormRequest
                 'string',
                 'required',
             ],
+            'room_quantity' => [
+                'required',
+                'integer',
+                'min:-2147483648',
+                'max:2147483647',
+            ],
         ];
     }
 }

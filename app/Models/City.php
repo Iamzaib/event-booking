@@ -21,7 +21,7 @@ class City extends Model
     ];
 
     protected $fillable = [
-        'cite_name',
+        'city_name',
         'state_id',
         'created_at',
         'updated_at',

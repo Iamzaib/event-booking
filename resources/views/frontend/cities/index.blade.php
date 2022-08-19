@@ -26,7 +26,7 @@
                                         {{ trans('cruds.city.fields.id') }}
                                     </th>
                                     <th>
-                                        {{ trans('cruds.city.fields.cite_name') }}
+                                        {{ trans('cruds.city.fields.city_name') }}
                                     </th>
                                     <th>
                                         {{ trans('cruds.city.fields.state') }}
@@ -43,7 +43,7 @@
                                             {{ $city->id ?? '' }}
                                         </td>
                                         <td>
-                                            {{ $city->cite_name ?? '' }}
+                                            {{ $city->city_name ?? '' }}
                                         </td>
                                         <td>
                                             {{ $city->state->state_name ?? '' }}

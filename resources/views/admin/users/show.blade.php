@@ -96,7 +96,7 @@
                             {{ trans('cruds.user.fields.city') }}
                         </th>
                         <td>
-                            {{ $user->city->cite_name ?? '' }}
+                            {{ $user->city->city_name ?? '' }}
                         </td>
                     </tr>
                     <tr>

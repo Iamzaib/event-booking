@@ -26,6 +26,7 @@ class HotelRoom extends Model
         'details',
         'room_price',
         'room_capacity',
+        'room_quantity',
         'created_at',
         'updated_at',
         'deleted_at',

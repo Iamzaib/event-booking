@@ -66,6 +66,14 @@
                                         {{ $hotelRoom->room_capacity }}
                                     </td>
                                 </tr>
+                                <tr>
+                                    <th>
+                                        {{ trans('cruds.hotelRoom.fields.room_quantity') }}
+                                    </th>
+                                    <td>
+                                        {{ $hotelRoom->room_quantity }}
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                         <div class="form-group">

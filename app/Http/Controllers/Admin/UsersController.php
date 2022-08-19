@@ -34,7 +34,7 @@ class UsersController extends Controller
     {
         abort_if(Gate::denies('user_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $cities = City::pluck('cite_name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $cities = City::pluck('city_name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
         $states = State::pluck('state_name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
@@ -64,7 +64,7 @@ class UsersController extends Controller
     {
         abort_if(Gate::denies('user_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $cities = City::pluck('cite_name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $cities = City::pluck('city_name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
         $states = State::pluck('state_name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
