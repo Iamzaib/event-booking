@@ -101,7 +101,14 @@
 
 @section('scripts')
 <script>
-    $(document).ready(function () {
+    var storeCKEditorImages_url='{{ route('admin.blog-posts.storeCKEditorImages') }}';
+    var dropzone_field='featured_image-dropzone',photo_upload_route='{{ route('admin.blog-posts.storeMedia') }}',field_name='featured_image',Maxfiles=1,dropzone=true,
+        crud_id='{{ $blogPost->id ?? 0 }}';
+    @if(isset($blogPost) && $blogPost->featured_image)
+        var image_exists=true;
+        var image_src={!! json_encode($blogPost->featured_image) !!}
+    @endif
+ /*   $(document).ready(function () {
   function SimpleUploadAdapter(editor) {
     editor.plugins.get('FileRepository').createUploadAdapter = function(loader) {
       return {
@@ -157,15 +164,16 @@
   for (var i = 0; i < allEditors.length; ++i) {
     ClassicEditor.create(
       allEditors[i], {
+            plugins: [ SourceEditing, Markdown],
         extraPlugins: [SimpleUploadAdapter]
       }
     );
   }
-});
+});*/
 </script>
 
 <script>
-    Dropzone.options.featuredImageDropzone = {
+    $("#profileimage-dropzone").dropzone({
     url: '{{ route('admin.blog-posts.storeMedia') }}',
     maxFilesize: 2, // MB
     acceptedFiles: '.jpeg,.jpg,.png,.gif',
@@ -216,7 +224,7 @@
 
         return _results
     }
-}
+});
 
 </script>
 @endsection

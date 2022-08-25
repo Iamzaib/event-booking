@@ -96,7 +96,7 @@
                             {{ trans('cruds.event.fields.city') }}
                         </th>
                         <td>
-                            {{ $event->city->cite_name ?? '' }}
+                            {{ $event->city->city_name ?? '' }}
                         </td>
                     </tr>
                     <tr>
@@ -113,6 +113,16 @@
                         </th>
                         <td>
                             {{ $event->event_end }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.event.fields.hotels') }}
+                        </th>
+                        <td>
+                            @foreach($event->hotels as $key => $hotels)
+                                <span class="label label-info">{{ $hotels->hotel_name }}</span>
+                            @endforeach
                         </td>
                     </tr>
                 </tbody>

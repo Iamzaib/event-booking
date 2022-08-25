@@ -37,7 +37,7 @@ class EventsController extends Controller
 
         $states = State::pluck('state_name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $cities = City::pluck('cite_name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $cities = City::pluck('city_name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
         return view('frontend.events.create', compact('cities', 'countries', 'states'));
     }
@@ -65,7 +65,7 @@ class EventsController extends Controller
 
         $states = State::pluck('state_name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $cities = City::pluck('cite_name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $cities = City::pluck('city_name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
         $event->load('country', 'state', 'city');
 

@@ -18,6 +18,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::delete('users/destroy', 'UsersController@massDestroy')->name('users.massDestroy');
     Route::post('users/media', 'UsersController@storeMedia')->name('users.storeMedia');
     Route::post('users/ckmedia', 'UsersController@storeCKEditorImages')->name('users.storeCKEditorImages');
+    Route::get('users-export', 'UsersController@export')->name('users.export');
     Route::resource('users', 'UsersController');
 
     // Content Category
@@ -54,6 +55,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::delete('blog-posts/destroy', 'BlogPostController@massDestroy')->name('blog-posts.massDestroy');
     Route::post('blog-posts/media', 'BlogPostController@storeMedia')->name('blog-posts.storeMedia');
     Route::post('blog-posts/ckmedia', 'BlogPostController@storeCKEditorImages')->name('blog-posts.storeCKEditorImages');
+    Route::get('blogs-export', 'BlogPostController@export')->name('blog-posts.export');
     Route::resource('blog-posts', 'BlogPostController');
 
     // Countries
@@ -63,13 +65,19 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // States
     Route::delete('states/destroy', 'StatesController@massDestroy')->name('states.massDestroy');
     Route::resource('states', 'StatesController');
+    Route::get('states_list/get_by_country', 'StatesController@get_by_country')->name('states.get_by_country');
+
 
     // Cities
     Route::delete('cities/destroy', 'CitiesController@massDestroy')->name('cities.massDestroy');
     Route::resource('cities', 'CitiesController');
+    Route::get('cities_list/get_by_state', 'CitiesController@get_by_state')->name('cities.get_by_state');
 
     // Admin
     Route::delete('admins/destroy', 'AdminController@massDestroy')->name('admins.massDestroy');
+    Route::post('admins/media', 'AdminController@storeMedia')->name('admins.storeMedia');
+    Route::post('admins/ckmedia', 'AdminController@storeCKEditorImages')->name('admins.storeCKEditorImages');
+    Route::get('admins-export', 'AdminController@export')->name('admins.export');
     Route::resource('admins', 'AdminController');
 
     // Event Addons
@@ -97,6 +105,28 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // Event Booking
     Route::delete('event-bookings/destroy', 'EventBookingController@massDestroy')->name('event-bookings.massDestroy');
     Route::resource('event-bookings', 'EventBookingController');
+
+    // Traveler
+    Route::delete('travelers/destroy', 'TravelerController@massDestroy')->name('travelers.massDestroy');
+    Route::resource('travelers', 'TravelerController');
+
+    // Payments
+    Route::delete('payments/destroy', 'PaymentsController@massDestroy')->name('payments.massDestroy');
+    Route::resource('payments', 'PaymentsController');
+
+    // Hotels
+    Route::delete('hotels/destroy', 'HotelsController@massDestroy')->name('hotels.massDestroy');
+    Route::resource('hotels', 'HotelsController');
+
+    // Hotel Rooms
+    Route::delete('hotel-rooms/destroy', 'HotelRoomsController@massDestroy')->name('hotel-rooms.massDestroy');
+    Route::resource('hotel-rooms', 'HotelRoomsController');
+
+    // Amenities
+    Route::delete('amenities/destroy', 'AmenitiesController@massDestroy')->name('amenities.massDestroy');
+    Route::post('amenities/media', 'AmenitiesController@storeMedia')->name('amenities.storeMedia');
+    Route::post('amenities/ckmedia', 'AmenitiesController@storeCKEditorImages')->name('amenities.storeCKEditorImages');
+    Route::resource('amenities', 'AmenitiesController');
 });
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {
     // Change password
@@ -172,9 +202,9 @@ Route::group(['as' => 'frontend.', 'namespace' => 'Frontend', 'middleware' => ['
     Route::delete('cities/destroy', 'CitiesController@massDestroy')->name('cities.massDestroy');
     Route::resource('cities', 'CitiesController');
 
-    // Admin
-    Route::delete('admins/destroy', 'AdminController@massDestroy')->name('admins.massDestroy');
-    Route::resource('admins', 'AdminController');
+//    // Admin
+//    Route::delete('admins/destroy', 'AdminController@massDestroy')->name('admins.massDestroy');
+//    Route::resource('admins', 'AdminController');
 
     // Event Addons
     Route::delete('event-addons/destroy', 'EventAddonsController@massDestroy')->name('event-addons.massDestroy');
@@ -201,6 +231,28 @@ Route::group(['as' => 'frontend.', 'namespace' => 'Frontend', 'middleware' => ['
     // Event Booking
     Route::delete('event-bookings/destroy', 'EventBookingController@massDestroy')->name('event-bookings.massDestroy');
     Route::resource('event-bookings', 'EventBookingController');
+
+    // Traveler
+    Route::delete('travelers/destroy', 'TravelerController@massDestroy')->name('travelers.massDestroy');
+    Route::resource('travelers', 'TravelerController');
+
+    // Payments
+    Route::delete('payments/destroy', 'PaymentsController@massDestroy')->name('payments.massDestroy');
+    Route::resource('payments', 'PaymentsController');
+
+    // Hotels
+    Route::delete('hotels/destroy', 'HotelsController@massDestroy')->name('hotels.massDestroy');
+    Route::resource('hotels', 'HotelsController');
+
+    // Hotel Rooms
+    Route::delete('hotel-rooms/destroy', 'HotelRoomsController@massDestroy')->name('hotel-rooms.massDestroy');
+    Route::resource('hotel-rooms', 'HotelRoomsController');
+
+    // Amenities
+    Route::delete('amenities/destroy', 'AmenitiesController@massDestroy')->name('amenities.massDestroy');
+    Route::post('amenities/media', 'AmenitiesController@storeMedia')->name('amenities.storeMedia');
+    Route::post('amenities/ckmedia', 'AmenitiesController@storeCKEditorImages')->name('amenities.storeCKEditorImages');
+    Route::resource('amenities', 'AmenitiesController');
 
     Route::get('frontend/profile', 'ProfileController@index')->name('profile.index');
     Route::post('frontend/profile', 'ProfileController@update')->name('profile.update');

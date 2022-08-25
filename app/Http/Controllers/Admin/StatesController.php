@@ -81,4 +81,18 @@ class StatesController extends Controller
 
         return response(null, Response::HTTP_NO_CONTENT);
     }
+    public function get_by_country(Request $request)
+    {
+        abort_if(Gate::denies('state_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        if (!$request->country_id) {
+            $html = '<option value="">'.trans('global.pleaseSelect').'</option>';
+        } else {
+            $html = '<option value="">'.trans('global.pleaseSelect').'</option>';
+            $states = State::where('country_id', $request->country_id)->get();
+            foreach ($states as $state) {
+                $html .= '<option value="'.$state->id.'">'.$state->state_name.'</option>';
+            }
+        }
+        return response()->json(['html' => $html]);
+    }
 }

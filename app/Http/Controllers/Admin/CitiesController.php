@@ -81,4 +81,19 @@ class CitiesController extends Controller
 
         return response(null, Response::HTTP_NO_CONTENT);
     }
+    public function get_by_state(Request $request)
+    {
+        abort_if(Gate::denies('city_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        if (!$request->state_id) {
+            $html = '<option value="">'.trans('global.pleaseSelect').'</option>';
+        } else {
+            $html = '<option value="">'.trans('global.pleaseSelect').'</option>';
+            $cities = City::where('state_id', $request->state_id)->get();
+            foreach ($cities as $city) {
+                $html .= '<option value="'.$city->id.'">'.$city->city_name.'</option>';
+            }
+        }
+
+        return response()->json(['html' => $html]);
+    }
 }

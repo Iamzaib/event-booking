@@ -21,6 +21,7 @@ class EventBooking extends Model
     ];
 
     protected $fillable = [
+        'booking_details',
         'booking_event_id',
         'booking_by_user_id',
         'booking_total',
