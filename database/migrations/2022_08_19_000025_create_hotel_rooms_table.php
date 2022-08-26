@@ -14,6 +14,7 @@ class CreateHotelRoomsTable extends Migration
             $table->longText('details')->nullable();
             $table->decimal('room_price', 15, 2);
             $table->string('room_capacity');
+            $table->integer('room_quantity');
             $table->timestamps();
             $table->softDeletes();
         });

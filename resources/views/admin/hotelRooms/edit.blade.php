@@ -65,6 +65,16 @@
                 <span class="help-block">{{ trans('cruds.hotelRoom.fields.room_capacity_helper') }}</span>
             </div>
             <div class="form-group">
+                <label class="required" for="room_quantity">{{ trans('cruds.hotelRoom.fields.room_quantity') }}</label>
+                <input class="form-control {{ $errors->has('room_quantity') ? 'is-invalid' : '' }}" type="number" name="room_quantity" id="room_quantity" value="{{ old('room_quantity', $hotelRoom->room_quantity) }}" step="1" required>
+                @if($errors->has('room_quantity'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('room_quantity') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.hotelRoom.fields.room_quantity_helper') }}</span>
+            </div>
+            <div class="form-group">
                 <button class="btn btn-danger" type="submit">
                     {{ trans('global.save') }}
                 </button>

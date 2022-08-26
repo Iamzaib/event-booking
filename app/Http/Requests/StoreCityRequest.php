@@ -17,7 +17,7 @@ class StoreCityRequest extends FormRequest
     public function rules()
     {
         return [
-            'cite_name' => [
+            'city_name' => [
                 'string',
                 'required',
             ],
