@@ -75,7 +75,7 @@
                         </li>
                     @endcan
                     @can('booking_access')
-                        <li class="c-sidebar-nav-dropdown {{ request()->is("admin/event-bookings*") ? "c-show" : "" }} {{ request()->is("admin/travelers*") ? "c-show" : "" }} {{ request()->is("admin/payments*") ? "c-show" : "" }}">
+                        <li class="c-sidebar-nav-dropdown {{ request()->is("admin/event-bookings*") ? "c-show" : "" }} {{ request()->is("admin/travelers*") ? "c-show" : "" }} {{ request()->is("admin/payments*") ? "c-show" : "" }} {{ request()->is("admin/testimonials*") ? "c-show" : "" }} {{ request()->is("admin/booking-rooms*") ? "c-show" : "" }}">
                             <a class="c-sidebar-nav-dropdown-toggle" href="#">
                                 <i class="fa-fw fas fa-calendar c-sidebar-nav-icon">
 
@@ -110,6 +110,26 @@
 
                                             </i>
                                             {{ trans('cruds.payment.title') }}
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('testimonial_access')
+                                    <li class="c-sidebar-nav-item">
+                                        <a href="{{ route("admin.testimonials.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/testimonials") || request()->is("admin/testimonials/*") ? "c-active" : "" }}">
+                                            <i class="fa-fw fas fa-cogs c-sidebar-nav-icon">
+
+                                            </i>
+                                            {{ trans('cruds.testimonial.title') }}
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('booking_room_access')
+                                    <li class="c-sidebar-nav-item">
+                                        <a href="{{ route("admin.booking-rooms.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/booking-rooms") || request()->is("admin/booking-rooms/*") ? "c-active" : "" }}">
+                                            <i class="fa-fw fas fa-cogs c-sidebar-nav-icon">
+
+                                            </i>
+                                            {{ trans('cruds.bookingRoom.title') }}
                                         </a>
                                     </li>
                                 @endcan
@@ -369,6 +389,16 @@
                         </li>
                     @endcan
                 </ul>
+            </li>
+        @endcan
+        @can('setting_access')
+            <li class="c-sidebar-nav-item">
+                <a href="{{ route("admin.settings.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/settings") || request()->is("admin/settings/*") ? "c-active" : "" }}">
+                    <i class="fa-fw fas fa-cogs c-sidebar-nav-icon">
+
+                    </i>
+                    {{ trans('cruds.setting.title') }}
+                </a>
             </li>
         @endcan
         @if(file_exists(app_path('Http/Controllers/Auth/ChangePasswordController.php')))

@@ -55,6 +55,14 @@
                             {{ $eventBooking->booking_total }}
                         </td>
                     </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.eventBooking.fields.status') }}
+                        </th>
+                        <td>
+                            {{ App\Models\EventBooking::STATUS_SELECT[$eventBooking->status] ?? '' }}
+                        </td>
+                    </tr>
                 </tbody>
             </table>
             <div class="form-group">

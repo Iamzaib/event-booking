@@ -564,6 +564,70 @@ class PermissionsTableSeeder extends Seeder
             ],
             [
                 'id'    => 139,
+                'title' => 'setting_create',
+            ],
+            [
+                'id'    => 140,
+                'title' => 'setting_edit',
+            ],
+            [
+                'id'    => 141,
+                'title' => 'setting_show',
+            ],
+            [
+                'id'    => 142,
+                'title' => 'setting_delete',
+            ],
+            [
+                'id'    => 143,
+                'title' => 'setting_access',
+            ],
+            [
+                'id'    => 144,
+                'title' => 'testimonial_create',
+            ],
+            [
+                'id'    => 145,
+                'title' => 'testimonial_edit',
+            ],
+            [
+                'id'    => 146,
+                'title' => 'testimonial_show',
+            ],
+            [
+                'id'    => 147,
+                'title' => 'testimonial_delete',
+            ],
+            [
+                'id'    => 148,
+                'title' => 'testimonial_access',
+            ],
+            [
+                'id'    => 149,
+                'title' => 'website_management_access',
+            ],
+            [
+                'id'    => 150,
+                'title' => 'booking_room_create',
+            ],
+            [
+                'id'    => 151,
+                'title' => 'booking_room_edit',
+            ],
+            [
+                'id'    => 152,
+                'title' => 'booking_room_show',
+            ],
+            [
+                'id'    => 153,
+                'title' => 'booking_room_delete',
+            ],
+            [
+                'id'    => 154,
+                'title' => 'booking_room_access',
+            ],
+            [
+                'id'    => 155,
                 'title' => 'profile_password_edit',
             ],
         ];

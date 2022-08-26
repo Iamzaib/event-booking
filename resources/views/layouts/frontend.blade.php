@@ -127,6 +127,16 @@
                                             {{ trans('cruds.payment.title') }}
                                         </a>
                                     @endcan
+                                    @can('testimonial_access')
+                                        <a class="dropdown-item ml-3" href="{{ route('frontend.testimonials.index') }}">
+                                            {{ trans('cruds.testimonial.title') }}
+                                        </a>
+                                    @endcan
+                                    @can('booking_room_access')
+                                        <a class="dropdown-item ml-3" href="{{ route('frontend.booking-rooms.index') }}">
+                                            {{ trans('cruds.bookingRoom.title') }}
+                                        </a>
+                                    @endcan
                                     @can('hotels_management_access')
                                         <a class="dropdown-item disabled" href="#">
                                             {{ trans('cruds.hotelsManagement.title') }}
@@ -240,6 +250,11 @@
                                     @can('city_access')
                                         <a class="dropdown-item ml-3" href="{{ route('frontend.cities.index') }}">
                                             {{ trans('cruds.city.title') }}
+                                        </a>
+                                    @endcan
+                                    @can('setting_access')
+                                        <a class="dropdown-item" href="{{ route('frontend.settings.index') }}">
+                                            {{ trans('cruds.setting.title') }}
                                         </a>
                                     @endcan
 

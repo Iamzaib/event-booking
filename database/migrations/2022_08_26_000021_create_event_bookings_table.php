@@ -4,13 +4,15 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCitiesTable extends Migration
+class CreateEventBookingsTable extends Migration
 {
     public function up()
     {
-        Schema::create('cities', function (Blueprint $table) {
+        Schema::create('event_bookings', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('cite_name');
+            $table->string('booking_details')->nullable();
+            $table->decimal('booking_total', 15, 2)->nullable();
+            $table->string('status')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

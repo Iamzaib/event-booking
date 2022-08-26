@@ -12,6 +12,12 @@ class EventBooking extends Model
     use SoftDeletes;
     use HasFactory;
 
+    public const STATUS_SELECT = [
+        'active'          => 'Active',
+        'pending-payment' => 'Pending Payment',
+        'cancelled'       => 'Cancelled',
+    ];
+
     public $table = 'event_bookings';
 
     protected $dates = [
@@ -25,6 +31,7 @@ class EventBooking extends Model
         'booking_event_id',
         'booking_by_user_id',
         'booking_total',
+        'status',
         'created_at',
         'updated_at',
         'deleted_at',

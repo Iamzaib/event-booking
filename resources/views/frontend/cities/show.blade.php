@@ -28,10 +28,10 @@
                                 </tr>
                                 <tr>
                                     <th>
-                                        {{ trans('cruds.city.fields.cite_name') }}
+                                        {{ trans('cruds.city.fields.city_name') }}
                                     </th>
                                     <td>
-                                        {{ $city->cite_name }}
+                                        {{ $city->city_name }}
                                     </td>
                                 </tr>
                                 <tr>
