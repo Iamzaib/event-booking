@@ -119,6 +119,18 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('amenities/media', 'AmenitiesController@storeMedia')->name('amenities.storeMedia');
     Route::post('amenities/ckmedia', 'AmenitiesController@storeCKEditorImages')->name('amenities.storeCKEditorImages');
     Route::resource('amenities', 'AmenitiesController');
+
+    // Setting
+    Route::delete('settings/destroy', 'SettingController@massDestroy')->name('settings.massDestroy');
+    Route::resource('settings', 'SettingController');
+
+    // Testimonial
+    Route::delete('testimonials/destroy', 'TestimonialController@massDestroy')->name('testimonials.massDestroy');
+    Route::resource('testimonials', 'TestimonialController');
+
+    // Booking Room
+    Route::delete('booking-rooms/destroy', 'BookingRoomController@massDestroy')->name('booking-rooms.massDestroy');
+    Route::resource('booking-rooms', 'BookingRoomController');
 });
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {
     // Change password
@@ -245,6 +257,18 @@ Route::group(['as' => 'frontend.', 'namespace' => 'Frontend', 'middleware' => ['
     Route::post('amenities/media', 'AmenitiesController@storeMedia')->name('amenities.storeMedia');
     Route::post('amenities/ckmedia', 'AmenitiesController@storeCKEditorImages')->name('amenities.storeCKEditorImages');
     Route::resource('amenities', 'AmenitiesController');
+
+    // Setting
+    Route::delete('settings/destroy', 'SettingController@massDestroy')->name('settings.massDestroy');
+    Route::resource('settings', 'SettingController');
+
+    // Testimonial
+    Route::delete('testimonials/destroy', 'TestimonialController@massDestroy')->name('testimonials.massDestroy');
+    Route::resource('testimonials', 'TestimonialController');
+
+    // Booking Room
+    Route::delete('booking-rooms/destroy', 'BookingRoomController@massDestroy')->name('booking-rooms.massDestroy');
+    Route::resource('booking-rooms', 'BookingRoomController');
 
     Route::get('frontend/profile', 'ProfileController@index')->name('profile.index');
     Route::post('frontend/profile', 'ProfileController@update')->name('profile.update');
