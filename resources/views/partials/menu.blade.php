@@ -264,26 +264,26 @@
                 </a>
                 <div class="collapse {{ request()->is("admin/permissions*") ? "show" : "" }} {{ request()->is("admin/roles*") ? "show" : "" }} {{ request()->is("admin/users*") ? "show" : "" }} {{ request()->is("admin/admins*") ? "show" : "" }}" id="userManagement">
                 <ul class="nav nav-sm flex-column">
-                    @can('permission_access')
-                        <li class="nav-item">
-                            <a href="{{ route("admin.permissions.index") }}" class="nav-link {{ request()->is("admin/permissions") || request()->is("admin/permissions/*") ? "active" : "" }}">
+{{--                    @can('permission_access')--}}
+{{--                        <li class="nav-item">--}}
+{{--                            <a href="{{ route("admin.permissions.index") }}" class="nav-link {{ request()->is("admin/permissions") || request()->is("admin/permissions/*") ? "active" : "" }}">--}}
 {{--                                <i class="fa-fw fas fa-unlock-alt c-sidebar-nav-icon">--}}
 
 {{--                                </i>--}}
-                                {{ trans('cruds.permission.title') }}
-                            </a>
-                        </li>
-                    @endcan
-                    @can('role_access')
-                        <li class="nav-item">
-                            <a href="{{ route("admin.roles.index") }}" class="nav-link {{ request()->is("admin/roles") || request()->is("admin/roles/*") ? "active" : "" }}">
+{{--                                {{ trans('cruds.permission.title') }}--}}
+{{--                            </a>--}}
+{{--                        </li>--}}
+{{--                    @endcan--}}
+{{--                    @can('role_access')--}}
+{{--                        <li class="nav-item">--}}
+{{--                            <a href="{{ route("admin.roles.index") }}" class="nav-link {{ request()->is("admin/roles") || request()->is("admin/roles/*") ? "active" : "" }}">--}}
 {{--                                <i class="fa-fw fas fa-briefcase c-sidebar-nav-icon">--}}
 
 {{--                                </i>--}}
-                                {{ trans('cruds.role.title') }}
-                            </a>
-                        </li>
-                    @endcan
+{{--                                {{ trans('cruds.role.title') }}--}}
+{{--                            </a>--}}
+{{--                        </li>--}}
+{{--                    @endcan--}}
                     @can('user_access')
                         <li class="nav-item">
                             <a href="{{ route("admin.users.index") }}" class="nav-link {{ request()->is("admin/users") || request()->is("admin/users/*") ? "active" : "" }}">
