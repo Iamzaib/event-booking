@@ -15,8 +15,8 @@
     </div>
 
     <div class="card-body">
-        <div class="table-responsive">
-            <table class=" table table-bordered table-striped table-hover datatable datatable-Traveler">
+        <div class="table-responsive overflow-visible print">
+            <table class="table table-sm table-hover table-nowrap card-table" id="data-table">
                 <thead>
                     <tr>
                         <th width="10">
@@ -148,7 +148,7 @@
       $($.fn.dataTable.tables(true)).DataTable()
           .columns.adjust();
   });
-  
+
 })
 
 </script>

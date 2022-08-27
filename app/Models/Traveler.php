@@ -33,6 +33,7 @@ class Traveler extends Model
         'phone',
         'gender',
         'notes',
+        'costume_id',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -41,6 +42,16 @@ class Traveler extends Model
     public function booking()
     {
         return $this->belongsTo(EventBooking::class, 'booking_id');
+    }
+
+    public function costume()
+    {
+        return $this->belongsTo(Costume::class, 'costume_id');
+    }
+
+    public function tickets()
+    {
+        return $this->belongsToMany(EventTicket::class);
     }
 
     protected function serializeDate(DateTimeInterface $date)

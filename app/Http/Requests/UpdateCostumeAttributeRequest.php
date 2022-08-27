@@ -21,6 +21,10 @@ class UpdateCostumeAttributeRequest extends FormRequest
                 'string',
                 'required',
             ],
+            'values' => [
+                'string',
+                'nullable',
+            ],
         ];
     }
 }

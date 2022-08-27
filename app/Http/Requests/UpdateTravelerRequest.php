@@ -40,6 +40,12 @@ class UpdateTravelerRequest extends FormRequest
             'gender' => [
                 'required',
             ],
+            'tickets.*' => [
+                'integer',
+            ],
+            'tickets' => [
+                'array',
+            ],
         ];
     }
 }

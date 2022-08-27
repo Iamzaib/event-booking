@@ -22,6 +22,7 @@ class CostumeAttribute extends Model
 
     protected $fillable = [
         'title',
+        'values',
         'created_at',
         'updated_at',
         'deleted_at',

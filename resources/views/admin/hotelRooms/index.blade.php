@@ -15,8 +15,8 @@
     </div>
 
     <div class="card-body">
-        <div class="table-responsive">
-            <table class=" table table-bordered table-striped table-hover datatable datatable-HotelRoom">
+        <div class="table-responsive overflow-visible print">
+            <table class="table table-sm table-hover table-nowrap card-table" id="data-table">
                 <thead>
                     <tr>
                         <th width="10">
@@ -33,6 +33,9 @@
                         </th>
                         <th>
                             {{ trans('cruds.hotelRoom.fields.room_price') }}
+                        </th>
+                        <th>
+                            {{ trans('cruds.hotelRoom.fields.room_quantity') }}
                         </th>
                         <th>
                             &nbsp;
@@ -56,6 +59,9 @@
                             </td>
                             <td>
                                 {{ $hotelRoom->room_price ?? '' }}
+                            </td>
+                            <td>
+                                {{ $hotelRoom->room_quantity ?? '' }}
                             </td>
                             <td>
                                 @can('hotel_room_show')
@@ -131,12 +137,9 @@
     order: [[ 1, 'desc' ]],
     pageLength: 100,
   });
-  let table = $('.datatable-HotelRoom:not(.ajaxTable)').DataTable({ buttons: dtButtons })
-  $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e){
-      $($.fn.dataTable.tables(true)).DataTable()
-          .columns.adjust();
-  });
-  
+  let table = $('.datatable-HotelRoom:not(.ajaxTable)');
+
+
 })
 
 </script>

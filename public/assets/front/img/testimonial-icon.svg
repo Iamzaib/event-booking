@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="16px" viewBox="0 0 18 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 53.2 (72643) - https://sketchapp.com -->
+    <title>Asset 14 (2)</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="tedo-kelionies-pasiulymas-viesbutis(pop-up)" transform="translate(-379.000000, -1218.000000)" stroke="#9CA9BA" stroke-width="2">
+            <g id="Asset-14-(2)" transform="translate(380.000000, 1219.000000)">
+                <circle id="Oval" cx="3" cy="11" r="3"></circle>
+                <circle id="Oval" cx="13" cy="11" r="3"></circle>
+                <path d="M5,0 L4.5,0.4 C1.65490461,2.67789923 -0.000760148192,6.12536118 1.77635684e-15,9.77 L-2.61634739e-07,11" id="Path"></path>
+                <path d="M15,0 L14.5,0.4 C11.6549046,2.67789923 9.99923985,6.12536118 10,9.77 L9.99999974,11" id="Path"></path>
+            </g>
+        </g>
+    </g>
+</svg>

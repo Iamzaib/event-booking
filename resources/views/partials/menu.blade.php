@@ -27,7 +27,7 @@
                     <!-- Toggle -->
                     <a href="#" id="sidebarIcon" class="dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <div class="avatar avatar-sm avatar-online">
-                            <img src="./assets/img/avatars/profiles/avatar-1.jpg" class="avatar-img rounded-circle" alt="...">
+                            <img src="{{asset('assets/img/avatars/profiles/avatar-1.jpg')}}assets/img/avatars/profiles/avatar-1.jpg" class="avatar-img rounded-circle" alt="...">
                         </div>
                     </a>
 
@@ -70,7 +70,9 @@
                     <img src="{{asset('assets/img/icons/calendar-tick.svg')}}" style="object-fit: scale-down;" class="me-1 w-10" alt="{{ trans('global.dashboard') }}">
                     {{ trans('cruds.eventsManagement.title') }}
                 </a>
-                <div class="collapse {{ request()->is("admin/events*") ? "show" : "" }} {{ request()->is("admin/event-addons*") ? "show" : "" }} {{ request()->is("admin/costumes*") ? "show" : "" }} {{ request()->is("admin/costume-attributes*") ? "show" : "" }} {{ request()->is("admin/event-tickets*") ? "show" : "" }} " id="eventsManagement">
+                <div class="collapse {{ request()->is("admin/events*") ? "show" : "" }} {{ request()->is("admin/event-addons*") ? "show" : "" }} {{ request()->is("admin/costumes*") ? "show" : "" }} {{ request()->is("admin/costume-attributes*") ? "show" : "" }} {{ request()->is("admin/event-tickets*") ? "show" : "" }}
+                {{ request()->is("admin/hotels*") ? "show" : "" }} {{ request()->is("admin/hotel-rooms*") ? "show" : "" }} {{ request()->is("admin/amenities*") ? "show" : "" }}
+                    " id="eventsManagement">
                 <ul class="nav nav-sm flex-column">
                     @can('event_access')
                         <li class="nav-item">
@@ -122,6 +124,16 @@
                             </a>
                         </li>
                     @endcan
+                    @can('package_amenity_access')
+                        <li class="nav-item">
+                            <a href="{{ route("admin.package-amenities.index") }}" class="nav-link {{ request()->is("admin/package-amenities") || request()->is("admin/package-amenities/*") ? "c-active" : "" }}">
+{{--                                <i class="fa-fw fas fa-cogs c-sidebar-nav-icon">--}}
+
+{{--                                </i>--}}
+                                {{ trans('cruds.packageAmenity.title') }}
+                            </a>
+                        </li>
+                    @endcan
                     @can('booking_access')
                             <li class="nav-item ">
                                 <a class="nav-link" href="#booking" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="booking">
@@ -142,10 +154,101 @@
                                                 </a>
                                             </li>
                                         @endcan
+                                            @can('traveler_access')
+                                                <li class="nav-item">
+                                                    <a href="{{ route("admin.travelers.index") }}" class="nav-link {{ request()->is("admin/travelers") || request()->is("admin/travelers/*") ? "active" : "" }}">
+{{--                                                        <i class="fa-fw fas fa-cogs c-sidebar-nav-icon">--}}
+
+{{--                                                        </i>--}}
+                                                        {{ trans('cruds.traveler.title') }}
+                                                    </a>
+                                                </li>
+                                            @endcan
+                                            @can('payment_access')
+                                                <li class="nav-item">
+                                                    <a href="{{ route("admin.payments.index") }}" class="nav-link {{ request()->is("admin/payments") || request()->is("admin/payments/*") ? "active" : "" }}">
+{{--                                                        <i class="fa-fw fas fa-cogs c-sidebar-nav-icon">--}}
+
+{{--                                                        </i>--}}
+                                                        {{ trans('cruds.payment.title') }}
+                                                    </a>
+                                                </li>
+                                            @endcan
+                                            @can('testimonial_access')
+                                                <li class="nav-item">
+                                                    <a href="{{ route("admin.testimonials.index") }}" class="nav-link {{ request()->is("admin/testimonials") || request()->is("admin/testimonials/*") ? "active" : "" }}">
+{{--                                                        <i class="fa-fw fas fa-cogs c-sidebar-nav-icon">--}}
+
+{{--                                                        </i>--}}
+                                                        {{ trans('cruds.testimonial.title') }}
+                                                    </a>
+                                                </li>
+                                            @endcan
+                                            @can('booking_room_access')
+                                                <li class="nav-item">
+                                                    <a href="{{ route("admin.booking-rooms.index") }}" class="nav-link {{ request()->is("admin/booking-rooms") || request()->is("admin/booking-rooms/*") ? "active" : "" }}">
+{{--                                                        <i class="fa-fw fas fa-cogs c-sidebar-nav-icon">--}}
+
+{{--                                                        </i>--}}
+                                                        {{ trans('cruds.bookingRoom.title') }}
+                                                    </a>
+                                                </li>
+                                            @endcan
                                     </ul>
                                 </div>
                         </li>
                     @endcan
+                        @can('hotels_management_access')
+{{--                            <li class="c-sidebar-nav-dropdown {{ request()->is("admin/hotels*") ? "show" : "" }} {{ request()->is("admin/hotel-rooms*") ? "show" : "" }} {{ request()->is("admin/amenities*") ? "show" : "" }}">--}}
+{{--                                <a class="c-sidebar-nav-dropdown-toggle" href="#">--}}
+{{--                                    <i class="fa-fw fas fa-cogs c-sidebar-nav-icon">--}}
+
+{{--                                    </i>--}}
+{{--                                    {{ trans('cruds.hotelsManagement.title') }}--}}
+{{--                                </a>--}}
+{{--                                <ul class="c-sidebar-nav-dropdown-items">--}}
+                                    <li class="nav-item ">
+                                        <a class="nav-link" href="#hotelsManagement" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="hotelsManagement">
+                                            {{--                                <i class="fa-fw fas fa-calendar c-sidebar-nav-icon">--}}
+
+                                            {{--                                </i>--}}
+                                            {{ trans('cruds.hotelsManagement.title') }}
+                                        </a>
+                                        <div class="collapse {{ request()->is("admin/hotels*") ? "show" : "" }} {{ request()->is("admin/hotel-rooms*") ? "show" : "" }} {{ request()->is("admin/amenities*") ? "show" : "" }}" id="hotelsManagement">
+                                            <ul class="nav nav-sm flex-column">
+                                    @can('hotel_access')
+                                        <li class="nav-item">
+                                            <a href="{{ route("admin.hotels.index") }}" class="nav-link {{ request()->is("admin/hotels") || request()->is("admin/hotels/*") ? "c-active" : "" }}">
+{{--                                                <i class="fa-fw fas fa-cogs c-sidebar-nav-icon">--}}
+
+{{--                                                </i>--}}
+                                                {{ trans('cruds.hotel.title') }}
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('hotel_room_access')
+                                        <li class="nav-item">
+                                            <a href="{{ route("admin.hotel-rooms.index") }}" class="nav-link {{ request()->is("admin/hotel-rooms") || request()->is("admin/hotel-rooms/*") ? "c-active" : "" }}">
+{{--                                                <i class="fa-fw fas fa-cogs c-sidebar-nav-icon">--}}
+
+{{--                                                </i>--}}
+                                                {{ trans('cruds.hotelRoom.title') }}
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('amenity_access')
+                                        <li class="nav-item">
+                                            <a href="{{ route("admin.amenities.index") }}" class="nav-link {{ request()->is("admin/amenities") || request()->is("admin/amenities/*") ? "c-active" : "" }}">
+{{--                                                <i class="fa-fw fas fa-cogs c-sidebar-nav-icon">--}}
+
+{{--                                                </i>--}}
+                                                {{ trans('cruds.amenity.title') }}
+                                            </a>
+                                        </li>
+                                    @endcan
+                                </ul>
+                            </li>
+                        @endcan
                 </ul>
                 </div>
             </li>
@@ -218,7 +321,7 @@
                 {{ request()->is("admin/content-categories*") ? "show" : "" }} {{ request()->is("admin/content-tags*") ? "show" : "" }} {{ request()->is("admin/content-pages*") ? "show" : "" }}
                 {{ request()->is("admin/faq-categories*") ? "show" : "" }} {{ request()->is("admin/faq-questions*") ? "show" : "" }}
                 {{ request()->is("admin/blog-categories*") ? "show" : "" }} {{ request()->is("admin/blog-tags*") ? "show" : "" }} {{ request()->is("admin/blog-posts*") ? "show" : "" }}
-                    " id="website">
+            {{ request()->is("admin/settings/*") ? "active" : "" }}  " id="website">
                 <ul class="nav nav-sm flex-column">
         @can('content_management_access')
             <li class="nav-item ">
@@ -346,6 +449,16 @@
                 </div>
             </li>
         @endcan
+            @can('setting_access')
+                <li class="nav-item">
+                    <a href="{{ route("admin.settings.index") }}" class="nav-link {{ request()->is("admin/settings") || request()->is("admin/settings/*") ? "active" : "" }}">
+{{--                        <i class="fa-fw fas fa-cogs c-sidebar-nav-icon">--}}
+
+{{--                        </i>--}}
+                        {{ trans('cruds.setting.title') }}
+                    </a>
+                </li>
+            @endcan
                 </ul>
             </div>
         </li>

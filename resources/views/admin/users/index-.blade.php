@@ -49,7 +49,7 @@
 
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-bordered table-striped table-hover datatable datatable-User" style="width:100%">
+                        <table class="table table-sm table-hover table-nowrap card-table datatable-User" style="width:100%">
                             <thead>
                             <tr>
                                 <th width="10">
@@ -210,11 +210,8 @@
     order: [[ 1, 'desc' ]],
     pageLength: 50,
   });
-  let table = $('.datatable-User:not(.ajaxTable)').DataTable({ buttons: dtButtons })
-  $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e){
-      $($.fn.dataTable.tables(true)).DataTable()
-          .columns.adjust();
-  });
+  let table = $('.datatable-User:not(.ajaxTable)');
+
 
 })
 

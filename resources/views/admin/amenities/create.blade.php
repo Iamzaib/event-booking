@@ -45,6 +45,13 @@
 
 @section('scripts')
 <script>
+    var storeCKEditorImages_url='{{ route('admin.amenities.storeCKEditorImages') }}';
+    var dropzone_field='icon-dropzone',photo_upload_route='{{ route('admin.amenities.storeMedia') }}',field_name='icon',Maxfiles=1,dropzone=true,
+        crud_id='{{ $amenity->id ?? 0 }}';
+    @if(isset($amenity) && $amenity->icon)
+    var image_exists=true;
+    var image_src={!! json_encode($amenity->icon) !!}
+    @endif
     Dropzone.options.iconDropzone = {
     url: '{{ route('admin.amenities.storeMedia') }}',
     maxFilesize: 1, // MB

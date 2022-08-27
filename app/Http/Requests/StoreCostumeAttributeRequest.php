@@ -21,6 +21,10 @@ class StoreCostumeAttributeRequest extends FormRequest
                 'string',
                 'required',
             ],
+            'values' => [
+                'string',
+                'nullable',
+            ],
         ];
     }
 }

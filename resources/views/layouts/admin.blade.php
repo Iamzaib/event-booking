@@ -44,6 +44,9 @@
         .w-10{
             width: 9%!important;
         }
+        .white-spaces-normal{
+            white-space: normal;
+        }
         @media only print {
             .no-print {
                 display:none;

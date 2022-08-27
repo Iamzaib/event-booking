@@ -26,13 +26,13 @@
     <table class="table table-sm table-hover table-nowrap card-table">
         <tr>
             @foreach($headers as $item)
-            <th>{{$item}}</th>
+            <th align="center">{{$item}}</th>
                 @endforeach
         </tr>
         @foreach($model_data as $data)
             <tr>
                 @for($d=0;$d<count($headers);$d++)
-                <td>{{ $data[$headers[$d]]}}</td>
+                <td style="@if(strlen($data[$headers[$d]])>60) white-space: normal @endif ">{{ $data[$headers[$d]]}}</td>
                  @endfor
             </tr>
         @endforeach

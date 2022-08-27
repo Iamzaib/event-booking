@@ -368,7 +368,7 @@
                                 </table>
                             </div>
                             <div class="card-footer d-flex justify-content-between">
-                                    {{$users->appends(['sort' => $sort,'per_page'=>$per_page])->links()}}
+                                    {{$users->appends(request()->merge(['sort' => $sort,'per_page'=>$per_page])->all())->links()}}
                                 <!-- Pagination (prev) -->
 {{--                                <ul class="list-pagination-prev pagination pagination-tabs card-pagination">--}}
 {{--                                    <li class="page-item">--}}

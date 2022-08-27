@@ -15,8 +15,8 @@
     </div>
 
     <div class="card-body">
-        <div class="table-responsive">
-            <table class=" table table-bordered table-striped table-hover datatable datatable-EventBooking">
+        <div class="table-responsive overflow-visible print">
+            <table class="table table-sm table-hover table-nowrap card-table" id="data-table">
                 <thead>
                     <tr>
                         <th width="10">
@@ -36,6 +36,9 @@
                         </th>
                         <th>
                             {{ trans('cruds.eventBooking.fields.booking_total') }}
+                        </th>
+                        <th>
+                            {{ trans('cruds.eventBooking.fields.status') }}
                         </th>
                         <th>
                             &nbsp;
@@ -62,6 +65,9 @@
                             </td>
                             <td>
                                 {{ $eventBooking->booking_total ?? '' }}
+                            </td>
+                            <td>
+                                {{ App\Models\EventBooking::STATUS_SELECT[$eventBooking->status] ?? '' }}
                             </td>
                             <td>
                                 @can('event_booking_show')
@@ -137,12 +143,9 @@
     order: [[ 1, 'desc' ]],
     pageLength: 50,
   });
-  let table = $('.datatable-EventBooking:not(.ajaxTable)').DataTable({ buttons: dtButtons })
-  $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e){
-      $($.fn.dataTable.tables(true)).DataTable()
-          .columns.adjust();
-  });
-  
+  let table = $('.datatable-EventBooking:not(.ajaxTable)');
+
+
 })
 
 </script>

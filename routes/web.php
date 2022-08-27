@@ -1,7 +1,8 @@
 <?php
 
-Route::view('/', 'welcome');
+//Route::view('/', 'welcome');
 Route::get('userVerification/{token}', 'UserVerificationController@approve')->name('userVerification');
+Route::get('/', 'HomeController@index')->name('home');
 Auth::routes();
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => ['auth', 'admin']], function () {
@@ -34,6 +35,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('content-pages/media', 'ContentPageController@storeMedia')->name('content-pages.storeMedia');
     Route::post('content-pages/ckmedia', 'ContentPageController@storeCKEditorImages')->name('content-pages.storeCKEditorImages');
     Route::resource('content-pages', 'ContentPageController');
+    Route::get('content-pages-export', 'ContentPageController@export')->name('content-pages.export');
 
     // Faq Category
     Route::delete('faq-categories/destroy', 'FaqCategoryController@massDestroy')->name('faq-categories.massDestroy');
@@ -127,6 +129,25 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('amenities/media', 'AmenitiesController@storeMedia')->name('amenities.storeMedia');
     Route::post('amenities/ckmedia', 'AmenitiesController@storeCKEditorImages')->name('amenities.storeCKEditorImages');
     Route::resource('amenities', 'AmenitiesController');
+
+    // Setting
+    Route::delete('settings/destroy', 'SettingController@massDestroy')->name('settings.massDestroy');
+    Route::resource('settings', 'SettingController');
+
+    // Testimonial
+    Route::delete('testimonials/destroy', 'TestimonialController@massDestroy')->name('testimonials.massDestroy');
+    Route::resource('testimonials', 'TestimonialController');
+    Route::get('testimonials-export', 'TestimonialController@export')->name('testimonials.export');
+
+    // Booking Room
+    Route::delete('booking-rooms/destroy', 'BookingRoomController@massDestroy')->name('booking-rooms.massDestroy');
+    Route::resource('booking-rooms', 'BookingRoomController');
+
+    // Package Amenities
+    Route::delete('package-amenities/destroy', 'PackageAmenitiesController@massDestroy')->name('package-amenities.massDestroy');
+    Route::post('package-amenities/media', 'PackageAmenitiesController@storeMedia')->name('package-amenities.storeMedia');
+    Route::post('package-amenities/ckmedia', 'PackageAmenitiesController@storeCKEditorImages')->name('package-amenities.storeCKEditorImages');
+    Route::resource('package-amenities', 'PackageAmenitiesController');
 });
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {
     // Change password
@@ -253,6 +274,24 @@ Route::group(['as' => 'frontend.', 'namespace' => 'Frontend', 'middleware' => ['
     Route::post('amenities/media', 'AmenitiesController@storeMedia')->name('amenities.storeMedia');
     Route::post('amenities/ckmedia', 'AmenitiesController@storeCKEditorImages')->name('amenities.storeCKEditorImages');
     Route::resource('amenities', 'AmenitiesController');
+
+    // Setting
+    Route::delete('settings/destroy', 'SettingController@massDestroy')->name('settings.massDestroy');
+    Route::resource('settings', 'SettingController');
+
+    // Testimonial
+    Route::delete('testimonials/destroy', 'TestimonialController@massDestroy')->name('testimonials.massDestroy');
+    Route::resource('testimonials', 'TestimonialController');
+
+    // Booking Room
+    Route::delete('booking-rooms/destroy', 'BookingRoomController@massDestroy')->name('booking-rooms.massDestroy');
+    Route::resource('booking-rooms', 'BookingRoomController');
+
+    // Package Amenities
+    Route::delete('package-amenities/destroy', 'PackageAmenitiesController@massDestroy')->name('package-amenities.massDestroy');
+    Route::post('package-amenities/media', 'PackageAmenitiesController@storeMedia')->name('package-amenities.storeMedia');
+    Route::post('package-amenities/ckmedia', 'PackageAmenitiesController@storeCKEditorImages')->name('package-amenities.storeCKEditorImages');
+    Route::resource('package-amenities', 'PackageAmenitiesController');
 
     Route::get('frontend/profile', 'ProfileController@index')->name('profile.index');
     Route::post('frontend/profile', 'ProfileController@update')->name('profile.update');

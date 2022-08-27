@@ -14,13 +14,53 @@ use Symfony\Component\HttpFoundation\Response;
 
 class StatesController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         abort_if(Gate::denies('state_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        $filters['countries'] = Country::pluck('name', 'id')->prepend('Any', '*');
+        $per_page=$request->per_page??10;
+        $sort_r=explode('-',$request->sort);
+        $sort=isset($sort_r[0])&&$sort_r[0]!=''?$sort_r[0]:'id';
+        $sort_type=isset($sort_r[1])&&$sort_r[1]!=''?$sort_r[1]:'desc';
+        $states = $this->modelListingQuery($request)->paginate($per_page,'*','page',($request->page?$request->page:1));
+        if($request->sorting){
+            if($sort_type=='desc'){
+                $sort_type='asc';
+            }else{
+                $sort_type='desc';
+            }
+        }
+        //$states = State::with(['country'])->get();
 
-        $states = State::with(['country'])->get();
-
-        return view('admin.states.index', compact('states'));
+        return view('admin.states.index', compact('states','sort','per_page','sort_type','filters'));
+    }
+    public function modelListingQuery($request)
+    {
+        $states = State::query();
+        $sort_r=explode('-',$request->sort);
+        $sort=isset($sort_r[0])&&$sort_r[0]!=''?$sort_r[0]:'id';
+        $sort_type=isset($sort_r[1])&&$sort_r[1]!=''?$sort_r[1]:'desc';
+        $special_sort=true;
+        if($sort=='country'){
+            $with_Array=['country'=>function ($query) use ($sort_type) {
+                $query->orderBy('name', $sort_type);
+            }];
+        }else{
+            $with_Array=['country'];
+            $special_sort=false;
+        }
+        $states->with($with_Array)->when($request->search, function ($query, $search) {
+            $query->where('state_name', 'LIKE', "%{$search}%");
+            $query->orWhereHas('country', function ($q) use ($search) { return $q->where('name', 'LIKE', "%{$search}%"); });
+        })->when($request->country, function ($query, $country) {
+            if(is_numeric($country)&&$country!='*') {
+                $query->whereHas('country', function ($q) use ($country) {  return $q->where('id', $country);});
+            }
+        });
+        if($special_sort===false){
+            $states->orderBy($sort,$sort_type);
+        }
+        return $states;
     }
 
     public function create()

@@ -367,7 +367,7 @@
                                 </table>
                             </div>
                             <div class="card-footer d-flex justify-content-between">
-                                    {{$users->appends(['sort' => $sort,'per_page'=>$per_page])->links()}}
+                                    {{$users->appends(request()->merge(['sort' => $sort,'per_page'=>$per_page])->all())->links()}}
 
                                 <!-- Alert -->
                                 <div class="list-alert alert alert-dark alert-dismissible border fade" role="alert" id="list-alert">
