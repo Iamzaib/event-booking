@@ -134,10 +134,18 @@
                     <li>
                         <span><a href="!#">Trips </a></span>
                     </li>
-
+                    @guest
                     <li>
-                        <span>@guest<a href="{{route('login')}}">Login</a>@else<a href="{{route('admin.home')}}">Account</a>@endguest</span>
+                        <span><a href="{{route('login')}}">Login</a></span>
                     </li>
+                    @else
+                    <li>
+                        <span><a href="{{route('admin.home')}}">Account</a></span>
+                    </li>
+                     <li>
+                        <span><a href="#" onclick="event.preventDefault(); document.getElementById('logoutform').submit();">Logout</a></span>
+                    </li>
+                    @endguest
                 </ul>
             </nav>
             <div class="mblsdiv1">
@@ -900,7 +908,9 @@
 </div>
 
 
-
+<form id="logoutform" action="{{ route('logout') }}" method="POST" style="display: none;">
+    {{ csrf_field() }}
+</form>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script src="{{ asset('assets/front/js/common_scripts.js') }}"></script>
 <script src="{{ asset('assets/front/js/main.js')}}"></script>
