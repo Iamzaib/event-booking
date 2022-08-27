@@ -16,7 +16,7 @@
             </a>
         </li>
         @can('events_management_access')
-            <li class="c-sidebar-nav-dropdown {{ request()->is("admin/events*") ? "c-show" : "" }} {{ request()->is("admin/event-addons*") ? "c-show" : "" }} {{ request()->is("admin/costumes*") ? "c-show" : "" }} {{ request()->is("admin/costume-attributes*") ? "c-show" : "" }} {{ request()->is("admin/event-tickets*") ? "c-show" : "" }} {{ request()->is("admin/*") ? "c-show" : "" }} {{ request()->is("admin/*") ? "c-show" : "" }}">
+            <li class="c-sidebar-nav-dropdown {{ request()->is("admin/events*") ? "c-show" : "" }} {{ request()->is("admin/event-addons*") ? "c-show" : "" }} {{ request()->is("admin/costumes*") ? "c-show" : "" }} {{ request()->is("admin/costume-attributes*") ? "c-show" : "" }} {{ request()->is("admin/event-tickets*") ? "c-show" : "" }} {{ request()->is("admin/package-amenities*") ? "c-show" : "" }} {{ request()->is("admin/*") ? "c-show" : "" }} {{ request()->is("admin/*") ? "c-show" : "" }}">
                 <a class="c-sidebar-nav-dropdown-toggle" href="#">
                     <i class="fa-fw fas fa-users c-sidebar-nav-icon">
 
@@ -71,6 +71,16 @@
 
                                 </i>
                                 {{ trans('cruds.eventTicket.title') }}
+                            </a>
+                        </li>
+                    @endcan
+                    @can('package_amenity_access')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.package-amenities.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/package-amenities") || request()->is("admin/package-amenities/*") ? "c-active" : "" }}">
+                                <i class="fa-fw fas fa-cogs c-sidebar-nav-icon">
+
+                                </i>
+                                {{ trans('cruds.packageAmenity.title') }}
                             </a>
                         </li>
                     @endcan

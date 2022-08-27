@@ -6,13 +6,13 @@
 
             <div class="card">
                 <div class="card-header">
-                    {{ trans('global.show') }} {{ trans('cruds.costumeAttribute.title') }}
+                    {{ trans('global.show') }} {{ trans('cruds.packageAmenity.title') }}
                 </div>
 
                 <div class="card-body">
                     <div class="form-group">
                         <div class="form-group">
-                            <a class="btn btn-default" href="{{ route('frontend.costume-attributes.index') }}">
+                            <a class="btn btn-default" href="{{ route('frontend.package-amenities.index') }}">
                                 {{ trans('global.back_to_list') }}
                             </a>
                         </div>
@@ -20,32 +20,36 @@
                             <tbody>
                                 <tr>
                                     <th>
-                                        {{ trans('cruds.costumeAttribute.fields.id') }}
+                                        {{ trans('cruds.packageAmenity.fields.id') }}
                                     </th>
                                     <td>
-                                        {{ $costumeAttribute->id }}
+                                        {{ $packageAmenity->id }}
                                     </td>
                                 </tr>
                                 <tr>
                                     <th>
-                                        {{ trans('cruds.costumeAttribute.fields.title') }}
+                                        {{ trans('cruds.packageAmenity.fields.title') }}
                                     </th>
                                     <td>
-                                        {{ $costumeAttribute->title }}
+                                        {{ $packageAmenity->title }}
                                     </td>
                                 </tr>
                                 <tr>
                                     <th>
-                                        {{ trans('cruds.costumeAttribute.fields.values') }}
+                                        {{ trans('cruds.packageAmenity.fields.icon') }}
                                     </th>
                                     <td>
-                                        {{ $costumeAttribute->values }}
+                                        @if($packageAmenity->icon)
+                                            <a href="{{ $packageAmenity->icon->getUrl() }}" target="_blank" style="display: inline-block">
+                                                <img src="{{ $packageAmenity->icon->getUrl('thumb') }}">
+                                            </a>
+                                        @endif
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                         <div class="form-group">
-                            <a class="btn btn-default" href="{{ route('frontend.costume-attributes.index') }}">
+                            <a class="btn btn-default" href="{{ route('frontend.package-amenities.index') }}">
                                 {{ trans('global.back_to_list') }}
                             </a>
                         </div>

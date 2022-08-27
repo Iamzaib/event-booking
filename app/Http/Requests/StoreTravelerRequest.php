@@ -40,6 +40,12 @@ class StoreTravelerRequest extends FormRequest
             'gender' => [
                 'required',
             ],
+            'tickets.*' => [
+                'integer',
+            ],
+            'tickets' => [
+                'array',
+            ],
         ];
     }
 }

@@ -131,6 +131,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // Booking Room
     Route::delete('booking-rooms/destroy', 'BookingRoomController@massDestroy')->name('booking-rooms.massDestroy');
     Route::resource('booking-rooms', 'BookingRoomController');
+
+    // Package Amenities
+    Route::delete('package-amenities/destroy', 'PackageAmenitiesController@massDestroy')->name('package-amenities.massDestroy');
+    Route::post('package-amenities/media', 'PackageAmenitiesController@storeMedia')->name('package-amenities.storeMedia');
+    Route::post('package-amenities/ckmedia', 'PackageAmenitiesController@storeCKEditorImages')->name('package-amenities.storeCKEditorImages');
+    Route::resource('package-amenities', 'PackageAmenitiesController');
 });
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {
     // Change password
@@ -269,6 +275,12 @@ Route::group(['as' => 'frontend.', 'namespace' => 'Frontend', 'middleware' => ['
     // Booking Room
     Route::delete('booking-rooms/destroy', 'BookingRoomController@massDestroy')->name('booking-rooms.massDestroy');
     Route::resource('booking-rooms', 'BookingRoomController');
+
+    // Package Amenities
+    Route::delete('package-amenities/destroy', 'PackageAmenitiesController@massDestroy')->name('package-amenities.massDestroy');
+    Route::post('package-amenities/media', 'PackageAmenitiesController@storeMedia')->name('package-amenities.storeMedia');
+    Route::post('package-amenities/ckmedia', 'PackageAmenitiesController@storeCKEditorImages')->name('package-amenities.storeCKEditorImages');
+    Route::resource('package-amenities', 'PackageAmenitiesController');
 
     Route::get('frontend/profile', 'ProfileController@index')->name('profile.index');
     Route::post('frontend/profile', 'ProfileController@update')->name('profile.update');

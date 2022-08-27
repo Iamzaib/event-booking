@@ -2,16 +2,16 @@
 
 namespace App\Http\Requests;
 
-use App\Models\CostumeAttribute;
+use App\Models\PackageAmenity;
 use Gate;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response;
 
-class UpdateCostumeAttributeRequest extends FormRequest
+class StorePackageAmenityRequest extends FormRequest
 {
     public function authorize()
     {
-        return Gate::allows('costume_attribute_edit');
+        return Gate::allows('package_amenity_create');
     }
 
     public function rules()
@@ -20,10 +20,6 @@ class UpdateCostumeAttributeRequest extends FormRequest
             'title' => [
                 'string',
                 'required',
-            ],
-            'values' => [
-                'string',
-                'nullable',
             ],
         ];
     }

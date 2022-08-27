@@ -24,6 +24,16 @@
                             <span class="help-block">{{ trans('cruds.costumeAttribute.fields.title_helper') }}</span>
                         </div>
                         <div class="form-group">
+                            <label for="values">{{ trans('cruds.costumeAttribute.fields.values') }}</label>
+                            <input class="form-control" type="text" name="values" id="values" value="{{ old('values', '') }}">
+                            @if($errors->has('values'))
+                                <div class="invalid-feedback">
+                                    {{ $errors->first('values') }}
+                                </div>
+                            @endif
+                            <span class="help-block">{{ trans('cruds.costumeAttribute.fields.values_helper') }}</span>
+                        </div>
+                        <div class="form-group">
                             <button class="btn btn-danger" type="submit">
                                 {{ trans('global.save') }}
                             </button>
