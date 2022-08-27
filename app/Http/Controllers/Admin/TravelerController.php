@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\MassDestroyTravelerRequest;
 use App\Http\Requests\StoreTravelerRequest;
 use App\Http\Requests\UpdateTravelerRequest;
+use App\Models\Costume;
 use App\Models\EventBooking;
+use App\Models\EventTicket;
 use App\Models\Traveler;
 use Gate;
 use Illuminate\Http\Request;
@@ -18,7 +20,7 @@ class TravelerController extends Controller
     {
         abort_if(Gate::denies('traveler_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $travelers = Traveler::with(['booking'])->get();
+        $travelers = Traveler::with(['booking', 'costume', 'tickets'])->get();
 
         return view('admin.travelers.index', compact('travelers'));
     }
@@ -29,12 +31,17 @@ class TravelerController extends Controller
 
         $bookings = EventBooking::pluck('booking_details', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.travelers.create', compact('bookings'));
+        $costumes = Costume::pluck('costume_title', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        $tickets = EventTicket::pluck('ticket_title', 'id');
+
+        return view('admin.travelers.create', compact('bookings', 'costumes', 'tickets'));
     }
 
     public function store(StoreTravelerRequest $request)
     {
         $traveler = Traveler::create($request->all());
+        $traveler->tickets()->sync($request->input('tickets', []));
 
         return redirect()->route('admin.travelers.index');
     }
@@ -45,14 +52,19 @@ class TravelerController extends Controller
 
         $bookings = EventBooking::pluck('booking_details', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $traveler->load('booking');
+        $costumes = Costume::pluck('costume_title', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.travelers.edit', compact('bookings', 'traveler'));
+        $tickets = EventTicket::pluck('ticket_title', 'id');
+
+        $traveler->load('booking', 'costume', 'tickets');
+
+        return view('admin.travelers.edit', compact('bookings', 'costumes', 'tickets', 'traveler'));
     }
 
     public function update(UpdateTravelerRequest $request, Traveler $traveler)
     {
         $traveler->update($request->all());
+        $traveler->tickets()->sync($request->input('tickets', []));
 
         return redirect()->route('admin.travelers.index');
     }
@@ -61,7 +73,7 @@ class TravelerController extends Controller
     {
         abort_if(Gate::denies('traveler_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $traveler->load('booking');
+        $traveler->load('booking', 'costume', 'tickets');
 
         return view('admin.travelers.show', compact('traveler'));
     }

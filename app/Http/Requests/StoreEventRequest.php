@@ -25,6 +25,10 @@ class StoreEventRequest extends FormRequest
                 'string',
                 'nullable',
             ],
+            'age' => [
+                'string',
+                'nullable',
+            ],
             'daily_price' => [
                 'required',
             ],
@@ -52,6 +56,18 @@ class StoreEventRequest extends FormRequest
                 'integer',
             ],
             'hotels' => [
+                'array',
+            ],
+            'addons.*' => [
+                'integer',
+            ],
+            'addons' => [
+                'array',
+            ],
+            'amenities_includeds.*' => [
+                'integer',
+            ],
+            'amenities_includeds' => [
                 'array',
             ],
         ];

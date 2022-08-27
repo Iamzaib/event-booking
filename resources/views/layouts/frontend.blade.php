@@ -107,6 +107,11 @@
                                             {{ trans('cruds.eventTicket.title') }}
                                         </a>
                                     @endcan
+                                    @can('package_amenity_access')
+                                        <a class="dropdown-item ml-3" href="{{ route('frontend.package-amenities.index') }}">
+                                            {{ trans('cruds.packageAmenity.title') }}
+                                        </a>
+                                    @endcan
                                     @can('booking_access')
                                         <a class="dropdown-item disabled" href="#">
                                             {{ trans('cruds.booking.title') }}

@@ -35,6 +35,7 @@ class Event extends Model implements HasMedia
         'event_title',
         'overview',
         'duration',
+        'age',
         'daily_price',
         'information',
         'country_id',
@@ -114,6 +115,16 @@ class Event extends Model implements HasMedia
     public function hotels()
     {
         return $this->belongsToMany(Hotel::class);
+    }
+
+    public function addons()
+    {
+        return $this->belongsToMany(EventAddon::class);
+    }
+
+    public function amenities_includeds()
+    {
+        return $this->belongsToMany(PackageAmenity::class);
     }
 
     protected function serializeDate(DateTimeInterface $date)

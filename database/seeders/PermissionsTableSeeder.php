@@ -628,6 +628,26 @@ class PermissionsTableSeeder extends Seeder
             ],
             [
                 'id'    => 155,
+                'title' => 'package_amenity_create',
+            ],
+            [
+                'id'    => 156,
+                'title' => 'package_amenity_edit',
+            ],
+            [
+                'id'    => 157,
+                'title' => 'package_amenity_show',
+            ],
+            [
+                'id'    => 158,
+                'title' => 'package_amenity_delete',
+            ],
+            [
+                'id'    => 159,
+                'title' => 'package_amenity_access',
+            ],
+            [
+                'id'    => 160,
                 'title' => 'profile_password_edit',
             ],
         ];
