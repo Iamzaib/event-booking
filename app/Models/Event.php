@@ -117,6 +117,19 @@ class Event extends Model implements HasMedia
         return $this->belongsToMany(Hotel::class);
     }
 
+    public function itinerary()
+    {
+        return $this->hasMany(Itinerary::class);
+    }
+    public function tickets()
+    {
+        return $this->hasMany(EventTicket::class);
+    }
+    public function faqs()
+    {
+        return $this->hasMany(EventFaq::class);
+    }
+
     public function addons()
     {
         return $this->belongsToMany(EventAddon::class);
@@ -125,6 +138,14 @@ class Event extends Model implements HasMedia
     public function amenities_includeds()
     {
         return $this->belongsToMany(PackageAmenity::class);
+    }
+    public function amenities_excludeds()
+    {
+        return $this->belongsToMany(PackageAmenity::class,'event_package_amenity_excluded');
+    }
+    public function costumes()
+    {
+        return $this->belongsToMany(Costume::class,'event_costumes');
     }
 
     protected function serializeDate(DateTimeInterface $date)

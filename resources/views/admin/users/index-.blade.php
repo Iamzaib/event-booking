@@ -49,7 +49,7 @@
 
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-sm table-hover table-nowrap card-table datatable-User" style="width:100%">
+                        <table class="table table-sm table-hover table-wrap card-table datatable-User" style="width:100%">
                             <thead>
                             <tr>
                                 <th width="10">

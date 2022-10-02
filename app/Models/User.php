@@ -16,13 +16,15 @@ use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Laravel\Cashier\Billable;
 
-class User extends Authenticatable implements HasMedia
+class User extends Authenticatable implements HasMedia,MustVerifyEmail
 {
     use SoftDeletes;
     use Notifiable;
     use InteractsWithMedia;
     use HasFactory;
+    use Billable;
 
     public const GENDER_RADIO = [
         'male'   => 'Male',

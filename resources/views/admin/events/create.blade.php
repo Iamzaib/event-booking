@@ -197,6 +197,101 @@
                 <span class="help-block">{{ trans('cruds.event.fields.amenities_included_helper') }}</span>
             </div>
             <div class="form-group">
+                <label for="amenities_excludeds">{{ trans('cruds.event.fields.amenities_excluded') }}</label>
+                <div style="padding-bottom: 4px">
+                    <span class="btn btn-info btn-xs select-all" style="border-radius: 0">{{ trans('global.select_all') }}</span>
+                    <span class="btn btn-info btn-xs deselect-all" style="border-radius: 0">{{ trans('global.deselect_all') }}</span>
+                </div>
+                <select class="form-control select2 {{ $errors->has('amenities_excludeds') ? 'is-invalid' : '' }}" name="amenities_excludeds[]" id="amenities_excludeds" multiple>
+                    @foreach($amenities_includeds as $id => $amenities_included)
+                        <option value="{{ $id }}" {{ in_array($id, old('amenities_excludeds', [])) ? 'selected' : '' }}>{{ $amenities_included }}</option>
+                    @endforeach
+                </select>
+                @if($errors->has('amenities_excludeds'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('amenities_excludeds') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.event.fields.amenities_excluded_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <label for="costumes">{{ trans('cruds.event.fields.costumes') }}</label>
+                <div style="padding-bottom: 4px">
+                    <span class="btn btn-info btn-xs select-all" style="border-radius: 0">{{ trans('global.select_all') }}</span>
+                    <span class="btn btn-info btn-xs deselect-all" style="border-radius: 0">{{ trans('global.deselect_all') }}</span>
+                </div>
+                <select class="form-control select2 {{ $errors->has('costumes') ? 'is-invalid' : '' }}" name="costumes[]" id="costumes" multiple>
+                    @foreach($costumes as $id => $costume)
+                        <option value="{{ $id }}" {{ in_array($id, old('costumes', [])) ? 'selected' : '' }}>{{ $costume }}</option>
+                    @endforeach
+                </select>
+                @if($errors->has('costumes'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('costumes') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.event.fields.costumes_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <label for="">Itinerary</label>
+                <div id="Itinerary">
+                    <table class="table" id="Itinerary_fields">
+                        <tr>
+                            <th>Number</th>
+                            <th>Title</th>
+                            <th>Details</th>
+                            <th>Date/Time</th>
+                            <th>Duration</th>
+                            <th><span class="btn btn-info" onclick="add_new_Itinerary()">Add New Itinerary</span></th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="text" name="number[]" id="" class="form-control">
+                            </td>
+                            <td>
+                                <input type="text" name="title[]" id="" class="form-control">
+                            </td>
+                            <td>
+                                <input type="text" name="details[]" id="" class="form-control">
+                            </td>
+                            <td>
+                                <input type="time" name="datetime[]" id="" class="form-control ">
+                            </td>
+                            <td>
+                                <input type="text" name="durations[]" id="" class="form-control">
+                            </td>
+                            <td>
+                                <span class="btn btn-danger" onclick="remove_new_Itinerary(this)">Remove This</span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="">FAQs</label>
+                <div id="faqs">
+                    <table class="table" id="faq_fields">
+                        <tr>
+                            <th>Question</th>
+                            <th>Answer</th>
+
+                            <th><span class="btn btn-info" onclick="add_new_faq()">Add New Faq</span></th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="text" name="faq_question[]" id="" class="form-control">
+                            </td>
+                            <td>
+                                <textarea name="faq_answer[]" class="form-control" cols="30" rows="3"></textarea>
+                            </td>
+                            <td>
+                                <span class="btn btn-danger" onclick="remove_new_Itinerary(this)">Remove This</span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="form-group">
                 <button class="btn btn-danger" type="submit">
                     {{ trans('global.save') }}
                 </button>
@@ -219,6 +314,35 @@
     var image_exists=true;
     var image_src={!! json_encode($event->featured_image) !!}
     @endif
+        var new_Itinerary=' <tr><td> <input type="text" name="number[]" id="" class="form-control">        </td>' +
+            ' <td>        <input type="text" name="title[]" id="" class="form-control">    </td>' +
+            ' <td>' +
+            '<input type="text" name="details[]" id="" class="form-control">' +
+            '</td>' +
+            '<td>' +
+            '<input type="time" name="datetime[]" id="" class="form-control" >' +
+            '</td>' +
+            ' <td>' +
+            '<input type="text" name="durations[]" id="" class="form-control">' +
+            '</td>' +
+            '<td>' +
+            '<span class="btn btn-danger" onclick="remove_new_Itinerary(this)">Remove This</span>' +
+            '</td>' +
+            '</tr>';
 
+        var new_FAQ=' <tr><td> <input type="text" name="faq_question[]" id="" class="form-control">        </td>' +
+            ' <td>        <textarea name="faq_answer[]" class="form-control" cols="30" rows="3"></textarea>    </td>' +
+            '<td>' +
+            '<span class="btn btn-danger" onclick="remove_new_Itinerary(this)">Remove This</span>' +
+            '</td>' +
+            '</tr>';
+    function add_new_Itinerary(){
+        $('#Itinerary_fields tbody').append(new_Itinerary);
+    }function add_new_faq(){
+        $('#faq_fields tbody').append(new_FAQ);
+    }
+    function remove_new_Itinerary(btn){
+        $(btn).parent().parent().remove();
+    }
 </script>
 @endsection

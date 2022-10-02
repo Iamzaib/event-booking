@@ -2289,7 +2289,7 @@
         $("#" + dropzone_field).dropzone({
             url: photo_upload_route,
             maxFilesize: 2, // MB
-            acceptedFiles: '.jpeg,.jpg,.png,.gif',
+            acceptedFiles: '.jpeg,.jpg,.png,.gif,.svg',
             maxFiles: Maxfiles,
             addRemoveLinks: true,
             headers: {

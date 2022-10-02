@@ -24,10 +24,19 @@ class UsersController extends Controller
     public function index()
     {
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        $cities=$states= [''=>trans('global.pleaseSelect')];
+        $user = User::find(auth()->id());
+        if($user->country_id>0){
+            $states = State::where('country_id',$user->country_id)->pluck('state_name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        }
+        if($user->state_id>0) {
+            $cities = City::where('state_id',$user->state_id)->pluck('city_name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        }
+        $countries = Country::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $users = User::with(['city', 'state', 'country', 'roles', 'media'])->get();
 
-        return view('frontend.users.index', compact('users'));
+//dd($user);
+        return view('front.account.account', compact('user','cities', 'countries',  'states'));
     }
 
     public function create()

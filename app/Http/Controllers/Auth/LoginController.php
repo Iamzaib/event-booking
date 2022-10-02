@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -38,10 +39,22 @@ class LoginController extends Controller
 
     public function redirectTo()
     {
+
         if (auth()->user()->is_admin) {
             return '/admin';
         }
 
         return '/home';
+    }
+    protected function authenticated(Request $request, $user)
+    {
+        if(session('redirect_to_checkout')!==''){
+                redirect()->intended(route('frontend.checkout',['payment_info'=>session('redirect_to_checkout')]));
+        }
+        if (auth()->user()->is_admin) {
+            redirect()->intended(route('admin.home'));
+        }else{
+            redirect()->intended(route('account'));
+        }
     }
 }

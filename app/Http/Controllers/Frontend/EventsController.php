@@ -8,8 +8,11 @@ use App\Http\Requests\MassDestroyEventRequest;
 use App\Http\Requests\StoreEventRequest;
 use App\Http\Requests\UpdateEventRequest;
 use App\Models\City;
+use App\Models\Costume;
 use App\Models\Country;
 use App\Models\Event;
+use App\Models\EventAddon;
+use App\Models\HotelRoom;
 use App\Models\State;
 use Gate;
 use Illuminate\Http\Request;
@@ -18,7 +21,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 class EventsController extends Controller
 {
+    private $request;
     use MediaUploadingTrait;
+    public function __construct(Request $request)
+    {
+        $this->request=$request;
+    }
 
     public function index()
     {
@@ -26,7 +34,7 @@ class EventsController extends Controller
 
         $events = Event::with(['country', 'state', 'city', 'media'])->get();
 
-        return view('frontend.events.index', compact('events'));
+        return view('front.trips.trips', compact('events'));
     }
 
     public function create()
@@ -92,11 +100,33 @@ class EventsController extends Controller
 
     public function show(Event $event)
     {
-        abort_if(Gate::denies('event_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        //abort_if(Gate::denies('event_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $event->load('country', 'state', 'city');
 
-        return view('frontend.events.show', compact('event'));
+        return view('front.trips.trip-event', compact('event'));
+    }
+    public function customized_trip($trip_title,Event $trip){
+//       dd($trip_title,$trip);
+
+        $data['page_name']=$trip_title;
+//        $data['page_type']='trip';
+        $trip->load('country', 'state', 'city');
+        $data['trip']=$trip;
+        //var_dump($data = $this->request->session()->all());
+        return view('front.trips.custom_trip',$data);
+    }
+
+    public function trip_view($trip_title,Event $event)
+    {
+        //abort_if(Gate::denies('event_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        $data['page_name']=$trip_title;
+        $data['page_type']='trip';
+        $event->load('country', 'state', 'city');
+
+        $data['trip']=$event;
+
+        return view('front.trips.trip-event', $data);
     }
 
     public function destroy(Event $event)

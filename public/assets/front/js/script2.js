@@ -245,11 +245,11 @@ $(".signupbtnjs").click(function () {
 $(".benefitsshowmore").click(function () {
   if ($(".benefitstext").hasClass("benefitsshow-more-height")) {
     $(this).html(
-      "<span>Hide Package Details</span> <img src='./img/arrow-square-down.svg' />"
+      "<span>Hide Package Details</span> <img src='/assets/front/img/arrow-square-up.svg' />"
     );
   } else {
     $(this).html(
-      "<span>Show Package Details</span> <img src='./img/arrow-square-down.svg' />"
+      "<span>Show Package Details</span> <img src='/assets/front/img/arrow-square-down.svg' />"
     );
   }
 
@@ -269,7 +269,7 @@ $(".benefitsshowmore2").click(function () {
   } else {
     $(this).html("Show more <i class='fa fa-angle-down'></i>");
     $("#dura1").css("display", "none");
-    
+
   }
 
   $(".benefitstext2").toggleClass("benefitsshow-more-height");
@@ -515,5 +515,5 @@ $("#chsepayoption input[type=radio]").click(function () {
 
 $("#conttopay").click(function () {
    $("#chsepaymet").css("display", "block");
-}); 
+});
 

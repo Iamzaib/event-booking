@@ -32,6 +32,10 @@ class Hotel extends Model
     {
         return $this->belongsToMany(Amenity::class);
     }
+    public function rooms()
+    {
+        return $this->hasMany(HotelRoom::class);
+    }
 
     protected function serializeDate(DateTimeInterface $date)
     {

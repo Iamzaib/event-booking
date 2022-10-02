@@ -27,16 +27,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
 
 
-    <style type="text/css">
-        .tiny_bullet_slider .tp-bullet:before {
-            content: " ";
-            position: absolute;
-            width: 100%;
-            height: 25px;
-            top: -12px;
-            left: 0px;
-            background: transparent
-        }
+
+        @if(isset($page_name)&&$page_name=='home')
+     <style type="text/css">
+                                   .tiny_bullet_slider .tp-bullet:before {
+                                       content: " ";
+                                       position: absolute;
+                                       width: 100%;
+                                       height: 25px;
+                                       top: -12px;
+                                       left: 0px;
+                                       background: transparent
+                                   }
 
         .bullet-bar.tp-bullets:before {
             content: " ";
@@ -93,14 +95,118 @@
         header.sticky .btnhead {
             color: #ff027c !important;
         }
+     </style>
+          @else
+        <style type="text/css">
+                                      .tiny_bullet_slider .tp-bullet:before {
+                                          content: " ";
+                                          position: absolute;
+                                          width: 100%;
+                                          height: 25px;
+                                          top: -12px;
+                                          left: 0px;
+                                          background: transparent
+                                      }
+
+        .bullet-bar.tp-bullets:before {
+            content: " ";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            padding: 10px;
+            margin-left: -10px;
+            margin-top: -10px;
+            box-sizing: content-box
+        }
+
+        .bullet-bar .tp-bullet {
+            width: 60px;
+            height: 3px;
+            position: absolute;
+            background: #aaa;
+            background: rgba(204, 204, 204, 0.5);
+            cursor: pointer;
+            box-sizing: content-box
+        }
+
+        .bullet-bar .tp-bullet:hover,
+        .bullet-bar .tp-bullet.selected {
+            background: rgba(204, 204, 204, 1)
+        }
+
+        #logo {
+            float: left;
+            position: absolute;
+        }
+
+        .header {
+            background-color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .main-menu>ul>li span>a {
+            color: #383839 !important;
+        }
+
+        header.header.sticky .logo_sticky {
+            display: inline-block;
+
+        }
+
+        header.header.sticky {
+            background-color: #fff !important;
+            border-bottom: 1px solid #fff !important;
+        }
+
+        @media(max-width:991px) {
+            .btn_mobile {
+                position: absolute;
+                right: 15px;
+                top: 16px;
+            }
+        }
+
+        @media(min-width:600px) {
+            header {
+                background-color: transparent;
+            }
+
+            .hamburger-inner {
+                background-color: #000 !important;
+            }
+
+            .hamburger-inner::before {
+                background-color: #000 !important;
+            }
+
+            .hamburger-inner::after {
+                background-color: #000 !important;
+            }
+
+            .btnhead {
+
+                color: #fff;
+
+            }
+        }
+
+        header.sticky .btnhead {
+            color: #ff027c !important;
+        }
     </style>
+        @endif
+
 {{--    <link href="{{ asset('css/custom.css') }}" rel="stylesheet" />--}}
     @yield('styles')
 </head>
 
 <body>
 <div id="page">
-
+@if(isset($page_name)&&$page_name=='home')
     <header class="header menu_fixed">
         <div id="preloader">
             <div data-loader="circle-side"></div>
@@ -129,7 +235,7 @@
                         <span><a><img src="{{ asset('assets/front/img/global.svg')}}" /> English</a></span>
                     </li>
                     <li>
-                        <span><a href="!#"> Help Center</a></span>
+                        <span><a href="{{route('help_center')}}"> Help Center</a></span>
                     </li>
                     <li>
                         <span><a href="!#">Trips </a></span>
@@ -155,6 +261,72 @@
             </div>
         </div>
     </header>
+@else
+        <header class="header menu_fixed">
+            <div id="preloader">
+                <div data-loader="circle-side"></div>
+            </div>
+            <!-- /Page Preload -->
+            <div class="container">
+                <div id="logo">
+                    <a href="{{route('home')}}">
+                        <img src="{{asset('assets/front/img/darklogo.svg')}}" width="250" height="36" alt="" class="logo_normal imgindexdesk" />
+                        <img src="{{asset('assets/front/img/mbllogo.svg')}}" width="60" height="36" alt="" class="logo_normal imgindexmbl" />
+                        <img src="{{asset('assets/front/img/darklogo.svg')}}" width="250" height="36" alt="" class="logo_sticky" />
+                    </a>
+                </div>
+                <!-- /top_menu -->
+                <a href="#menu" class="btn_mobile">
+                    <div class="hamburger hamburger--spin" id="hamburger">
+                        <div class="hamburger-box">
+                            <div class="hamburger-inner"></div>
+                        </div>
+                    </div>
+                </a>
+                <nav id="menu" class="main-menu">
+                    <ul>
+                        <li>
+                            <span><a><img src="{{asset('assets/front/img/drakglobal.svg')}}" /> English</a></span>
+                        </li>
+                        <li>
+                            <span><a href="{{route('help_center')}}"> Help Center</a></span>
+                        </li>
+                        <li>
+                            <span><a href="./tour-detail.html">Trips </a></span>
+                        </li>
+                        @guest
+                            <li>
+                                <span><a href="{{route('login')}}">Login</a></span>
+                            </li>
+                        @else
+                            <li>
+                                <span><a href="{{route('admin.home')}}"><img src="{{asset('assets/front/img/userimg.png')}}" class="userloginprofile" /></a></span>
+                            </li>
+                            <li>
+                                <span><a href="#" onclick="event.preventDefault(); document.getElementById('logoutform').submit();">Logout</a></span>
+                            </li>
+                        @endguest
+{{--                        <li>--}}
+{{--                            <span><a href="#"><img src="./img/userimg.png" class="userloginprofile" /></a></span>--}}
+{{--                        </li>--}}
+
+                    </ul>
+                </nav>
+                <div class="mblsdiv1">
+                    <a href="#"><img src="{{asset('assets/front/img/dar-search-normal.svg')}}" /></a>
+                    <a href="#"><img src="{{asset('assets/front/img/darkbriefcase.svg')}}" /></a>
+                    <a href="{{route('frontend.account.index')}}"><svg style="width: 24px; height: 23px;"><path fill-rule="evenodd" d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 3a3 3 0 110 6 3 3 0 010-6zM6 15.98a7.2 7.2 0 0012 0c-.03-1.99-4.01-3.08-6-3.08-2 0-5.97 1.09-6 3.08z" clip-rule="evenodd"></path></svg></a>
+                </div>
+            </div>
+        </header>
+    @if(isset($page_type)&&$page_type=='trip')
+            @if($trip->featured_image)
+                    <img src="{{ $trip->featured_image->getUrl() }}" class="tourdetailshead1">
+              @else
+                <img src="{{asset('assets/front/img/tourdetailsbg1.png')}}" class="tourdetailshead1" />
+            @endif
+        @endif
+    @endif
     <!-- /header -->
         <main>
             @yield('content')
@@ -912,10 +1084,56 @@
     {{ csrf_field() }}
 </form>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="{{ asset('assets/front/js/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ asset('assets/front/js/common_scripts.js') }}"></script>
 <script src="{{ asset('assets/front/js/main.js')}}"></script>
 <script src="{{ asset('assets/front/js/script2.js')}}"></script>
 @yield('scripts')
+<script>
+    var select_placeholder='<option>{{trans('global.pleaseSelect')}}</option>';
+    $("select[name=country]").change(function (){
+        console.log($(this).val());
+        $.ajax({
+            url: "{{ route('states.get_by_country') }}?country_id=" + $(this).val(),
+            method: 'GET',
+            success: function(data) {
+                $('select[name=state]').html(data.html);
+                $('select[name=city]').html(select_placeholder);
+            }
+        });
+    });
+    $("select[name=state]").change(function (){
+        console.log($(this).val());
+        $.ajax({
+            url: "{{ route('cities.get_by_state') }}?state_id=" + $(this).val(),
+            method: 'GET',
+            success: function(data) {
+                $('select[name=city]').html(data.html);
+            }
+        });
+    });
+    $("select[name=country_id]").change(function (){
+        console.log($(this).val());
+        $.ajax({
+            url: "{{ route('states.get_by_country') }}?country_id=" + $(this).val(),
+            method: 'GET',
+            success: function(data) {
+                $('select[name=state_id]').html(data.html);
+                $('select[name=city_id]').html(select_placeholder);
+            }
+        });
+    });
+    $("select[name=state_id]").change(function (){
+        console.log($(this).val());
+        $.ajax({
+            url: "{{ route('cities.get_by_state') }}?state_id=" + $(this).val(),
+            method: 'GET',
+            success: function(data) {
+                $('select[name=city_id]').html(data.html);
+            }
+        });
+    });
+</script>
 </body>
 
 </html>

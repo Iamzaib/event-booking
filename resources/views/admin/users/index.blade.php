@@ -228,7 +228,7 @@
                                 </div> <!-- / .row -->
                             </div>
                             <div class="table-responsive overflow-visible print">
-                                <table class="table table-sm table-hover table-nowrap card-table" id="data-table">
+                                <table class="table table-sm table-hover table-wrap card-table" id="data-table">
                                     <thead>
                                     <tr>
                                         <th>
