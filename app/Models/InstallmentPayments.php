@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class CostumeAttribute extends Model
+class InstallmentPayments extends Model
 {
     use SoftDeletes;
     use HasFactory;
 
-    public $table = 'costume_attributes';
+    public $table = 'installment_payments';
 
     protected $dates = [
         'created_at',
@@ -21,15 +21,25 @@ class CostumeAttribute extends Model
     ];
 
     protected $fillable = [
-        'title',
-        'values',
+        'payment_id',
+        'amount_total',
+        'amount_paid',
+        'amount_balance',
+        'installment',
+        'total_installments',
+        'installment_no',
+        'payment_method',
+        'payment_details',
         'created_at',
         'updated_at',
         'deleted_at',
     ];
-    public function costumes(){
-        $this->belongsToMany(Costume::class,'costume_costume_attribute');
+
+    public function payment()
+    {
+        return $this->belongsTo(Payment::class, 'payment_id');
     }
+
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->format('Y-m-d H:i:s');

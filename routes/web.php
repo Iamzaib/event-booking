@@ -3,15 +3,21 @@
 //Route::view('/', 'welcome');
 use App\Http\Controllers\Frontend\CheckoutController;
 use App\Http\Controllers\Frontend\UsersController;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('userVerification/{token}', 'UserVerificationController@approve')->name('userVerification');
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('/help-center', 'HomeController@help')->name('help_center');
 Route::get('/trips', 'HomeController@trips')->name('trips');
+Route::get('/email-verify-now', 'VerificationController@show')->name('email_verification');
+
 Route::get('/page/{page_name}/{pID}', 'HomeController@page')->name('page_view');
 Auth::routes();
 Route::get('cities_list/get_by_state', 'Admin\CitiesController@get_by_state')->name('cities.get_by_state');
 Route::get('states_list/get_by_country', 'Admin\StatesController@get_by_country')->name('states.get_by_country');
+Route::group(['middleware' => ['auth']], function () {
+    Route::get('/email-verify-now', 'Auth\VerificationController@show')->name('email_verification');
+});
 Route::group(['as' => 'frontend.', 'namespace' => 'Frontend'], function () {
 
     Route::get('/home', 'HomeController@index')->name('home');
@@ -23,6 +29,9 @@ Route::controller(CheckoutController::class)->group(function () {
         Route::post('checkout-info-update', 'checkout_userInfo_update')->name('checkout_info_update');
         Route::group(['middleware' => ['auth']], function () {
             Route::get('checkout-payment', 'checkout_payment')->name('checkout_payment');
+            Route::post('checkout-update-payment', 'checkout_payment_save')->name('checkout_payment_save');
+            Route::get('checkout-confirmation', 'checkout_confirm')->name('checkout_confirm');
+            Route::get('booking-complete', 'checkout_complete')->name('checkout_complete');
         });
 });
 //    After Login

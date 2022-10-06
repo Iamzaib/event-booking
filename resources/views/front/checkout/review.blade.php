@@ -6,7 +6,7 @@
     <div class="checkutpagemain">
         <div class="container contch">
             <div class="checkout1box">
-                <h1 class="arwsqft"><img src="{{asset('assets/front/img/arrow-square-left.svg')}}" /><a href="./tour-detail.html">Go back</a></h1>
+                <h1 class="arwsqft"><img src="{{asset('assets/front/img/arrow-square-left.svg')}}" /><a href="{{route('trips')}}">Go back</a></h1>
                 <h2>Review your trip.</h2>
                 @if(DISPLAY_CHECKOUT_TOP_MSG==true)
                 <div class="toptxtch">
@@ -87,11 +87,8 @@
                                                 <li>{{$trip->duration-1}} Nights Hotel Accommodation</li>
                                                 @if($event_tickets>0)<li>{{$event_tickets}} Event Tickets</li>@endif
 
-                                                @foreach($trip->costumes as $costume)
-                                                    <li>{{$costume->costume_title}}</li>
-                                                @endforeach
-                                                @foreach($trip->addons as $addon)
-                                                    <li>{{$addon->addon_title}}</li>
+                                                @foreach($trip->amenities_includeds as $amenities_included)
+                                                    <li>{{$amenities_included->title}}</li>
                                                 @endforeach
 {{--                                                <li>Professional Photographer</li>--}}
 {{--                                                <li>Costume Pickup & Delivery</li>--}}

@@ -45,32 +45,44 @@
                                                    </div> -->
                                                     <label for="firstname" class="form-label">First name</label>
                                                     <input type="text" class="form-control" placeholder="First name" id="firstname"
-                                                           required name="name" value="{{auth()->user()->name??''}}">
+                                                           required name="name" value="{{$user_data['first_name']??''}}">
                                                 </div>
                                             </div>
+
                                             <div class="col-md-6">
                                                 <div class="mb-3">
                                                     <label for="lastname" class="form-label">Last name</label>
-                                                    <input type="text" class="form-control" placeholder="Last name" name="lastname" value="{{auth()->user()->lastname??''}}" id="lastname" required="">
+                                                    <input type="text" class="form-control" placeholder="Last name" name="lastname" value="{{$user_data['last_name']??''}}" id="lastname" required="">
                                                     <!-- <div class="prel">
                                                       <input type="text" class="inputText " required />
                                                       <span class="floating-label">Last name</span>
                                                     </div> -->
                                                 </div>
                                             </div>
-
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label>{{ trans('cruds.user.fields.gender') }}</label>
+                                                    @foreach(App\Models\User::GENDER_RADIO as $key => $label)
+                                                        <div class="form-check {{ $errors->has('gender') ? 'is-invalid' : '' }}">
+                                                            <input class="form-check-input" type="radio" id="gender_{{ $key }}" name="gender" value="{{ $key }}" {{  (string)$user_data['gender'] === (string) $key ? 'checked' : '' }}>
+                                                            <label class="form-check-label" for="gender_{{ $key }}">{{ $label }}</label>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
                                             <div class="col-md-6">
                                                 <div class="mb-3">
                                                     <label for="" class="form-label">Phone number</label>
                                                     <div class="row">
-                                                        <div class="col-4 pr0">
+                                                        <div class="col-4 pr0" style="display: none">
                                                             <select class="form-select formsele br1" name="phone_locale" formsele aria-label="Default select example">
+                                                                <option value="" selected>none</option>
                                                                 <option value="+1" >US (+1)</option>
                                                                 <option value="+44" >UK (+44)</option>
                                                             </select>
                                                         </div>
-                                                        <div class="col-8 pl0">
-                                                            <input type="text" class="form-control bl1 pl0" name="phone" value="{{auth()->user()->phone??''}}" placeholder="(555) 000-0000">
+                                                        <div class="col-12 ">
+                                                            <input type="text" class="form-control" name="phone" value="{{$user_data['phone']??''}}" placeholder="(555) 000-0000">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -80,14 +92,13 @@
                                             <div class="col-md-6">
                                                 <div class="mb-3 ">
                                                     <label for="" class="form-label">Street Address</label>
-                                                    <input type="text" name="address" class="form-control" placeholder="Street No etc" required value="{{auth()->user()->address??''}}">
-{{--                                                    <img src="{{asset('assets/front/img/search22.svg')}}" />--}}
+                                                    <input type="text" name="address" class="form-control" placeholder="Street No etc" required value="{{$user_data['address']??''}}">
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="mb-3 ">
                                                     <label for="" class="form-label">Building, House #</label>
-                                                    <input type="text" class="form-control" name="address2" placeholder="Street No etc" value="{{auth()->user()->address2??''}}">
+                                                    <input type="text" class="form-control" name="address_2" placeholder="Street No etc" value="{{$user_data['address_2']??''}}">
 {{--                                                    <img src="{{asset('assets/front/img/search22.svg')}}" />--}}
                                                 </div>
                                             </div>
@@ -98,7 +109,7 @@
                                                     <label for="country_id" class="form-label">Country</label>
                                                     <select class="form-control select2 {{ $errors->has('country') ? 'is-invalid' : '' }}" name="country_id" id="country_id" required>
                                                         @foreach($countries as $id => $entry)
-                                                            <option value="{{ $id }}" {{ (old('country_id') ? old('country_id') : auth()->user()->country->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                                                            <option value="{{ $id }}" {{ (old('country_id') ? old('country_id') : $user_data['country_id'] ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -108,7 +119,7 @@
                                                     <label for="state_id" class="form-label">State</label>
                                                     <select class="form-control select2 {{ $errors->has('state') ? 'is-invalid' : '' }}" name="state_id" id="state_id" required>
                                                         @foreach($states as $id => $entry)
-                                                            <option value="{{ $id }}" {{ (old('state_id') ? old('state_id') : auth()->user()->state->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                                                            <option value="{{ $id }}" {{ (old('state_id') ? old('state_id') : $user_data['state_id'] ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -118,7 +129,7 @@
                                                     <label for="city_id" class="form-label">City</label>
                                                     <select class="form-control select2 {{ $errors->has('city') ? 'is-invalid' : '' }}" name="city_id" id="city_id" >
                                                         @foreach($cities as $id => $entry)
-                                                            <option value="{{ $id }}" {{ (old('city_id') ? old('city_id') : auth()->user()->city->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                                                            <option value="{{ $id }}" {{ (old('city_id') ? old('city_id') : $user_data['city_id'] ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -135,7 +146,15 @@
                                             <div class="col-md-6">
                                                 <div class="mb-3 room_mate">
                                                     <label for="" class="form-label">Add Roommate</label>
-                                                    <input type="text" class="form-control mb-2" name="roommate[]"  placeholder="Roommate Name">
+                                                    @if(isset($order->user_details)&&is_array($order->user_details))
+                                                        @foreach($order->user_details['roommate'] as $index => $roommate)
+                                                            @if($index!=1)
+                                                            <input type="text" class="form-control mb-2" value="{{$roommate->first_name}}"  name="roommate[]"  placeholder="Roommate Name">
+                                                                @endif
+                                                            @endforeach
+                                                    @endif
+                                                    <input type="text" class="form-control mb-2"  name="roommate[]"  placeholder="Roommate Name">
+
                                                     <!-- <div class="prel">
                                                     <input type="text" class="inputText " required />
                                                     <span class="floating-label">Roommate Name</span>
@@ -183,6 +202,8 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        @elseguest
+                                            <input type="hidden" name="user_email" value="{{auth()->user()->email}}">
                                         @endguest
                                             <div class="row">
                                             <div class="col-md-12 mb-3">

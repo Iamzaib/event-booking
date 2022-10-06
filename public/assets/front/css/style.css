@@ -1146,7 +1146,7 @@ header.sticky .hamburger-inner::after {
   }
 }
 .hero_in.general:before {
-  background: url(../img/hero_in_bg_2.jpg) center center no-repeat;
+  background: url(/assets/front/img/hero_in_bg_2.jpg) center center no-repeat;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -1157,7 +1157,7 @@ header.sticky .hamburger-inner::after {
   background-color: rgba(0, 0, 0, 0.6);
 }
 .hero_in.tours:before {
-  background: url(../img/hero_in_bg_1.jpg) center center no-repeat;
+  background: url(/assets/front/img/hero_in_bg_1.jpg) center center no-repeat;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -1168,7 +1168,7 @@ header.sticky .hamburger-inner::after {
   background-color: rgba(0, 0, 0, 0.6);
 }
 .hero_in.hotels:before {
-  background: url(../img/hero_in_bg_4.jpg) center center no-repeat;
+  background: url(/assets/front/img/hero_in_bg_4.jpg) center center no-repeat;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -1179,7 +1179,7 @@ header.sticky .hamburger-inner::after {
   background-color: rgba(0, 0, 0, 0.6);
 }
 .hero_in.restaurants:before {
-  background: url(../img/hero_in_bg_5.jpg) center center no-repeat;
+  background: url(/assets/front/img/hero_in_bg_5.jpg) center center no-repeat;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -1199,14 +1199,14 @@ header.sticky .hamburger-inner::after {
   }
 }
 .hero_in.tours_detail:before {
-  background: url(../img/hero_in_tours_detail.jpg) center center no-repeat;
+  background: url(/assets/front/img/hero_in_tours_detail.jpg) center center no-repeat;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
 }
 .hero_in.tours_detail .wrapper {
-  background: url(../img/hero_in_tours_detail.jpg) center center no-repeat;
+  background: url(/assets/front/img/hero_in_tours_detail.jpg) center center no-repeat;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -1263,7 +1263,7 @@ header.sticky .hamburger-inner::after {
 }
 
 .hero_in.hotels_detail:before {
-  background: url(../img/hero_in_hotels_detail.jpg) center center no-repeat;
+  background: url(/assets/front/img/hero_in_hotels_detail.jpg) center center no-repeat;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -1282,7 +1282,7 @@ header.sticky .hamburger-inner::after {
   }
 }
 .hero_in.restaurants_detail:before {
-  background: url(../img/hero_in_restaurants_detail.jpg) center center no-repeat;
+  background: url(/assets/front/img/hero_in_restaurants_detail.jpg) center center no-repeat;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -1293,7 +1293,7 @@ header.sticky .hamburger-inner::after {
   background-color: rgba(0, 0, 0, 0.6);
 }
 .hero_in.contacts:before {
-  background: url(../img/hero_in_bg_3.jpg) center center no-repeat;
+  background: url(/assets/front/img/hero_in_bg_3.jpg) center center no-repeat;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -1461,7 +1461,7 @@ main {
 /* Footer */
 footer {
   background: #2D0087;
-  background-image: url(../img/footerbg.svg);
+  background-image: url(/assets/front/img/footerbg.svg);
   background-size: cover;
   background-position: bottom;
   color: #DFDFDF;
@@ -1471,7 +1471,7 @@ footer p {
  color: #DFDFDF;
 }
 footer h5 {
-  
+
   margin: 8px 0 25px;
   font-family: 'Sora' sans-serif;
 font-style: normal;
@@ -2149,7 +2149,7 @@ html[xmlns] .flexslider .slides {
   position: absolute;
   right: 20px;
   bottom: 20px;
-  background: url(../img/drag_icon.svg) 0 0 no-repeat;
+  background: url(/assets/front/img/drag_icon.svg) 0 0 no-repeat;
   width: 50px;
   height: 30px;
   opacity: 0.6;
@@ -2395,7 +2395,7 @@ a#moveDown {
 
 @media (max-width: 1024px) {
   #hero_video {
-    background: #ccc url(../img/home_section_1.jpg);
+    background: #ccc url(/assets/front/img/home_section_1.jpg);
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -2485,7 +2485,7 @@ a#moveDown {
   height: 620px;
 }
 .hero_single.version_2:before {
-  background: url(../img/unsplash_cB4Uqoc9D9k.png) center center no-repeat;
+  background: url(/assets/front/img/unsplash_cB4Uqoc9D9k.png) center center no-repeat;
   /* background: linear-gradient(270deg, rgba(148, 67, 224, 0.75) 0%, rgba(74, 0, 224, 0.75) 100%), url(dwp-lpts20_0159.jpg); */
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -2595,7 +2595,7 @@ a#moveDown {
 @media (max-width: 575px) {
   #custom-search-input input[type="submit"] {
     text-indent: -999px;
-    background: #ff027c url(../img/search.svg) no-repeat center center;
+    background: #ff027c url(/assets/front/img/search.svg) no-repeat center center;
   }
 }
 
@@ -4839,7 +4839,7 @@ ul.hotel_facilities li img {
 /*-------- 2.5 Login/register --------*/
 #login_bg,
 #register_bg {
-  background: url(../img/hero_in_bg_3.jpg) center center no-repeat fixed;
+  background: url(/assets/front/img/hero_in_bg_3.jpg) center center no-repeat fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -4849,7 +4849,7 @@ ul.hotel_facilities li img {
 }
 
 #register_bg {
-  background: url(../img/hero_in_bg_2.jpg) center center no-repeat fixed;
+  background: url(/assets/front/img/hero_in_bg_2.jpg) center center no-repeat fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -5391,7 +5391,7 @@ span.infobox_rate {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  /* background: #0054a6 url(../img/pattern_1.svg) center bottom repeat-x; */
+  /* background: #0054a6 url(/assets/front/img/pattern_1.svg) center bottom repeat-x; */
   color: #1f3c63;
   padding-top: 70px;
 }
@@ -5493,7 +5493,7 @@ span.infobox_rate {
 
 /*-------- 2.9 Cart section --------*/
 .cart_section {
-  background: #0054a6 url(../img/pattern_1.svg) center bottom repeat-x;
+  background: #0054a6 url(/assets/front/img/pattern_1.svg) center bottom repeat-x;
 }
 @media (max-width: 767px) {
   .cart_section {
@@ -6254,7 +6254,7 @@ ul.list_3 li:before {
 
 @media (max-width: 1024px) {
   .header-video.adventure #hero_video {
-    background: #ccc url(../img/bg_fallback_video_adventure.jpg) center right;
+    background: #ccc url(/assets/front/img/bg_fallback_video_adventure.jpg) center right;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -6352,7 +6352,7 @@ a.grid_item.latest_adventure em {
 }
 
 .banner {
-  background: url(../img/banner_bg_desktop.jpg) center center no-repeat;
+  background: url(/assets/front/img/banner_bg_desktop.jpg) center center no-repeat;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -6364,7 +6364,7 @@ a.grid_item.latest_adventure em {
 }
 @media (max-width: 767px) {
   .banner {
-    background: url(../img/banner_bg_mobile.jpg) center center no-repeat;
+    background: url(/assets/front/img/banner_bg_mobile.jpg) center center no-repeat;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -6398,7 +6398,7 @@ a.grid_item.latest_adventure em {
 }
 
 .call_section.adventure {
-  background: url(../img/bg_call_action_adventure.jpg) center center no-repeat
+  background: url(/assets/front/img/bg_call_action_adventure.jpg) center center no-repeat
     fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -6422,7 +6422,7 @@ a.grid_item.latest_adventure em {
   }
 }
 .hero_in.adventure_detail:before {
-  background: url(../img/bg_adventure_detail.jpg) center center no-repeat;
+  background: url(/assets/front/img/bg_adventure_detail.jpg) center center no-repeat;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -6725,7 +6725,7 @@ ul.list_feat li p {
   height: 690px;
 }
 .hero_single.version_3:before {
-  background: url(../img/home_section_3.jpg) center center no-repeat;
+  background: url(/assets/front/img/home_section_3.jpg) center center no-repeat;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -6929,7 +6929,7 @@ header.header.map_view .hamburger-inner::after {
 }
 
 a.btn_search_map_view {
-  background: url(../img/search.svg) no-repeat center center;
+  background: url(/assets/front/img/search.svg) no-repeat center center;
   background-size: 21px 21px;
   width: 21px;
   height: 21px;
@@ -8063,7 +8063,7 @@ a.btn_explore:hover {
 }
 
 .call_section {
-  background: url(../img/bg_call_section.jpg) center center no-repeat fixed;
+  background: url(/assets/front/img/bg_call_section.jpg) center center no-repeat fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -8484,11 +8484,11 @@ ul.bullets2 li:before {
   /* content: "";
   color: #ff027c;
   position: absolute;
-  left: 0px; 
+  left: 0px;
   top: 3px;
   width: 26px;
   height: 26px;
-  background: url("../img/tick.png") no-repeat; */
+  background: url("/assets/front/img/tick.png") no-repeat; */
   content: "\f00c";
   font-family: "FontAwesome";
   float: left;
@@ -9810,7 +9810,7 @@ ul.plan-features {
   }
 }
   /* .btnhead {
-     
+
     padding: 10px 20px !important;
   } */
 @media (max-width: 640px) {
@@ -9865,7 +9865,7 @@ ul.plan-features {
   padding: 15px 0px;
 }
 .tbl1 tbody tr {
- border-bottom: 1px solid #E3E3E3; 
+ border-bottom: 1px solid #E3E3E3;
 }
 
 .pricedmbl {
@@ -10505,7 +10505,7 @@ strong {
   }
 }
 .nav-tabs {
-  
+
   display: flex;
     flex-direction: column;
     border-bottom: 0px solid !important;
@@ -10514,7 +10514,7 @@ strong {
     margin: 0px !important;
     padding: 8px 8px 5px !important;
     border-left: 4px solid #F8F5FF !important;
-    
+
 }
 .nav-link {
   color: #95aac9;
@@ -10922,7 +10922,7 @@ margin-bottom: 25px;
       position: absolute;
     right: 9px;
     fill: #c5c6c9;
-   
+
 }
 @media (min-width: 576px)
 {
@@ -11050,7 +11050,7 @@ font-weight: 600 !important;
 }
 
 .formchin:checked[type=checkbox] {
-    background-image: url(../img/check.svg) !important;
+    background-image: url(/assets/front/img/check.svg) !important;
 }
 
 .formchin:checked {
@@ -11095,7 +11095,7 @@ font-weight: 600 !important;
       cursor: pointer;
 }
 .mtb20{
-  
+
     margin-bottom: 20px;
 
 }
@@ -11199,7 +11199,7 @@ color: #ff027c !important;
 .choosepaymemyrad input[type="radio"] + label h3 b{
   color: #383839;
     font-weight: 600;
-    
+
 }
 .boxchlabl{
   border-bottom: 1px solid #E3E3E3;
@@ -11262,7 +11262,7 @@ color: #ff027c !important;
 
 .choosepaymemyrad input[type="checkbox"]:checked + label {
       border: 2px solid #4A00E0;
-  
+
 }
 
 .choosepaymemyrad input[type="checkbox"] + label {
@@ -11284,7 +11284,7 @@ color: #ff027c !important;
     font-weight: 600;
     font-size: 13px;
 
-    
+
 }
 
 .choosepaymemyrad input[type="checkbox"] + label p{
@@ -11369,7 +11369,7 @@ text-transform: capitalize;
 
 /* When the checkbox is checked, add a blue background */
 .chbox2q input:checked ~ .checkmark {
-  
+
 }
 
 /* Create the checkmark/indicator (hidden when not checked) */
@@ -11441,7 +11441,7 @@ text-transform: capitalize;
 
 /* When the checkbox is checked, add a blue background */
 .chbox2q2 input:checked ~ .checkmark {
-  
+
 }
 
 
@@ -11473,13 +11473,13 @@ background: linear-gradient(90deg, #8E2DE2 0%, #4A00E0 100%) !important;
 }
 /* .btngrad:hover{
   background-image: -webkit-linear-gradient(to right, #ff4757, #fe058f) !important;
-    background-image: -moz-linear-gradient(to right, #ff4757, #fe058f) !important; 
-    
-background: linear-gradient(to right, #ff4757, #fe058f) !important; 
+    background-image: -moz-linear-gradient(to right, #ff4757, #fe058f) !important;
+
+background: linear-gradient(to right, #ff4757, #fe058f) !important;
 
 } */
 .dialogsumry{
- 
+
  height: 100% !important;
     margin: 0px !important;
     position: fixed;
@@ -11500,7 +11500,7 @@ background: linear-gradient(to right, #ff4757, #fe058f) !important;
     top: -38px;
     left: 0px;
     fill: #1f3c63;
-   
+
 }
 .dialogsumry .modal-content{
   padding: 20px;
@@ -11531,7 +11531,7 @@ background: linear-gradient(to right, #ff4757, #fe058f) !important;
     padding: 0px 0px !important;
 }
 .dialogsumry .dflexch1 span{
-  font-size: 14px; 
+  font-size: 14px;
 }
 .dialogsumry .dflexch1 p{
   color: #62758c;
@@ -11707,7 +11707,7 @@ line-height: 1.5;
     box-sizing: border-box;
     margin-bottom: 0.82353rem;
     font-size: 0.9375rem;
-       
+
 }
 .form-floating>label{
       transition: 0.1s ease all;
@@ -11730,7 +11730,7 @@ line-height: 1.5;
 .form-floating>.form-control:focus, .form-floating>.form-control:not(:placeholder-shown) {
 
     padding: 18px 0.75rem 0.625rem;
-  
+
 }
 
 .contactusform{
@@ -11773,7 +11773,7 @@ line-height: 1.5;
     overflow-anchor: none;
     align-items: center;
     background-color: #fff;
-  
+
     border-radius: 0;
     color: #161c2d;
     display: flex;
@@ -11794,7 +11794,7 @@ line-height: 1.5;
 .firstacchead p{
 
     font-size: 15px;
-  
+
 }
 .accordion-item {
     background-color: #fff;
@@ -11953,7 +11953,7 @@ font-size: 18px;
     display: block;
   }
   .announcement .coupon {
-  
+
     justify-content: center;
 }
   .btnshopoff{
@@ -12415,7 +12415,7 @@ width: 40px !important;
 @media(max-width: 991px)
 {
   ul#myTab{
-   
+
     white-space: nowrap;
     flex-wrap: nowrap;
   }
@@ -12424,7 +12424,7 @@ width: 40px !important;
     overflow-y: hidden;
   }
 
-  
+
 ul#myTab::-webkit-scrollbar-track
 {
 	-webkit-box-shadow: inset 0 0 0px rgba(0,0,0,0.3);
@@ -12628,7 +12628,7 @@ line-height: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
-   
+
 }
 .Destinationhead .homefirstdiv{
   max-width: 615px;
@@ -12642,7 +12642,7 @@ line-height: 18px;
     margin-bottom: 12px;
 }
 .Destinationhead .homefirstdiv p {
-   
+
     text-align: center;
     max-width: 490px;
     margin-bottom: 24px;
@@ -13133,7 +13133,7 @@ text-transform: uppercase;
     opacity: 1;
 }
 .paybycrad{
-  
+
 }
 .paybycrad h2{
   font-family: 'Sora', sans-serif !important;
@@ -13648,12 +13648,12 @@ font-size: 13px;
 }
 .roomsdetails{
   margin: 15px 0 5px;
- 
+
 }
 .mytripsaco{
   padding: 100px 0 250px;
   max-width: 500px;
-  margin: 0px auto 0px; 
+  margin: 0px auto 0px;
 }
 .mytripsaco h3{
   font-size: 24px;
@@ -13774,7 +13774,7 @@ ul#footer-selector li{
 }
 footer {
     background: #2D0087;
-    background-image: url(../img/footerbg-mbl.svg);
+    background-image: url(/assets/front/img/footerbg-mbl.svg);
     background-size: cover;
     background-position: bottom;
 }

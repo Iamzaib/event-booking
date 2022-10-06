@@ -214,7 +214,7 @@
         <!-- /Page Preload -->
         <div class="container">
             <div id="logo">
-                <a href="index.html">
+                <a href="{{route('home')}}}">
                     <img src="{{ asset('assets/front/img/home-page-logo.svg')}}" width="250" height="36" alt="" class="logo_normal imgindexdesk" />
                     <img src="{{ asset('assets/front/img/mbllogo.svg')}}" width="60" height="36" alt="" class="logo_normal imgindexmbl" />
                     <img src="{{ asset('assets/front/img/home-page-logo.svg')}}" width="250" height="36" alt="" class="logo_sticky" />
@@ -238,7 +238,7 @@
                         <span><a href="{{route('help_center')}}"> Help Center</a></span>
                     </li>
                     <li>
-                        <span><a href="!#">Trips </a></span>
+                        <span><a href="{{route('trips')}}">Trips </a></span>
                     </li>
                     @guest
                     <li>
@@ -246,7 +246,7 @@
                     </li>
                     @else
                     <li>
-                        <span><a href="{{route('admin.home')}}">Account</a></span>
+                        <span><a href="@if(auth()->user()->is_admin){{route('admin.home')}}@else{{route('frontend.account.index')}}@endif">Account</a></span>
                     </li>
                      <li>
                         <span><a href="#" onclick="event.preventDefault(); document.getElementById('logoutform').submit();">Logout</a></span>
@@ -256,8 +256,8 @@
             </nav>
             <div class="mblsdiv1">
                 <a href="#"><img src="{{ asset('assets/front/img/search-normal.svg')}}" /></a>
-                <a href="#"><img src="{{ asset('assets/front/img/briefcase.svg')}}" /></a>
-                <a href="./my-account.html"><svg style="width: 24px; height: 23px;"><path fill-rule="evenodd" fill="#fff" d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 3a3 3 0 110 6 3 3 0 010-6zM6 15.98a7.2 7.2 0 0012 0c-.03-1.99-4.01-3.08-6-3.08-2 0-5.97 1.09-6 3.08z" clip-rule="evenodd"></path></svg></a>
+                <a href="{{route('trips')}}"><img src="{{ asset('assets/front/img/briefcase.svg')}}" /></a>
+                <a href="@if(auth()->user()->is_admin){{route('admin.home')}}@else{{route('frontend.account.index')}}@endif"><svg style="width: 24px; height: 23px;"><path fill-rule="evenodd" fill="#fff" d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 3a3 3 0 110 6 3 3 0 010-6zM6 15.98a7.2 7.2 0 0012 0c-.03-1.99-4.01-3.08-6-3.08-2 0-5.97 1.09-6 3.08z" clip-rule="evenodd"></path></svg></a>
             </div>
         </div>
     </header>
@@ -292,7 +292,7 @@
                             <span><a href="{{route('help_center')}}"> Help Center</a></span>
                         </li>
                         <li>
-                            <span><a href="./tour-detail.html">Trips </a></span>
+                            <span><a href="{{route('trips')}}">Trips </a></span>
                         </li>
                         @guest
                             <li>
@@ -300,7 +300,7 @@
                             </li>
                         @else
                             <li>
-                                <span><a href="{{route('admin.home')}}"><img src="{{asset('assets/front/img/userimg.png')}}" class="userloginprofile" /></a></span>
+                                <span><a href="@if(auth()->user()->is_admin){{route('admin.home')}}@else{{route('frontend.account.index')}}@endif"><img src="{{auth()->user()->profileimage?auth()->user()->profileimage->getUrl('thumb'):asset('assets/front/img/userimg.png')}}" class="userloginprofile" /></a></span>
                             </li>
                             <li>
                                 <span><a href="#" onclick="event.preventDefault(); document.getElementById('logoutform').submit();">Logout</a></span>
@@ -314,8 +314,8 @@
                 </nav>
                 <div class="mblsdiv1">
                     <a href="#"><img src="{{asset('assets/front/img/dar-search-normal.svg')}}" /></a>
-                    <a href="#"><img src="{{asset('assets/front/img/darkbriefcase.svg')}}" /></a>
-                    <a href="{{route('frontend.account.index')}}"><svg style="width: 24px; height: 23px;"><path fill-rule="evenodd" d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 3a3 3 0 110 6 3 3 0 010-6zM6 15.98a7.2 7.2 0 0012 0c-.03-1.99-4.01-3.08-6-3.08-2 0-5.97 1.09-6 3.08z" clip-rule="evenodd"></path></svg></a>
+                    <a href="{{route('trips')}}"><img src="{{asset('assets/front/img/darkbriefcase.svg')}}" /></a>
+                    <a href="@if(auth()->user()->is_admin){{route('admin.home')}}@else{{route('frontend.account.index')}}@endif"><svg style="width: 24px; height: 23px;"><path fill-rule="evenodd" d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 3a3 3 0 110 6 3 3 0 010-6zM6 15.98a7.2 7.2 0 0012 0c-.03-1.99-4.01-3.08-6-3.08-2 0-5.97 1.09-6 3.08z" clip-rule="evenodd"></path></svg></a>
                 </div>
             </div>
         </header>
@@ -424,7 +424,7 @@
                 <div class="col-lg-6">
                     <ul id="footer-selector">
                         <li>
-                            <span>© 2000-2021, All Rights Reserved</span>
+                            <span>© 2000-{{date('Y')}}, All Rights Reserved</span>
                         </li>
                     </ul>
                 </div>

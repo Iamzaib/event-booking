@@ -132,7 +132,7 @@ class CitiesController extends Controller
     }
     public function get_by_state(Request $request)
     {
-        abort_if(Gate::denies('city_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        //abort_if(Gate::denies('city_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         if (!$request->state_id) {
             $html = '<option value="">'.trans('global.pleaseSelect').'</option>';
         } else {

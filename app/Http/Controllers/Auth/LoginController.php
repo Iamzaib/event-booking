@@ -27,7 +27,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+//    protected $redirectTo = RouteServiceProvider::HOME;
 
     /**
      * Create a new controller instance.
@@ -37,24 +37,23 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    public function redirectTo()
-    {
-
-        if (auth()->user()->is_admin) {
-            return '/admin';
-        }
-
-        return '/home';
-    }
+//    public function redirectTo()
+//    {
+//
+//        if (auth()->user()->is_admin) {
+//            return '/admin';
+//        }
+//
+//        return '/home';
+//    }
     protected function authenticated(Request $request, $user)
     {
-        if(session('redirect_to_checkout')!==''){
-                redirect()->intended(route('frontend.checkout',['payment_info'=>session('redirect_to_checkout')]));
+        if(session('redirect_to_checkout')!=''){
+               return redirect()->route('frontend.checkout_info',['payment_info'=>session('redirect_to_checkout')]);
         }
-        if (auth()->user()->is_admin) {
-            redirect()->intended(route('admin.home'));
-        }else{
-            redirect()->intended(route('account'));
+        if ($user->is_admin) {
+           return redirect()->intended(route('admin.home'));
         }
+        return redirect()->intended(route('frontend.account.index'));
     }
 }

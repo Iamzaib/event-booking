@@ -14,8 +14,11 @@ use App\Models\Event;
 use App\Models\EventAddon;
 use App\Models\HotelRoom;
 use App\Models\State;
+use Carbon\CarbonPeriod;
 use Gate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use JetBrains\PhpStorm\Pure;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -108,11 +111,34 @@ class EventsController extends Controller
     }
     public function customized_trip($trip_title,Event $trip){
 //       dd($trip_title,$trip);
-
+        $data['travelers']=1;
+        if($this->request->travelers>0){
+            $data['travelers']=$this->request->travelers;
+        }
         $data['page_name']=$trip_title;
 //        $data['page_type']='trip';
         $trip->load('country', 'state', 'city');
         $data['trip']=$trip;
+
+        $period = CarbonPeriod::create(date('Y-m-d H:i:s',strtotime($trip->event_start)), date('Y-m-d H:i:s',strtotime($trip->event_end)));
+        // Iterate over the period
+        $dates=$period->toArray();
+//        foreach ($period as $date) {
+//
+//        }
+        foreach ($dates as $i=> $date){
+            $dates[$i]=date('d-M-Y',strtotime($date));
+        }
+
+//        echo json_encode($pieces);exit;
+        if($trip->duration>2){
+            list($date_range_1, $date_range_2) = array_chunk($dates, ceil(count($dates) / 2));
+            $data['range'][0]['date']=Arr::first($date_range_1).' > '.Arr::last($date_range_1);
+            $data['range'][0]['price']=($trip->daily_price*count($date_range_1))*$data['travelers'];
+        }
+        $data['total_event_tickets']=count($trip->tickets);
+        $data['range'][1]['date']=date('d-M-Y',strtotime($trip->event_start)).' - '.date('d-M-Y',strtotime($trip->event_end));
+        $data['range'][1]['price']=($trip->daily_price*$trip->duration)*$data['travelers'];
         //var_dump($data = $this->request->session()->all());
         return view('front.trips.custom_trip',$data);
     }
