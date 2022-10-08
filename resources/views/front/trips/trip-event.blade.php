@@ -93,7 +93,7 @@
                         </div>
                         <div class="btsgar">
                             <div class="grid-sort-icon docfil">
-                                <img src="{{asset('assets/front/img/heart2.svg')}}">
+                                <img src="{{asset('assets/front/img/heart2.svg')}}" class="favourite {{favorite_check($trip->id,auth()->id())?'favourite-filter':''}}" data-id="{{$trip->id}}">
                             </div>
                             <div class="grid-sort-icon docfil">
                                 <img src="{{asset('assets/front/img/export.svg')}}">
@@ -241,8 +241,8 @@
                                             <h3>{{$room->room_title}}</h3>
                                             <h6> {{$room->details}}</h6>
                                             <div class="cb1sbt5">
-                                                <h1 class="arwsqft"><a href="#">Price details</a> <img src="{{asset('assets/front/img/arrow-square-down.svg')}}">
-                                                </h1>
+{{--                                                <h1 class="arwsqft"><a href="#">Price details</a> <img src="{{asset('assets/front/img/arrow-square-down.svg')}}">--}}
+{{--                                                </h1>--}}
                                             </div>
                                         </div>
                                         <div class="roomsdetailprice">
@@ -251,7 +251,7 @@
                                             @else
                                                 <h2> {{display_currency($room->room_price)}}</h2>
                                             @endif
-                                            <a href="{{route('frontend.checkout_review',['step'=>'review','trip'=>$trip->id,'room'=>$room->id])}}" class="btn_1  btngrad">Reserve</a>
+{{--                                            <a href="{{route('frontend.checkout_review',['step'=>'review','trip'=>$trip->id,'room'=>$room->id])}}" class="btn_1  btngrad">Reserve</a>--}}
                                         </div>
                                     </div>
                                     @endforeach
@@ -263,6 +263,7 @@
                         <h4>Itinerary</h4>
                         <ul class="cbp_tmtimeline">
                             @foreach($trip->itinerary as $itinerary)
+                                @if($itinerary->title!='')
                             <li>
                                 <time class="cbp_tmtime" datetime="{{$itinerary->time}}"><span>{{$itinerary->duration}}</span><span>{{$itinerary->time}}</span>
                                 </time>
@@ -277,6 +278,7 @@
                                     </p>
                                 </div>
                             </li>
+                                @endif
                             @endforeach
 
                         </ul>
@@ -497,12 +499,12 @@
                         <h6>
                             <small style="font-size: 12px">Price per person</small>
                         </h6>
-                        <h2>{{display_currency($trip->daily_price)}}</h2>
+                        <h2>{{display_currency($trip->daily_price*$trip->duration)}}</h2>
                         <p>
                             Vero consequat cotidieque ad eam. Ea duis errem qui, impedit blandit sed eu. Ius diam vivendo ne. Vero
                             consequat cotidieque
                         </p>
-                        <a href="{{route('frontend.checkout_review',['step'=>'review','trip'=>$trip->id,'room'=>$first_room])}}" class="full-width whitebtnmain">Reserve</a>
+                        <a href="{{route('frontend.custom_trip',['trip_title'=>$trip->event_title,'trip'=>$trip->id])}}" class="full-width whitebtnmain">Reserve</a>
                     </div>
 
                     <div class="pricebox2">
@@ -530,103 +532,42 @@
         </div>
         <div class="wrapper-grid">
             <div class="row">
-                <div class="col-xl-4 col-lg-4 col-md-4">
-                    <div class="box_grid">
-                        <figure>
-                            <a href="tour-detail.html"><img src="{{asset('assets/front/img/tour_1.jpg')}}" class="img-fluid" alt="" width="800"
-                                                            height="533"></a>
-                            <div class="tourdivf1">
-                                <div>
-                                    <small><img src="{{asset('assets/front/img/clock.png')}}" /> 25:26:31</small>
+                @foreach($featured_trips as $featured_trip)
+                    <div class="col-xl-4 col-lg-4 col-md-4">
+                        <div class="box_grid">
+
+                            <figure>
+                                <a href="{{route('frontend.trip_view',['trip_title'=>$featured_trip->event_title,'event'=>$featured_trip->id])}}"><img src="{{ $featured_trip->featured_image?$featured_trip->featured_image->getUrl():asset('assets/front/img/tour_1.jpg')}}" class="img-fluid" alt="" width="800"
+                                                                                                                                                       height="533"></a>
+                                <div class="tourdivf1">
+                                    {{--                                <div>--}}
+                                    {{--                                    <small><img src="{{ asset('assets/front/img/clock.png')}}" /> 25:26:31</small>--}}
+                                    {{--                                </div>--}}
+
+                                    <div>
+                                        <img class="favoriteicoimg {{favorite_check($featured_trip->id,auth()->id())?'favourite-filter':''}} favourite" data-id="{{$featured_trip->id}}" src="{{ asset('assets/front/img/heart2.svg')}}" />
+                                    </div>
+                                </div>
+                            </figure>
+
+                            <div class="">
+                                <a href="{{route('frontend.trip_view',['trip_title'=>$featured_trip->event_title,'event'=>$featured_trip->id])}}" class="titltxt">{{$featured_trip->event_title}}</a>
+                                <div class="tourdivf2">
+                                    <div>
+                                        <img src="{{ asset('assets/front/img/calendar.svg')}}" />
+                                        <span>{{$featured_trip->duration}} Days</span>
+                                    </div>
+                                    <div>
+                                        <img src="{{ asset('assets/front/img/location.svg')}}" />
+                                        <span>{{$featured_trip->city->city_name}}, {{$featured_trip->country->name}}</span>
+                                    </div>
                                 </div>
 
-                                <div>
-                                    <img class="favoriteicoimg" src="{{asset('assets/front/img/heart.svg')}}" />
-                                </div>
-                            </div>
-                        </figure>
-                        <div class="">
-                            <a href="tour-detail.html" class="titltxt">Cinnamon Dhonveli: The sunny side of life</a>
-                            <div class="tourdivf2">
-                                <div>
-                                    <img src="{{asset('assets/front/img/calendar.svg')}}" />
-                                    <span>4 Days</span>
-                                </div>
-                                <div>
-                                    <img src="{{asset('assets/front/img/location.svg')}}" />
-                                    <span>Maldives, Maldives</span>
-                                </div>
-                            </div>
-
-                        </div>
-
-                    </div>
-                </div>
-                <div class="col-xl-4 col-lg-4 col-md-4">
-                    <div class="box_grid">
-                        <figure>
-                            <a href="tour-detail.html"><img src="{{asset('assets/front/img/tour_2.jpg')}}" class="img-fluid" alt="" width="800"
-                                                            height="533"></a>
-                            <div class="tourdivf1">
-                                <div>
-                                    <small><img src="{{asset('assets/front/img/clock.png')}}" /> 25:26:31</small>
-                                </div>
-
-                                <div>
-                                    <img class="favoriteicoimg" src="{{asset('assets/front/img/heart.svg')}}" />
-                                </div>
-                            </div>
-                        </figure>
-                        <div class="">
-                            <a href="tour-detail.html" class="titltxt">Cinnamon Dhonveli: The sunny side of life</a>
-                            <div class="tourdivf2">
-                                <div>
-                                    <img src="{{asset('assets/front/img/calendar.svg')}}" />
-                                    <span>4 Days</span>
-                                </div>
-                                <div>
-                                    <img src="{{asset('assets/front/img/location.svg')}}" />
-                                    <span>Maldives, Maldives</span>
-                                </div>
                             </div>
 
                         </div>
-
                     </div>
-                </div>
-                <div class="col-xl-4 col-lg-4 col-md-4">
-                    <div class="box_grid">
-                        <figure>
-                            <a href="tour-detail.html"><img src="{{asset('assets/front/img/tour_3.jpg')}}" class="img-fluid" alt="" width="800"
-                                                            height="533"></a>
-                            <div class="tourdivf1">
-                                <div>
-                                    <small><img src="{{asset('assets/front/img/clock.png')}}" /> 25:26:31</small>
-                                </div>
-
-                                <div>
-                                    <img class="favoriteicoimg" src="{{asset('assets/front/img/heart.svg')}}" />
-                                </div>
-                            </div>
-                        </figure>
-                        <div class="">
-                            <a href="tour-detail.html" class="titltxt">Cinnamon Dhonveli: The sunny side of life</a>
-                            <div class="tourdivf2">
-                                <div>
-                                    <img src="{{asset('assets/front/img/calendar.svg')}}" />
-                                    <span>4 Days</span>
-                                </div>
-                                <div>
-                                    <img src="{{asset('assets/front/img/location.svg')}}" />
-                                    <span>Maldives, Maldives</span>
-                                </div>
-                            </div>
-
-                        </div>
-
-                    </div>
-                </div>
-
+                @endforeach
             </div>
             <!-- /row -->
         </div>

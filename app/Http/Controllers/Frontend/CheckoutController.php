@@ -8,19 +8,24 @@ use App\Http\Controllers\Controller;
 use App\Models\BookingRoom;
 use App\Models\City;
 use App\Models\Costume;
+use App\Models\CostumeAttribute;
 use App\Models\CostumeBookingAttribute;
 use App\Models\Country;
 use App\Models\Event;
 use App\Models\EventAddon;
 use App\Models\EventBooking;
+use App\Models\EventTicket;
 use App\Models\Hotel;
 use App\Models\HotelRoom;
+use App\Models\InstallmentPayments;
 use App\Models\Payment;
 use App\Models\State;
 use App\Models\Traveler;
 use App\Models\User;
+use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use Gate;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 
 class CheckoutController extends Controller
@@ -30,19 +35,222 @@ class CheckoutController extends Controller
     {
         $this->request=$request;
     }
+    public function custom_order_process(){
+
+        $rq=$this->request;
+//dd($rq->input());
+        $data['trip']=$trip=Event::find($rq->trip_id);
+        if(!isset($trip->id)){
+            redirect()->back()->with($rq->input());
+        }
+
+        $rooms=[];
+        $room_one_id=$room_total=0;
+        foreach ($rq->room_persons as $room_id => $room_person){
+            if($room_person>0){
+                $rooms_traveler[$room_id]=$room_person;
+                if($room_id>0){
+                    $rooms[$room_id]=HotelRoom::find($room_id);
+                    $room_one_id=$room_id;
+                    $room_total+=(float)$rooms[$room_id]->room_price*$room_person;
+                }
+            }
+        }
+        $room='';
+        if(count($rooms)==1){
+            $room=$rooms[$room_one_id];
+        }
+        $total_traveler=$rq->travelers;
+        $subtotal=($trip->daily_price*$trip->duration)*$total_traveler;
+        $range_=explode('%',$rq->range);
+        $range=explode(' > ',Arr::first($range_));
+        for ($r=0, $rMax = count($range); $r< $rMax; $r++){
+            $range[$r]=date(config('panel.date_format'),strtotime($range[$r]));
+        }
+//        var_dump($range);exit;
+        $duration=Arr::last($range_);
+        if($trip->duration>2) {
+            $subtotal=($trip->daily_price * $duration) * $total_traveler;
+        }
+
+
+
+        $starting_total= $subtotal += $room_total;//!$this->session_order('starting_total')?$total:$this->session_order('starting_total');
+        $data['savings']=0;
+        $data['coupon_amount']=0.00;
+        $data['coupon_code']='';
+        $data['processing_fee']=(float)PROCESSING_FEE;
+//        $data['trip']=$trip;
+        $data['room']=$room;
+        $data['rooms']=$rooms;
+        $data['booking']='';
+        $data['user_details']=[];
+        $data['user']=Auth::user();
+
+
+        $booking_details=$trip->event_title.' Booking By '.Auth::user()->name;
+        $booking=EventBooking::create([
+            'booking_details'=>$booking_details,
+            'booking_event_id'=>$trip->id,
+            'booking_by_user_id'=>Auth::id(),
+            'order_payment_type'=>$rq->payment_type,
+            "billing_name"=> Auth::user()->name,
+            "billing_lastname"=> Auth::user()->lastname,
+            "billing_address"=>Auth::user()->address,
+            "billing_address_2"=> Auth::user()->address_2,
+            "billing_country_id"=> (int)Auth::user()->country_id,
+            "billing_state_id" =>(int)Auth::user()->state_id,
+            "billing_city_id" =>(int)Auth::user()->city_id,
+        ]);
+        if($room!=''){
+            $booking->update([
+                'room_id'=>$room->id,
+                'room_price'=>$room->room_price,
+                'booking_from'=>$range[0],
+                'booking_to'=>$range[1],
+            ]);
+        }
+        if(count($rooms)>0){
+            foreach ($rooms as $room){
+                BookingRoom::create([
+                    'room_id'=>$room->id,
+                    'booking_for_id'=>$booking->id,
+                    'room_booking_rate'=>$room->room_price,
+                    'booking_from'=>$range[0],
+                    'booking_to'=>$range[1],
+                ]);
+            }
+        }
+        if(isset($this->request->addon)){
+            $addon=EventAddon::find($this->request->addon);
+            if(isset($addon->id)){
+                $data['addons'][$addon->id]=$addon;
+                $booking->booking_event_addons()->sync([$addon->id=>['addon_price'=>$addon->addon_price]]);
+                $subtotal+=(float)$addon->addon_price;
+            }
+        }
+        $data['costumes_options']=[];
+        for($t=1;$t<=$total_traveler;$t++){
+            $Traveler=Traveler::create([
+                'booking_id'=>$booking->id,
+                'first_name'=>$rq->first_name[$t],
+                'last_name'=>$rq->last_name[$t],
+                'email'=>$rq->email[$t],
+                'phone'=>$rq->phone[$t],
+                'gender'=>$rq->gender[$t],
+                'shirt_size'=>$rq->shirt_size[$t],
+                'notes'=>$rq->notes[$t],
+            ]);
+            $tID=$Traveler->id;
+            if($rq->costume[$t]!=0){
+                $costume=Costume::find($rq->costume[$t]);
+                if(isset($costume->id)){
+                    $data['costumes'][$costume->id]=$costume;
+                    $booking->booking_event_costumes()->sync([$costume->id=>['costume_price'=>$costume->costume_price]]);
+                    $Traveler->update(['costume_id'=>$costume->id]);
+                    $subtotal+=(float)$costume->costume_price;
+                    $user_details['roommate'][$t]['costume_id']=$costume->id;
+                    foreach ($rq->costume_option[$t][$costume->id] as $option_id => $option_value){
+                        $costume_attr=CostumeAttribute::find($option_id);
+                        if(isset($costume_attr->id)&&$rq->costume_option[$t][$costume->id][$option_id]!=''){
+//                            $data['costumes_options'][$t][$costume->id][$option_id]=$costume_attr;
+//                            $data['costumes_options'][$t][$costume->id][$option_id]->value=$option_value;
+                            CostumeBookingAttribute::create([
+                                'booking_id'=>$booking->id,
+                                'traveler_id'=>$tID,
+                                'costume_id'=>$costume->id,
+                                'costume_attribute_id'=>$option_id,
+                                'values'=>$option_value,
+                            ]);
+                        }
+
+                    }
+
+                }
+            }
+            if(count($rq->ticket)>0&&count($rq->ticket[$t])>0){
+                foreach ($rq->ticket[$t] as $ticket_id => $ticket){
+                    $ticket_get=EventTicket::find($ticket_id);
+                    if(isset($ticket_get->id)){
+                        $Traveler->tickets()->sync($ticket_get->id);
+                        $subtotal+=(float)$ticket_get->ticket_price;
+                    }
+                }
+            }
+        }
+
+        $total=$subtotal+(float)PROCESSING_FEE;
+        $booking->update([
+            'booking_total'=>$total,
+        ]);
+        $deposit=($total*((float)DEPOSIT_AMOUNT_PERCENT/100));
+        $installment=$total-$deposit;
+        $installment_1=($installment/(int)TOTAL_INSTALLMENTS);
+        $paymentMethod = $rq->payment_method;
+        $user=Auth::user();
+        $amount_to_paid=$total;
+        if($rq->payment_type=='Installment'){
+            $amount_to_paid=$deposit;
+        }
+        try {
+            $user->createOrGetStripeCustomer();
+            $user->updateDefaultPaymentMethod($paymentMethod);
+            $payment= $user->charge(((float)$amount_to_paid*100), $paymentMethod);
+//            $booking_=$order->booking->first();
+            $booking_payment=EventBooking::where('id',$booking->id)->update([
+                'stripe_id'=>$payment->id,
+                'stripe_status'=>$payment->status
+            ]);
+        } catch (\Exception $exception) {
+            //   return back()->with('error', );
+            echo $exception->getMessage();
+//            return redirect()->back()->with('error',$exception->getMessage());
+            exit;
+        }
+        $paymentUpdate=Payment::create([
+            'payment_event_id'=>$trip->id,
+            'payment_user_id'=>Auth::id(),
+            'payment_booking_id'=>$booking->id,
+            'amount_total'=>$total,
+            'starting_total'=>$starting_total,
+            'amount_paid'=>$amount_to_paid,
+            'payment_method'=>'CC',
+            'payment_details'=>json_encode($payment),
+            'savings'=>0,
+            'coupon_amount'=>0,
+            'coupon_code'=>'',
+            'processing_fee'=>(float)PROCESSING_FEE,
+            'subtotal'=>$subtotal,
+            'deposit'=>($rq->payment_type=='Installment'?$deposit:0),
+            'installment'=>($rq->payment_type=='Installment'?$installment_1:0),
+            'total_installments'=>($rq->payment_type=='Installment'?(int)TOTAL_INSTALLMENTS:0),
+            'amount_balance'=>($rq->payment_type=='Installment'?($installment):0),
+        ]);
+        $booking->update([
+                'status'=>($rq->payment_type=='Installment'?'pending-payment':'active')
+            ]);
+        if($rq->payment_type=='Installment'){
+            for ($p=1;$p<=TOTAL_INSTALLMENTS;$p++){
+                InstallmentPayments::create([
+                    'payment_id'=>$paymentUpdate->id,
+                    'amount_total'=>$total,
+                    'amount_paid'=>$amount_to_paid,
+                    'amount_balance'=>$installment,
+                    'installment'=>$installment_1,
+                    'total_installments'=>TOTAL_INSTALLMENTS,
+                    'installment_no'=>$p,
+                    'payment_method'=>'',
+                    'payment_details'=>'',
+                ]);
+            }
+        }
+        return redirect()->route('frontend.account.index',['tab','trips']);
+
+    }
     public function checkout_review($step,Event $trip,HotelRoom $room){
         if(!isset($trip->id)){
             abort(404);
         }
-//        if($room==''){
-//            $hotels=$trip->hotels;
-//            foreach ($hotels as $hotel){
-//                $rooms[$hotel->id]=$hotel->rooms;
-//            }
-//        }else{
-//            $room=HotelRoom::find($room);
-//        }
-
         $total_traveler=$this->request->travelers;
         $total=($trip->daily_price*$trip->duration)+($room->room_price*($trip->duration-1));
         $data['starting_total']=$total;//!$this->session_order('starting_total')?$total:$this->session_order('starting_total');
@@ -355,7 +563,7 @@ class CheckoutController extends Controller
                 'savings'=>$order->info['savings'],
                 'coupon_amount'=>$order->info['coupon_amount'],
                 'coupon_code'=>$order->info['coupon_code'],
-                'processing_fee'=>$order->info['starting_total'],
+                'processing_fee'=>(float)PROCESSING_FEE,
                 'subtotal'=>$order->subtotal,
                 'deposit'=>($order->payment['type']=='Installment'?$order->installments['deposit']:0),
                 'installment'=>($order->payment['type']=='Installment'?$order->installments['installment']:0),

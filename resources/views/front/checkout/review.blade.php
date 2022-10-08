@@ -203,11 +203,11 @@
                                             <li>
                                                 Pay for your package in full
                                             </li>
+{{--                                            <li>--}}
+{{--                                                Get 2X rewards points--}}
+{{--                                            </li>--}}
                                             <li>
-                                                Get 2X rewards points
-                                            </li>
-                                            <li>
-                                                Pay for your iPhone with low monthly
+                                                Pay for your trip with low monthly
                                             </li>
                                         </ul>
                                     </div>
@@ -217,22 +217,22 @@
                     </div>
 
 
-                    <div class="quextions">
-                        <div class="upgradess">
+{{--                    <div class="quextions">--}}
+{{--                        <div class="upgradess">--}}
 
-                            <div class="dflexcb1 padbot0">
-                                <div>
-                                    <h3>Questions About Buying</h3>
-                                </div>
-                                <div>
-                                    <h1 class="arwsqft"><img src="{{asset('assets/front/img/add-square.svg')}}" /></h1>
-                                </div>
-                            </div>
+{{--                            <div class="dflexcb1 padbot0">--}}
+{{--                                <div>--}}
+{{--                                    <h3>Questions About Buying</h3>--}}
+{{--                                </div>--}}
+{{--                                <div>--}}
+{{--                                    <h1 class="arwsqft"><img src="{{asset('assets/front/img/add-square.svg')}}" /></h1>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
 
 
 
-                        </div>
-                    </div>
+{{--                        </div>--}}
+{{--                    </div>--}}
 
 
 

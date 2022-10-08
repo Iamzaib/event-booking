@@ -6,21 +6,33 @@
     <div class="checkutpagemain">
         <div class="container contch">
             <div class="checkout1box custrip1">
-                <h1 class="arwsqft"><img src="{{asset('assets/front/img/arrow-square-left.svg')}}" /><a href="{{route('trips')}}">Go back</a></h1>
+                <h1 class="arwsqft"><img src="{{asset('assets/front/img/arrow-square-left.svg')}}" /><a href="{{route('frontend.trip_view',['trip_title'=>$trip->event_title,'event'=>$trip->id])}}">Go back</a></h1>
                 <h2>Create your custom trip.</h2>
+                @if(isset($error))
+                    {{$error}}
+                    @endif
             </div>
 
             <div class="row padding20sec1ch">
+                <form action="{{route('frontend.custom_order_process')}}" class="card-form" method="post" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-md-8">
 
-                        <img src="{{asset('assets/front/img/tour2.png')}}" class="tourimg1ct" />
+{{--                        <img src="{{asset('assets/front/img/tour2.png')}}" class="tourimg1ct" />--}}
+                        @if($trip->featured_image)
+                            <img src="{{ $trip->featured_image->getUrl() }}" class="tourimg1ct">
+                        @else
+                            <img src="{{asset('assets/front/img/tourdetailsbg1.png')}}" class="tourimg1ct" />
+                        @endif
+                        @csrf
+                        <input type="hidden" name="trip_id" value="{{$trip->id}}">
+                        <input type="hidden" name="travelers" value="{{$travelers}}">
                         <div class="cb1sbt2">
                             <div>
                                 <h4 class="marbot0 texthead22">{{$trip->event_title}}</h4>
                             </div>
                             <div>
-                                <h4 class="marbot0 texthead22"><sup>Starting From</sup>&nbsp;<span id="starting_top" style="font-size: 20px"> {{display_currency(\Illuminate\Support\Arr::first($range)['price'])}}</span></h4>
+                                <h4 class="marbot0 texthead22"><sup>Starting From</sup>&nbsp;<span id="starting_top" style="font-size: 20px"> {{display_currency($low_total)}}</span></h4>
                             </div>
                         </div>
                         <div class="cb1sbt6">
@@ -53,14 +65,14 @@
                                   <img src="{{asset('assets/front/img/arrow-square-down-light.svg')}}" />
                                 </div> -->
                                     <div>
-                                        <form action="{{request()->url()}}" method="get">
+{{--                                        <form action="{{request()->url()}}" method="get">--}}
                                             <select class="form-select" formsele="" name="travelers" onchange="window.location='{{request()->fullUrlWithQuery(['travelers'=>'trvlr'])}}'.replace('trvlr',this.value)" aria-label="Default select example">
                                                 <option value="">Choose No. of Travelers</option>
                                                 @for($i=1;$i<=10;$i++)
                                                     <option value="{{$i}}" {{$i==$travelers?'selected':''}}>{{$i}} Person(s)</option>
                                                 @endfor
                                             </select>
-                                        </form>
+{{--                                        </form>--}}
                                     </div>
                                 </div>
                             </div>
@@ -75,7 +87,7 @@
                                 @foreach($range as $index => $date_range)
                                     <div class="col-md-6">
                                         <div class="choosepaymemyrad">
-                                            <input type="radio" id="range{{$index}}" class="date_range"  name="range" value="{{$date_range['date']}}%{{$date_range['price']}}">
+                                            <input type="radio" id="range{{$index}}" class="date_range"  name="range" data-range="{{$date_range['date']}}%{{$date_range['price']}}" value="{{$date_range['date']}}%{{$date_range['price']}}%{{$date_range['duration']}}">
                                             <label for="range{{$index}}">
                                                 <div class="boxchlabl border0 ">
                                                     <p><img src="{{asset('assets/front/img/calendar2.svg')}}"/>Date</p>
@@ -114,7 +126,7 @@
                                                         </p>
                                                     </div>
                                                     <div class="col-6">
-                                                        <select name="room_persons[0]" class="form-control" data-roomprice="0" onchange="" id="">
+                                                        <select name="room_persons[0]" class="form-control room" data-roomprice="0" data-id="0" onchange="" id="">
                                                             <option value="0">--Please Select--</option>
                                                             @for($i=1;$i<=$travelers;$i++)
                                                                 <option value="{{$i}}">{{$i}} Person(s)</option>
@@ -175,7 +187,7 @@
                                     <div class="row">
                                         @foreach($trip->costumes as $costume)
                                             @foreach($costume->options as $option)
-                                                <div class="col-md-6 costume_options_{{$t}}{{$costume->id}} costume_options" style="display: none">
+                                                <div class="col-md-6 costume_options_{{$t}}{{$costume->id}} costume_options_{{$t}} costume_options" style="display: none">
                                                     <label for="option_{{$option->id}}">
                                                         {{$option->title}}  &nbsp;</label>
                                                     @if($option->values!='')
@@ -257,12 +269,12 @@
 
                                 <div class="col-md-6">
                                     <div class="choosepaymemyrad">
-                                        <input type="radio" id="pay1" name="radio">
+                                        <input type="radio" id="pay1" class="payment_type" name="payment_type" value="Installment">
                                         <label for="pay1">
 
                                             <div class="boxchlabl">
                                                 <h3>Deposit + Monthly Installments</h3>
-                                                <h3><b>$500 Deposit + $425 for 4 Months</b></h3>
+                                                <h3><b id="install">{{display_currency($low_deposit)}} Deposit + {{display_currency($low_installment)}} for {{TOTAL_INSTALLMENTS}} Months</b></h3>
                                             </div>
                                             <div>
                                                 <ul class="bullets2 bbbhssgdu">
@@ -282,12 +294,12 @@
 
                                     <div class="choosepaymemyrad">
 
-                                        <input type="radio" id="pay2" name="radio">
+                                        <input type="radio" id="pay2" name="payment_type" class="payment_type" value="Full">
                                         <label for="pay2">
 
                                             <div class="boxchlabl">
                                                 <h3>Pay in full</h3>
-                                                <h3><b>$2540.08</b></h3>
+                                                <h3><b class="finaltotal">{{display_currency($low_total+(float)PROCESSING_FEE)}}</b></h3>
                                             </div>
                                             <div>
                                                 <ul class="bullets2 bbbhssgdu">
@@ -309,7 +321,6 @@
                         </div>
 
                         <div class="container no-gutters">
-
                             <div class="row no-gutters">
                                 <div class="col-md-12">
                                     <h4 class="texthead22" style="margin: 20px 0;">Travel Details</h4>
@@ -327,7 +338,7 @@
                                                             <!-- <label for="firstname" class="form-label">First name</label>
                                                             <input type="text" class="form-control" placeholder="First name" id="firstname" required=""> -->
                                                             <div class="prel">
-                                                                <input type="text" class="inputText " required name="first_name[{{$t}}]" />
+                                                                <input type="text" class="inputText " required  name="first_name[{{$t}}]" />
                                                                 <span class="floating-label">First name</span>
                                                             </div>
                                                         </div>
@@ -337,7 +348,7 @@
                                                             <!-- <label for="lastname" class="form-label">Last name</label>
                                                             <input type="text" class="form-control" placeholder="Last name" id="lastname" required=""> -->
                                                             <div class="prel">
-                                                                <input type="text" class="inputText " required name="last_name[{{$t}}]" />
+                                                                <input type="text" class="inputText " required  name="last_name[{{$t}}]" />
                                                                 <span class="floating-label">Last name</span>
                                                             </div>
                                                         </div>
@@ -400,7 +411,7 @@
                                                         <div class="mb-3">
                                                             {{--                                                        <div class="prel">--}}
                                                             <label for="Notes{{$t}}">Notes</label>
-                                                            <textarea type="text" class="inputText " style="height: auto" id="Notes{{$t}}" rows="4"></textarea>
+                                                            <textarea type="text" class="inputText " name="notes[{{$t}}]" style="height: auto" id="Notes{{$t}}" rows="4"></textarea>
                                                             {{--                                                            <span class="floating-label">Notes</span>--}}
                                                             {{--                                                        </div>--}}
                                                         </div>
@@ -413,17 +424,45 @@
                                     </div>
                                 @endfor
                             </div>
+                        </div>
+                         <div class="custrip2">
+                                        <div class="row">
+                                            <div class="col-12 mb-4" style="padding-left: 5px" >
+                                                <h3 class="texthead22">Terms And Conditions.</h3>
+                                                <div style="margin-left: 1.5rem">
+                                                    <label for="terms" class="form-check-label"><input type="checkbox" class="form-check-inline" name="terms" id="terms">
+                                                        &nbsp;You agree with out friendly&nbsp;<a href="#">Privacy Policy</a></label>
+                                                    <label for="terms" class="form-check-label"><input type="checkbox" class="form-check-inline form-check" name="terms" id="terms">
+                                                        &nbsp;Nunc bibendum velit sit amet leo interdum, eget suscipit nulla posuere.</label>
+                                                    <label for="terms" class="form-check-label"><input type="checkbox" class="form-check-inline form-check" name="terms" id="terms">
+                                                        &nbsp;Aliquam risus velit, ornare sed bibendum at, tristique blandit nibh.</label>
+                                                </div>
+
+                                            </div>
+
+
+                                            <div class="col-12">
+                                                <div class="card" style="border: 1px solid #ced4da;border-radius: 6px">
+                                                    <div class="card-header">
+                                                        <h6 class="" style="margin: 20px 0;">Pay By Card</h6>
+                                                    </div>
+                                                    <div class="card-body p-3">
+                                                        <div id="card-element" class="mt-3 mb-3"></div>
+                                                        <div id="card-errors" role="alert"></div>
+                                                        <input type="hidden" name="payment_method" class="payment-method">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                             <div class="custrip2 border0">
                                 <div class="checkoutcontent2" style="display: block; padding-bottom: 15px;">
                                     <div class="row">
-                                        <a href="#" class="btn_1  btngrad btnch2new">Continue to payment</a>
+                                        <button  class="btn_1 pay btngrad btnch2new">Book Now</button>
                                     </div>
                                 </div>
                             </div>
-
-
-
-                        </div>
+{{--                        </div>--}}
 
                     </div>
                     <div class="col-md-4">
@@ -437,7 +476,7 @@
                                         <p>Starting Price</p>
                                     </div>
                                     <div>
-                                        <p id="starting">{{display_currency(\Illuminate\Support\Arr::first($range)['price'])}}</p>
+                                        <p class="starting">{{display_currency($low_total)}}</p>
                                     </div>
                                 </div>
 {{--                                <div class="priceflex1">--}}
@@ -488,7 +527,7 @@
                                         <p>Subtotal</p>
                                     </div>
                                     <div>
-                                        <p id="subtotal"><b>{{display_currency(\Illuminate\Support\Arr::first($range)['price'])}}</b></p>
+                                        <p id="subtotal"><b>{{display_currency($low_total)}}</b></p>
                                     </div>
                                 </div>
                                 <div class="priceflex1">
@@ -504,21 +543,25 @@
                                 </div>
 
                             </div>
+                            <div id="Installment" class="mainmaxprice">
+                                <span style="font-size: 17px;font-weight: bolder">Installment(s) Details</span>
 
+                            </div>
                             <div class="priceflex1">
                                 <div>
                                     <p>Total</p>
                                 </div>
                                 <div class="flex22">
                                     <img src="{{asset('assets/front/img/usd.svg')}}" />
-                                    <h4 id="finaltotal">{{display_currency(\Illuminate\Support\Arr::first($range)['price']+(float)PROCESSING_FEE)}}</h4>
+                                    <h4 class="finaltotal">{{display_currency($low_total+(float)PROCESSING_FEE)}}</h4>
                                 </div>
                             </div>
-                            <a href="./checkout2.html">Proceed to checkout</a>
+                            <a href="#" class="pay">Book Now</a>
 
                         </div>
                     </div>
                 </div>
+                </form>
             </div>
 
 
@@ -526,12 +569,65 @@
     </div>
 @endsection
 @section('scripts')
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        let stripe = Stripe("{{ env('STRIPE_KEY') }}")
+        let elements = stripe.elements()
+        let style = {
+            base: {
+                color: '#32325d',
+                fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+                fontSmoothing: 'antialiased',
+                fontSize: '16px',
+                '::placeholder': {
+                    color: '#aab7c4'
+                }
+            },
+            invalid: {
+                color: '#fa755a',
+                iconColor: '#fa755a'
+            }
+        }
+        let card = elements.create('card', {hidePostalCode: true,style: style})
+        card.mount('#card-element')
+        let paymentMethod = null;
+        $('.pay').on('click', function (e) {
+            var name='{{auth()->user()->name.' '.auth()->user()->lastname}}';
+            $('.pay').attr('disabled', true)
+            if (paymentMethod) {
+                $('.payment-method').val(paymentMethod);
+                $('.card-form').submit();
+                return true
+            }
+            stripe.confirmCardSetup(
+                "{{ $intent->client_secret }}",
+                {
+                    payment_method: {
+                        card: card,
+                        billing_details: {name: name}
+                    }
+                }
+            ).then(function (result) {
+                console.log(result);
+                if (result.error) {
+                    $('#card-errors').text(result.error.message)
+                    $('button.pay').removeAttr('disabled')
+                } else {
+                    paymentMethod = result.setupIntent.payment_method
+                    $('.payment-method').val(paymentMethod);
+                    $('.card-form').submit()
+                }
+            })
+            return false
+        })
+
+    </script>
     <script>
         var addons=[],costumes=[],rooms=[],tickets=[],room_previous=[];
         var addons_titles=[],costumes_titles=[],rooms_titles=[],tickets_titles=[];
         var addons_added=[],costumes_added=[],rooms_added=[],tickets_added=[];
-        var costume_total=0,addons_total=0,rooms_total=0,tickets_total=0,total=0,duration_total=0;
-
+        var costume_total=0,addons_total=0,rooms_total=0,tickets_total=0,total=0,total_room_persons=0,duration_total= {{$low_total}};
+var total_travelers={{$travelers}};
         @foreach($trip->addons as $addon)
             addons[{{$addon->id}}]='{{$addon->addon_price}}';
             addons_titles[{{$addon->id}}]='{{$addon->addon_title}}';
@@ -554,68 +650,116 @@
             @endforeach
 
         $(function (){
-
+                    $('.payment_type').trigger('change');
             var subprices_div=$('#subprices');
                     subprices_div.find('#costume').hide();
                     subprices_div.find('#rooms').hide();
                     subprices_div.find('#addons').hide();
                     subprices_div.find('#tickets').hide();
+                    $('#Installment').hide();
+            $('.payment_type').change(function () {
+            var payment_type=$(this).val();
+                var total=$('.finaltotal').html().replace('$','');
+                var Deposit={{(float)DEPOSIT_AMOUNT_PERCENT/100}};
+                var totalinstallment_={{(int)TOTAL_INSTALLMENTS}};
 
+                Deposit=parseFloat(total)*Deposit;
+                var installment=(parseFloat(total)-Deposit)/totalinstallment_;
+                console.log(payment_type+'$'+Deposit+' Deposit + $'+installment+' for '+totalinstallment_+' Months');
+                $('#install').html('$'+Deposit+' Deposit + $'+installment+' for '+totalinstallment_+' Months')
+                if(payment_type==='Installment'){console.log(payment_type+'$'+Deposit+' Deposit + $'+installment+' for '+totalinstallment_+' Months');
+                    var Installment_this = '<div class="priceflex1" id="deposit-total">' +
+                        '<div>' +
+                        '<p>Deposit </p>' +
+                        '</div>' +
+                        '<div>' +
+                        '<p style="">$' + (parseFloat(Deposit)).toFixed(2) + '</p>' +
+                        '</div>' +
+                        '</div>'+'<div class="priceflex1" id="installment-total">' +
+                        '<div>' +
+                        '<p> Installments/Month For (' + totalinstallment_ + ' Months)</p>' +
+                        '</div>' +
+                        '<div>' +
+                        '<p style="">$' + (installment.toFixed(2)) + '</p>' +
+                        '</div>' +
+                        '</div>';
+                    $('#Installment').show();
+                    $('#Installment').append(Installment_this);
+                }else{
+                    $('#Installment').hide();
+                    $('#deposit-total').remove();
+                    $('#installment-total').remove();
+                    calculate_total();
+                }
+
+            });
             $('.date_range').change(function () {
                 var val=$(this).val();
                 val=val.split('%');
-                console.log(duration_total=parseFloat(val[1]));
-                console.log(duration_total);
-                $('#starting').html('$'+duration_total.toFixed(2));
+                duration_total=parseFloat(val[1]);
+                // console.log(duration_total);
+                $('.starting').html('$'+duration_total.toFixed(2));
                 $('#starting_top').html('$'+duration_total.toFixed(2));
                 calculate_total();
             });
                     @if(count($trip->costumes)>0)
             $('.costume').change(function () {
-                var trvlr=$(this).data('traveler');
-                var costume_id=$(this).val();
-                        console.log(costume_id);console.log(costumes);
-                $('.costume_options').hide();
-                $('.costume_options_'+trvlr+costume_id).fadeIn();
-                let id_found=false;
+                var trvlr = $(this).data('traveler');
+                 var costume_id = $(this).val();
+                 // if()
+                         // console.log(costume_id);console.log(costumes);
+                  if (typeof costumes_added[trvlr] === 'undefined'){
+                      costumes_added[trvlr]=[];
+                  }
+                  if (typeof costume_id !== 'undefined'){
+                      // console.log(costume_id+'-2');console.log(costumes);
+                            $('.costume_options_'+trvlr).hide();
+                        $('.costume_options_' + trvlr + costume_id).fadeIn();
+                        let id_found = false;
 
-                for(var v=0;v<costumes_added.length;v++){
-                    if(costumes_added[v]===costume_id){id_found=true;}
-                }
-                if(id_found===false){
-                    costumes_added.push(costume_id);
-                    costume_total+=parseFloat(costumes[costume_id]);
-                    var costume_this='<div class="priceflex1" id="costume_subtotal'+trvlr+costume_id+'">'+
-                        '<div>'+
-                        '<p>'+costumes_titles[costume_id]+' Traveler('+trvlr+')</p>'+
-                        '</div>'+
-                        '<div>'+
-                        '<p style="">$'+(parseFloat(costumes[costume_id]))+'</p>'+
-                        '</div>'+
-                        '</div>';
-                    subprices_div.find('#costume').append(costume_this);
-                    subprices_div.find('#costume').show();
-                }else{
-                    for (var i=0;i<costumes_added.length;i++){
-                        if(costumes_added[i]===costume_id){
-                            costumes_added.splice(costumes_added.indexOf(costume_id),1);
-                            costume_total-=parseFloat(costumes[costume_id]);
-                            $('#costume_subtotal'+trvlr+costume_id).remove();
+                        for (var v = 0; v < costumes_added[trvlr].length; v++) {
+                            if (costumes_added[trvlr][v] === costume_id) {
+                                id_found = true;
+                            }
                         }
+
+                        if (id_found === false) {
+                            costumes_added[trvlr].push(costume_id);
+                            costume_total += parseFloat(costumes[costume_id]);
+                            var costume_this = '<div class="priceflex1" id="costume_subtotal' + trvlr + costume_id + '">' +
+                                '<div>' +
+                                '<p>' + costumes_titles[costume_id] + ' Traveler(' + trvlr + ')</p>' +
+                                '</div>' +
+                                '<div>' +
+                                '<p style="">$' + (parseFloat(costumes[costume_id])) + '</p>' +
+                                '</div>' +
+                                '</div>';
+                            subprices_div.find('#costume').show();
+                            subprices_div.find('#costume').append(costume_this);
+
+                        } else {
+                            for (var i = 0; i < costumes_added[trvlr].length; i++) {
+                                if (costumes_added[trvlr][i] === costume_id) {
+                                    costumes_added[trvlr].splice(costumes_added[trvlr].indexOf(costume_id), 1);
+                                    costume_total -= parseFloat(costumes[costume_id]);
+                                    $('#costume_subtotal' + trvlr + costume_id).remove();
+                                }
+                            }
+                            if (costumes_added[trvlr].length <= 0) {
+                                subprices_div.find('#costume').hide();
+                            }
+                        }
+
+                        calculate_total();
                     }
-                    if(costumes_added.length<=0){
-                        subprices_div.find('#costume').hide();
-                    }
-                }
-                console.info(costume_total);
-                calculate_total();
+                  console.info(costumes_added);
             });
             @endif
             @if(count($trip->addons)>0)
             $('.addons').change(function () {
                 // var trvlr=$(this).data('traveler');
                 //if(this.checked) {
-                    console.log($(this).val());
+                //     console.log($(this).val());
                     var addon_id = $(this).val();
                     let id_found = false;
 
@@ -658,12 +802,14 @@
                         var trvlr=$(this).data('traveler');
                         var ticket_id=$(this).val();
                         let id_found=false;
-
-                        for(var v=0;v<tickets_added.length;v++){
-                            if(tickets_added[v]===ticket_id){id_found=true;}
+                        if (typeof tickets_added[trvlr] === 'undefined'){
+                            tickets_added[trvlr]=[];
+                        }
+                        for(var v=0;v<tickets_added[trvlr].length;v++){
+                            if(tickets_added[trvlr][v]===ticket_id){id_found=true;}
                         }
                         if(id_found===false){
-                            tickets_added.push(ticket_id);
+                            tickets_added[trvlr].push(ticket_id);
                             tickets_total+=parseFloat(tickets[ticket_id]);
                             var ticket_this='<div class="priceflex1" id="ticket_subtotal'+trvlr+ticket_id+'">'+
                                 '<div>'+
@@ -676,17 +822,18 @@
                             subprices_div.find('#tickets').show();
                             subprices_div.find('#tickets').append(ticket_this);
                         }else{
-                            for (var i=0;i<tickets_added.length;i++){
-                                if(tickets_added[i]===ticket_id){
-                                    tickets_added.splice(tickets_added.indexOf(ticket_id),1);
+                            for (var i=0;i<tickets_added[trvlr].length;i++){
+                                if(tickets_added[trvlr][i]===ticket_id){
+                                    tickets_added[trvlr].splice(tickets_added[trvlr].indexOf(ticket_id),1);
                                     tickets_total-=parseFloat(tickets[ticket_id]);
                                     $('#ticket_subtotal'+trvlr+ticket_id).remove();
                                 }
                             }
-                            if(tickets_added.length<=0){
+                            if(tickets_added[trvlr].length<=0){
                                 subprices_div.find('#tickets').hide();
                             }
                         }
+                        console.log('');
                         calculate_total();
                     });
                     @endif
@@ -697,54 +844,88 @@
                     var room_persons=$(this).val();
                     var room_id = $(this).data('id');
                     let id_found = false;
-                    if(parseInt(room_persons)!==0){console.log(rooms);}
-                    console.log('persons:'+room_persons+'-id:'+room_id);
-                    for (var v = 0; v < rooms_added.length; v++) {
-                        if (rooms_added[v] === room_id) {
-                            id_found = true;
-                        }
-                    }
-                    var room_now_persons=0;
-                    if (id_found === false||parseInt(room_persons)!==0) {
-                        if(id_found===false){
-                            rooms_added.push(room_id);
-                        }else{
-                            $('#room_subtotal'+room_id).remove();
-                        }
-                        console.log(rooms_added+' added')
-                        rooms_total += (parseFloat(rooms[room_id])*parseInt(room_persons));
-                        var room_this='<div class="priceflex1" id="room_subtotal'+room_id+'">'+
-                            '<div>'+
-                                '<p>'+rooms_titles[room_id]+' for '+room_persons+ '</p>'+
-                            '</div>'+
-                            '<div>'+
-                                '<p style="">$'+(parseFloat(rooms[room_id])*parseInt(room_persons))+'</p>'+
-                            '</div>'+
-                        '</div>';
-                        subprices_div.find('#rooms').show();
-                        subprices_div.find('#rooms').append(room_this);
-                        // console.log('persons:'+room_persons+'-id:'+room_id+'-price'+(parseFloat(rooms[room_id])*parseInt(room_persons)));
-                    } else {
-                        for (var i = 0; i < rooms_added.length; i++) {
-                            if (rooms_added[i] === room_id) {
-                                console.log(rooms_added);
-                                rooms_added.splice(rooms_added.indexOf(room_id), 1);
-                                if(parseInt(room_persons)===0){room_now_persons=room_previous[room_id];}else{room_now_persons=room_persons;}
-                                rooms_total -= (parseFloat(rooms[room_id])*parseInt(room_now_persons));
-                                $('#room_subtotal'+room_id).remove();
+
+                    // console.log('persons:'+room_persons+'-id:'+room_id);
+                        if(room_id>0){
+                        for (var v = 0; v < rooms_added.length; v++) {
+                            if (rooms_added[v] === room_id) {
+                                id_found = true;
                             }
                         }
-                        if(rooms_added.length<=0){
-                            subprices_div.find('#rooms').hide();
+                        var room_now_persons=0;
+                        if (id_found === false||parseInt(room_persons)!==0) {
+                            if(id_found===false){
+                                rooms_added.push(room_id);
+                            }else{
+                                $('#room_subtotal'+room_id).remove();
+                            }
+                            // console.log(rooms_added+' added')
+                            rooms_total += (parseFloat(rooms[room_id])*parseInt(room_persons));
+                            var room_this='<div class="priceflex1" id="room_subtotal'+room_id+'">'+
+                                '<div>'+
+                                    '<p>'+rooms_titles[room_id]+' for '+room_persons+ '</p>'+
+                                '</div>'+
+                                '<div>'+
+                                    '<p style="">$'+(parseFloat(rooms[room_id])*parseInt(room_persons))+'</p>'+
+                                '</div>'+
+                            '</div>';
+                            subprices_div.find('#rooms').show();
+                            subprices_div.find('#rooms').append(room_this);
+                             total_room_persons-=room_previous[room_id];
+                             total_room_persons+=parseInt(room_persons);
+                            // console.log('persons:'+room_persons+'-id:'+room_id+'-price'+(parseFloat(rooms[room_id])*parseInt(room_persons)));
+                        } else {
+                            for (var i = 0; i < rooms_added.length; i++) {
+                                if (rooms_added[i] === room_id) {
+                                    // console.log(rooms_added);
+                                    rooms_added.splice(rooms_added.indexOf(room_id), 1);
+                                    if (parseInt(room_persons) === 0) {
+                                        room_now_persons = room_previous[room_id];
+                                    } else {
+                                        room_now_persons = room_persons;
+                                    }
+                                    total_room_persons -= room_now_persons;
+                                    rooms_total -= (parseFloat(rooms[room_id]) * parseInt(room_now_persons));
+                                    $('#room_subtotal' + room_id).remove();
+                                }
+                            }
+                            if (rooms_added.length <= 0) {
+                                subprices_div.find('#rooms').hide();
+                            }
                         }
-                    }
+                    }else{
+                            if(room_previous[room_id]&&room_previous[room_id]>0){
+                                total_room_persons-=room_previous[room_id];
+                            }
+                            total_room_persons+=parseInt(room_persons);
+                            // console.log('total room persons:'+total_room_persons);
+                        }
                     room_previous[room_id]=room_persons;
                     calculate_total();
                // }
 
+                        $(".room").each(function() {
+                            var allowed=total_travelers-total_room_persons;
+                            // console.log('total room persons left:'+allowed);
+                            var selected=parseInt($(this).val());
+
+                            $(this).find("option").each(function() {
+                                var $thisOption = $(this);
+                                if($thisOption.val() > allowed) {
+                                    $thisOption.not(':selected').attr("disabled", "disabled");
+                                }else{
+                                    $thisOption.removeAttr('disabled');
+                                }
+                                // console.log('Allowed+Selected:'+(allowed+selected));
+                                if ($thisOption.val()<=(allowed+selected)){
+                                    $thisOption.removeAttr('disabled');
+                                }
+                            });
+                        });
 
             });
         });
+
         function calculate_total(){
             total=0;
             total+=duration_total;
@@ -758,9 +939,15 @@
             var processing={{(float)PROCESSING_FEE}};
 
             total+=processing;
-            $('#finaltotal').html('$'+total.toFixed(2))
-            console.log('total:'+total);
+            $('.finaltotal').html('$'+total.toFixed(2))
+            // console.log('total:'+total);
+            var Deposit={{(float)DEPOSIT_AMOUNT_PERCENT/100}};
+            var totalinstallment_={{(int)TOTAL_INSTALLMENTS}};
 
+            Deposit=total*Deposit;
+            var installment=(total-Deposit)/totalinstallment_;
+            // console.log(payment_type+'$'+Deposit+' Deposit + $'+installment+' for '+totalinstallment_+' Months');
+            $('#install').html('$'+Deposit+' Deposit + $'+installment+' for '+totalinstallment_+' Months')
         }
     </script>
 @endsection

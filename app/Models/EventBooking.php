@@ -62,9 +62,13 @@ class EventBooking extends Model
     {
         return $this->hasMany(BookingRoom::class);
     }
+    public function tavelers()
+    {
+        return $this->hasMany(Traveler::class);
+    }
     public function booking_payment()
     {
-        return $this->hasOne(Payment::class);
+        return $this->hasOne(Payment::class,'payment_booking_id','id');
     }
     public function booking_event_addons()
     {

@@ -4,46 +4,87 @@
     <div class="container margin_100_35">
         <div class="row">
             <div class="col-lg-3 col-md-3 col-sm-12 mblscroll">
-                @include('partials.account_menu')
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link {{!isset(request()->tab)||(isset(request()->tab)&&request()->tab=='profile')?'active ':''}}" id="general-tab" data-bs-toggle="tab" data-bs-target="#general"
+                                type="button" role="tab" aria-controls="general" aria-selected="true">
+                            General
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link {{isset(request()->tab)&&request()->tab=='trips'?'active ':''}}" id="mytrip-tab" data-bs-toggle="tab" data-bs-target="#mytrip" type="button"
+                                role="tab" aria-controls="mytrip" aria-selected="true">
+                            My Trips
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link {{isset(request()->tab)&&request()->tab=='payment'?'active ':''}}" id="paymentmethod-tab" data-bs-toggle="tab" data-bs-target="#paymentmethod"
+                                type="button" role="tab" aria-controls="paymentmethod" aria-selected="false">
+                            Payment
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link {{isset(request()->tab)&&request()->tab=='favorites'?'active ':''}}" id="Offers-tab" data-bs-toggle="tab" data-bs-target="#Offers" type="button"
+                                role="tab" aria-controls="Offers" aria-selected="false">
+                            Favorites
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link {{isset(request()->tab)&&request()->tab=='password'?'active ':''}}" id="chpass-tab" data-bs-toggle="tab" data-bs-target="#chpass" type="button"
+                                role="tab" aria-controls="chpass" aria-selected="false">
+                            Change Password
+                        </button>
+                    </li>
+                    <li class="nav-item " role="presentation">
+                        <button class="nav-link {{isset(request()->tab)&&request()->tab=='reviews'?'active ':''}}" id="Reviews-tab" data-bs-toggle="tab" data-bs-target="#Reviews" type="button"
+                                role="tab" aria-controls="Reviews" aria-selected="false">
+                            Reviews
+                        </button>
+                    </li>
+
+                </ul>
             </div>
             <div class="col-lg-9 col-md-9 col-sm-12">
                 <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab">
+                    <div class="tab-pane fade {{!isset(request()->tab)||(isset(request()->tab)&&request()->tab=='profile')?'active show':''}}" id="general" role="tabpanel" aria-labelledby="general-tab">
                         <div class="generaltabmin">
                             <div class="usercover1">
 {{--                                <img class="userblurimg" src="{{$user->profileimage??asset('assets/front/img/Ellipse 33.png')}}" />--}}
 
                             </div>
+                            <form action="{{route('frontend.account.save',['user'=>$user->id])}}" method="post" enctype="multipart/form-data">
+                                @csrf
                             <div class="userimgchngr">
-                                <img class="userblurimg" id="profileimage" src="{{$user->profileimage??asset('assets/front/img/Ellipse 33.png')}}" />
-                                <input type="file" id="profileimage-upload" name="profileimage" onchange="readURL(this,'{{$user->profileimage??asset('assets/front/img/Ellipse 33.png')}}')" style="display: none">
+                                <img class="userblurimg" id="profileimage" src="{{$user->profileimage?$user->profileimage->getUrl():asset('assets/front/img/Ellipse 33.png')}}" />
+                                <input type="file" id="profileimage-upload" name="profileimage-upload" onchange="readURL(this,'{{$user->profileimage?$user->profileimage->getUrl():asset('assets/front/img/Ellipse 33.png')}}')" style="visibility: hidden">
                                 <div class="editimgbar">
                                     <img src="{{asset('assets/front/img/edit-2.svg')}}" onclick="$('#profileimage-upload').trigger('click'); return false;" />
                                 </div>
+                                <input type="hidden" name="profileimage" id="finalupload">
                             </div>
 
                             <div class="genrelform">
                                 <h2 class="heading003">Personal Information</h2>
-                                <form>
+
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="mb-3">
                                                 <label for="firstname" class="form-label">First name</label>
-                                                <input type="text" class="form-control" value="{{$user->name}}" placeholder="First name"
+                                                <input type="text" class="form-control" value="{{$user->name}}" name="name" placeholder="First name"
                                                        id="firstname" required>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="mb-3">
                                                 <label for="lastname" class="form-label">Last name</label>
-                                                <input type="text" class="form-control" value="{{$user->lastname}}" placeholder="Last name"
+                                                <input type="text" class="form-control" value="{{$user->lastname}}" name="lastname" placeholder="Last name"
                                                        id="lastname" required>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="mb-3">
                                                 <label for="exampleInputEmail1" class="form-label">Email</label>
-                                                <input type="email" class="form-control" value="{{$user->email}}" id="exampleInputEmail1"
+                                                <input type="email" class="form-control" value="{{$user->email}}" name="email" id="exampleInputEmail1"
                                                        placeholder="you@company.com" required>
                                             </div>
                                         </div>
@@ -51,7 +92,7 @@
                                         <div class="col-md-6">
                                             <div class="mb-3">
                                                 <label for="exampleInputphone" class="form-label">Phone</label>
-                                                <input type="text" class="form-control" id="exampleInputphone" value="{{$user->phone}}"
+                                                <input type="text" class="form-control" id="exampleInputphone" name="phone" value="{{$user->phone}}"
                                                        placeholder="you@company.com" required>
                                             </div>
                                         </div>
@@ -61,14 +102,14 @@
                                             <div class="mb-3">
                                                 <label for="" class="form-label">Gender</label>
                                                 <div class="form-check">
-                                                    <input class="form-check-input form-check-input2" type="radio" name="flexRadioDefault"
+                                                    <input class="form-check-input form-check-input2"  type="radio" name="gender"
                                                            id="flexRadioDefault1" value="male" {{$user->gender=='male'?'checked':''}}>
                                                     <label class="form-check-label" for="flexRadioDefault1">
                                                         Male
                                                     </label>
                                                 </div>
                                                 <div class="form-check">
-                                                    <input class="form-check-input form-check-input2" type="radio" name="flexRadioDefault"
+                                                    <input class="form-check-input form-check-input2" type="radio" name="gender"
                                                            id="flexRadioDefault2" value="female" {{$user->gender=='female'?'checked':''}}>
                                                     <label class="form-check-label"  for="flexRadioDefault2">
                                                         Female
@@ -82,13 +123,13 @@
                                         <div class="col-md-6">
                                             <div class="mb-3">
                                                 <label for="stad" class="form-label">Street Address</label>
-                                                <input type="text" class="form-control" value="{{$user->address}}" placeholder="Street Address" id="stad" required>
+                                                <input type="text" class="form-control" value="{{$user->address}}" name="address" placeholder="Street Address" id="stad" required>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="mb-3">
                                                 <label for="stad2" class="form-label">Apt, Suite, Building</label>
-                                                <input type="text" class="form-control" value="{{$user->address2}}" placeholder="Apt, Suite, Building" id="stad2"
+                                                <input type="text" class="form-control" value="{{$user->address_2}}" name="address_2" placeholder="Apt, Suite, Building" id="stad2"
                                                        required>
                                             </div>
                                         </div>
@@ -136,49 +177,186 @@
 
 
                                     <button type="submit" class="btn_1 btngrad btnfull">Save Profile</button>
-                                </form>
-                            </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="mytrip" role="tabpanel" aria-labelledby="mytrip-tab">
+                    <div class="tab-pane fade {{isset(request()->tab)&&request()->tab=='trips'?'active show':''}}" id="mytrip" role="tabpanel" aria-labelledby="mytrip-tab">
                         <div class="tripsmaindiv">
                             <h2 class="heading003">My Trips </h2>
                             <div class="row ">
-                                <div class="col-md-12 col-sm-12 col-12">
-                                    <div class="card mb-3 tripsdiv modaltripdetails1show">
-                                        <div>
-                                            <img src="{{asset('assets/front/img/tour_1.jpg')}}" class="card-img-top" alt="Trip Image" />
-                                        </div>
-                                        <div class="card-body">
-                                            <div class="tripsinfo1">
-                                                <h5 class="card-title">Cinnamon Dhonveli: The sunny side of life</h5>
+                                @if(count($user->bookingByUserEventBookings)>0)
+                                    @foreach($user->bookingByUserEventBookings as $booking)
+                                        @if($booking->status!='')
+                                        <div class="col-md-12 col-sm-12 col-12" >
+                                            <div class="card mb-3 tripsdiv modaltripdetails1show" data-bs-toggle="modal" data-bs-target="#exampleModal{{$booking->id}}">
+                                                <div>
+                                                    <img src="{{ $booking->booking_event->featured_image?$booking->booking_event->featured_image->getUrl():asset('assets/front/img/tour_1.jpg')}}" class="card-img-top" alt="Trip Image" />
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="tripsinfo1">
+                                                        <h5 class="card-title" >{{$booking->booking_event->event_title}}</h5>
+                                                    </div>
 
+                                                </div>
                                             </div>
+                                            <!-- Button trigger modal -->
 
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-12 col-sm-12 col-12">
-                                    <div class="card mb-3 tripsdiv modaltripdetails1show">
-                                        <div>
-                                            <img src="{{asset('assets/front/img/tour_2.jpg')}}" class="card-img-top" alt="Trip Image" />
-                                        </div>
-                                        <div class="card-body">
-                                            <div class="tripsinfo1">
-                                                <h5 class="card-title">Malesuada consequat hac quis commodo vel. Pellentesque.</h5>
 
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="exampleModal{{$booking->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+{{--                                                            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>--}}
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="card mb-3  " >
+
+                                                                <div class="card-body">
+                                                                    <div class="row">
+                                                                    <div class="col-5">
+                                                                        <div>
+                                                                            <img src="{{ $booking->booking_event->featured_image?$booking->booking_event->featured_image->getUrl():asset('assets/front/img/tour_1.jpg')}}" class="card-img-top" alt="Trip Image" />
+                                                                        </div>
+                                                                    </div>
+                                                                        <div class="col-7">
+                                                                             <span class="badge
+                                                                @if($booking->status=='cancelled') bg-danger
+                                                                @elseif($booking->status=='pending-payment') bg-danger
+                                                                @else bg-success @endif">
+                                                                        {{\App\Models\EventBooking::STATUS_SELECT[$booking->status]}}
+                                                                    </span>
+                                                                            <div class="tripsinfo1">
+                                                                                <h5 class="card-title" >{{$booking->booking_event->event_title}}</h5>
+                                                                            </div>
+                                                                            <div id="benefitsdescription">
+                                                                                <div class="benefitsshowmore1 packde1" onclick="$('.benefitstext1').toggle();">
+                                                                                    <span>Show Package Details <i class="fa fa-chevron-down"></i></span>
+                                                                                </div>
+                                                                                <div class="benefitstext1 benefitsshow1-more-height mt-3" style="display:none;">
+                                                                                    <ul class="bullets2 bbbhssgdu">
+                                                                                        <li>{{$booking->booking_event->duration-1}} Nights Hotel Accommodation</li>
+                                                                                        @if(count($booking->booking_event->tickets)>0)<li>{{count($booking->booking_event->tickets)}} Event Tickets</li>@endif
+                                                                                        @foreach($booking->booking_event->amenities_includeds as $amenities_included)
+                                                                                            <li>{{$amenities_included->title}}</li>
+                                                                                        @endforeach
+                                                                                    </ul>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="row">
+                                                                                <div class="col-6">Total: {{display_currency($booking->booking_payment->amount_total)}}</div>
+                                                                                <div class="col-2"></div>
+                                                                                <div class="col-4">Balance: {{display_currency($booking->booking_payment->amount_balance)}}</div>
+                                                                            </div>
+                                                                            @if($booking->booking_payment->amount_balance>0)
+                                                                            <div class="row">
+                                                                                <div class="col-12">
+                                                                                    <button class="btn_1  btngrad btnfull" data-bs-toggle="modal" data-bs-target="#paymodel{{$booking->id}}">
+                                                                                        Pay Now
+                                                                                    </button>
+                                                                                </div>
+                                                                            </div>
+                                                                                @endif
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+{{--                                                        <div class="modal-footer">--}}
+{{--                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>--}}
+{{--                                                            <button type="button" class="btn btn-primary">Save changes</button>--}}
+{{--                                                        </div>--}}
+                                                    </div>
+                                                </div>
                                             </div>
+                                            @if($booking->booking_payment->amount_balance>0)
+                                                <div class="modal fade" id="paymodel{{$booking->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                {{--                                                            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>--}}
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <div class="card mb-3 tripsdiv " >
 
+                                                                    <div class="card-body">
+                                                                        <h6 class="p-3">Amount</h6>
+                                                                        <div class="container ">
+                                                                        <div class="row">
+                                                                            <div class="col-6">
+                                                                                <input type="radio" name="payment" value="custom"  class="form-check-inline payradio " id="payradio1">
+                                                                                <label for="payradio1">Enter Amount</label>
+                                                                            </div>
+                                                                            <div class="col-6">
+                                                                                <input type="text" name="amount[custom]" value="{{$booking->booking_payment->amount_balance}}"  class=" form-control " id="">
+                                                                            </div>
+                                                                        </div>
+                                                                            <div class="row">
+                                                                            <div class="col-6">
+                                                                                <input type="radio" name="payment" value="full"  class="form-check-inline payradio " id="payradio2">
+                                                                                <label for="payradio2">Complete</label>
+                                                                            </div>
+                                                                            <div class="col-6">
+                                                                                <input type="text" name="amount" disabled value="{{$booking->booking_payment->amount_balance}}"  class=" form-control " id="">
+                                                                                <input type="hidden" name="amount[full]" value="{{$booking->booking_payment->amount_balance}}">
+                                                                            </div>
+                                                                        </div>
+                                                                        </div>
+                                                                        <h6 class="p-3">Payment Method</h6>
+                                                                        <div class="container  mt-5">
+                                                                            @php
+                                                                                $paymentMethods = $user->paymentMethods()->map(function($paymentMethod){
+                                                                                            return $paymentMethod->asStripePaymentMethod();
+                                                                                        });
+                                                                                @endphp
+                                                                            @foreach($paymentMethods as $paymentmethod)
+                                                                                <div class="row">
+                                                                                    <div class="col-6">
+                                                                                        <input type="radio" name="paymentmethod" value="custom"  class="form-check-inline payradio " id="paymentmethod">
+                                                                                        <label for="paymentmethod">{{$paymentmethod->card->network}} ending in {{$paymentmethod->card->last4}}</label>
+                                                                                    </div>
+                                                                                    <div class="col-6">
+                                                                                        <img src="{{asset('assets/front/img/'.$paymentmethod->card->brand.'.svg')}}" style="width:66px;height: 42px;border-radius: 5px" class="imgcdpic" />
+                                                                                    </div>
+                                                                                </div>
+                                                                            @endforeach
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
                                         </div>
-                                    </div>
-                                </div>
+                                        @endif
+                                    @endforeach
+                                @endif
+{{--                                <div class="col-md-12 col-sm-12 col-12">--}}
+{{--                                    <div class="card mb-3 tripsdiv modaltripdetails1show">--}}
+{{--                                        <div>--}}
+{{--                                            <img src="{{asset('assets/front/img/tour_2.jpg')}}" class="card-img-top" alt="Trip Image" />--}}
+{{--                                        </div>--}}
+{{--                                        <div class="card-body">--}}
+{{--                                            <div class="tripsinfo1">--}}
+{{--                                                <h5 class="card-title">Malesuada consequat hac quis commodo vel. Pellentesque.</h5>--}}
+
+{{--                                            </div>--}}
+
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
 
                             </div>
 
 
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="paymentmethod" role="tabpanel" aria-labelledby="paymentmethod-tab">
+                    <div class="tab-pane fade {{isset(request()->tab)&&request()->tab=='payment'?'active show':''}}" id="paymentmethod" role="tabpanel" aria-labelledby="paymentmethod-tab">
                         <div>
                             <div class="alert alert-danger">
                                 <i class="fe fe-info me-1"></i> You are near your API
@@ -348,7 +526,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade show" id="Offers" role="tabpanel" aria-labelledby="Offers-tab">
+                    <div class="tab-pane fade {{isset(request()->tab)&&request()->tab=='favorites'?'active show':''}}" id="Offers" role="tabpanel" aria-labelledby="Offers-tab">
                         <div>
                             <div class="row">
                                 <!-- <div class="col-md-3">
@@ -356,30 +534,66 @@
                               </div> -->
                                 <div class="col-md-12">
                                     <div class="offersecdiv">
-                                        <h2>Up to 30% Off Promo Code</h2>
-                                        <p>Groupon Users! Don't miss out on this Vistaprint promo code exclusively to Groupon. Get 20%
-                                            Off one item or 30% off two items.</p>
-                                        <div class="announcement">
-                                            <div class="coupon">
-                                                <input type="text" value="CODEPEN50" id="couponCode" readonly />
-                                                <div class="tooltip">
-                                                    <button onclick="myFunction()" class="btnout" onmouseout="outFunc()">
-                                                        <span class="tooltiptext" id="myTooltip">Copy to clipboard</span>
-                                                        Copy
-                                                    </button>
+                                        <h2>Favorite Trips</h2>
+                                        <p>Your Favorite trips.</p>
+{{--                                        <div class="announcement">--}}
+{{--                                            <div class="coupon">--}}
+{{--                                                <input type="text" value="CODEPEN50" id="couponCode" readonly />--}}
+{{--                                                <div class="tooltip">--}}
+{{--                                                    <button onclick="myFunction()" class="btnout" onmouseout="outFunc()">--}}
+{{--                                                        <span class="tooltiptext" id="myTooltip">Copy to clipboard</span>--}}
+{{--                                                        Copy--}}
+{{--                                                    </button>--}}
+{{--                                                </div>--}}
+
+
+{{--                                            </div>--}}
+{{--                                            <a href="#" class="btn_1 btngrad btnshopoff"> Shop Now</a>--}}
+{{--                                        </div>--}}
+                                        <div class="row">
+                                            @foreach($user->favourite_trips as $featured_trip)
+                                            <div class="col-xl-4 col-lg-4 col-md-4">
+                                                <div class="box_grid">
+
+                                                    <figure>
+                                                        <a href="{{route('frontend.trip_view',['trip_title'=>$featured_trip->event_title,'event'=>$featured_trip->id])}}"><img src="{{ $featured_trip->featured_image?$featured_trip->featured_image->getUrl():asset('assets/front/img/tour_1.jpg')}}" class="img-fluid" alt="" width="800"
+                                                                                                                                                                               height="533"></a>
+                                                        <div class="tourdivf1">
+                                                            {{--                                <div>--}}
+                                                            {{--                                    <small><img src="{{ asset('assets/front/img/clock.png')}}" /> 25:26:31</small>--}}
+                                                            {{--                                </div>--}}
+
+{{--                                                            <div>--}}
+{{--                                                                <img class="favoriteicoimg favourite" data-id="{{$featured_trip->id}}" src="{{ asset('assets/front/img/heart2.svg')}}" />--}}
+{{--                                                            </div>--}}
+                                                        </div>
+                                                    </figure>
+
+                                                    <div class="">
+                                                        <a href="{{route('frontend.trip_view',['trip_title'=>$featured_trip->event_title,'event'=>$featured_trip->id])}}" class="titltxt">{{$featured_trip->event_title}}</a>
+                                                        <div class="tourdivf2">
+                                                            <div>
+                                                                <img src="{{ asset('assets/front/img/calendar.svg')}}" />
+                                                                <span>{{$featured_trip->duration}} Days</span>
+                                                            </div>
+                                                            <div>
+                                                                <img src="{{ asset('assets/front/img/location.svg')}}" />
+                                                                <span>{{$featured_trip->city->city_name}}, {{$featured_trip->country->name}}</span>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
                                                 </div>
-
-
                                             </div>
-                                            <a href="#" class="btn_1 btngrad btnshopoff"> Shop Now</a>
+                                            @endforeach
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade show" id="chpass" role="tabpanel" aria-labelledby="chpass-tab">
+                    <div class="tab-pane fade {{isset(request()->tab)&&request()->tab=='password'?'active show':''}}" id="chpass" role="tabpanel" aria-labelledby="chpass-tab">
                         <div>
                             <div class="row justify-content-between align-items-center mb-5">
                                 <div class="col-12 col-md-9 col-xl-7">
@@ -472,7 +686,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade show" id="Reviews" role="tabpanel" aria-labelledby="Reviews-tab">
+                    <div class="tab-pane fade {{isset(request()->tab)&&request()->tab=='reviews'?'active show':''}}" id="Reviews" role="tabpanel" aria-labelledby="Reviews-tab">
                         <div>
                             <section id="reviews" class="gduuuuu">
 
@@ -658,6 +872,30 @@
                 }
 
                 reader.readAsDataURL(input.files[0]);
+                var fd = new FormData();
+                var files = input.files[0];
+                fd.append('file', files);
+                fd.append('_token', '{{csrf_token()}}');
+
+                $.ajax({
+                    url: '{{ route('frontend.account.storeMedia') }}',
+                    type: 'post',
+                    data: fd,
+                    contentType: false,
+                    processData: false,
+                    success: function(response){
+                        console.log(response);
+                        if(response.name){
+                            $('#finalupload').val(response.name);
+                        }
+                        // if(response != 0){
+                        //     alert('file uploaded');
+                        // }
+                        // else{
+                        //     alert('file not uploaded');
+                        // }
+                    },
+                });
             }else{
                 $('#profileimage').attr('src', profileimg);
             }

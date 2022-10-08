@@ -12995,6 +12995,7 @@ height: 150px;
 }
 .userimgchngr{
 position: relative;
+    /*top: -62px;*/
 }
 .userblurimg{
 width: 130px;

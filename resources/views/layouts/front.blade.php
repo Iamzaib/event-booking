@@ -25,11 +25,16 @@
     <link href="{{ asset('assets/front/css/signin.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/front/css/checkout.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
 
 
-
+    <style type="text/css">
+        .favourite-filter{
+            filter: invert(15%) sepia(76%) saturate(6401%) hue-rotate(357deg) brightness(100%) contrast(114%);
+        }
         @if(isset($page_name)&&$page_name=='home')
-     <style type="text/css">
+
                                    .tiny_bullet_slider .tp-bullet:before {
                                        content: " ";
                                        position: absolute;
@@ -95,9 +100,9 @@
         header.sticky .btnhead {
             color: #ff027c !important;
         }
-     </style>
+
           @else
-        <style type="text/css">
+
                                       .tiny_bullet_slider .tp-bullet:before {
                                           content: " ";
                                           position: absolute;
@@ -197,9 +202,9 @@
         header.sticky .btnhead {
             color: #ff027c !important;
         }
-    </style>
-        @endif
 
+        @endif
+        </style>
 {{--    <link href="{{ asset('css/custom.css') }}" rel="stylesheet" />--}}
     @yield('styles')
 </head>
@@ -242,11 +247,11 @@
                     </li>
                     @guest
                     <li>
-                        <span><a href="{{route('login')}}">Login</a></span>
+                        <span><a href="{{route('login')}}" >Login</a></span>
                     </li>
                     @else
                     <li>
-                        <span><a href="@if(auth()->user()->is_admin){{route('admin.home')}}@else{{route('frontend.account.index')}}@endif">Account</a></span>
+                        <span><a href="@if(auth()->check()&&auth()->user()->is_admin){{route('admin.home')}}@else{{route('frontend.account.index')}}@endif">Account</a></span>
                     </li>
                      <li>
                         <span><a href="#" onclick="event.preventDefault(); document.getElementById('logoutform').submit();">Logout</a></span>
@@ -257,7 +262,7 @@
             <div class="mblsdiv1">
                 <a href="#"><img src="{{ asset('assets/front/img/search-normal.svg')}}" /></a>
                 <a href="{{route('trips')}}"><img src="{{ asset('assets/front/img/briefcase.svg')}}" /></a>
-                <a href="@if(auth()->user()->is_admin){{route('admin.home')}}@else{{route('frontend.account.index')}}@endif"><svg style="width: 24px; height: 23px;"><path fill-rule="evenodd" fill="#fff" d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 3a3 3 0 110 6 3 3 0 010-6zM6 15.98a7.2 7.2 0 0012 0c-.03-1.99-4.01-3.08-6-3.08-2 0-5.97 1.09-6 3.08z" clip-rule="evenodd"></path></svg></a>
+                <a href="@if(auth()->check()&&auth()->user()->is_admin){{route('admin.home')}}@else{{route('frontend.account.index')}}@endif"><svg style="width: 24px; height: 23px;"><path fill-rule="evenodd" fill="#fff" d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 3a3 3 0 110 6 3 3 0 010-6zM6 15.98a7.2 7.2 0 0012 0c-.03-1.99-4.01-3.08-6-3.08-2 0-5.97 1.09-6 3.08z" clip-rule="evenodd"></path></svg></a>
             </div>
         </div>
     </header>
@@ -300,7 +305,7 @@
                             </li>
                         @else
                             <li>
-                                <span><a href="@if(auth()->user()->is_admin){{route('admin.home')}}@else{{route('frontend.account.index')}}@endif"><img src="{{auth()->user()->profileimage?auth()->user()->profileimage->getUrl('thumb'):asset('assets/front/img/userimg.png')}}" class="userloginprofile" /></a></span>
+                                <span><a href="@if(auth()->check()&&auth()->user()->is_admin){{route('admin.home')}}@else{{route('frontend.account.index')}}@endif"><img src="{{auth()->user()->profileimage?auth()->user()->profileimage->getUrl('thumb'):asset('assets/front/img/userimg.png')}}" class="userloginprofile" /></a></span>
                             </li>
                             <li>
                                 <span><a href="#" onclick="event.preventDefault(); document.getElementById('logoutform').submit();">Logout</a></span>
@@ -315,7 +320,7 @@
                 <div class="mblsdiv1">
                     <a href="#"><img src="{{asset('assets/front/img/dar-search-normal.svg')}}" /></a>
                     <a href="{{route('trips')}}"><img src="{{asset('assets/front/img/darkbriefcase.svg')}}" /></a>
-                    <a href="@if(auth()->user()->is_admin){{route('admin.home')}}@else{{route('frontend.account.index')}}@endif"><svg style="width: 24px; height: 23px;"><path fill-rule="evenodd" d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 3a3 3 0 110 6 3 3 0 010-6zM6 15.98a7.2 7.2 0 0012 0c-.03-1.99-4.01-3.08-6-3.08-2 0-5.97 1.09-6 3.08z" clip-rule="evenodd"></path></svg></a>
+                    <a href="@if(auth()->check()&&auth()->user()->is_admin){{route('admin.home')}}@else{{route('frontend.account.index')}}@endif"><svg style="width: 24px; height: 23px;"><path fill-rule="evenodd" d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 3a3 3 0 110 6 3 3 0 010-6zM6 15.98a7.2 7.2 0 0012 0c-.03-1.99-4.01-3.08-6-3.08-2 0-5.97 1.09-6 3.08z" clip-rule="evenodd"></path></svg></a>
                 </div>
             </div>
         </header>
@@ -1084,12 +1089,30 @@
     {{ csrf_field() }}
 </form>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
 <script src="{{ asset('assets/front/js/bootstrap.bundle.min.js') }}"></script>
+
 <script src="{{ asset('assets/front/js/common_scripts.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+
 <script src="{{ asset('assets/front/js/main.js')}}"></script>
 <script src="{{ asset('assets/front/js/script2.js')}}"></script>
 @yield('scripts')
 <script>
+    $(function (){
+        $('.date').datetimepicker({
+            format: 'MM/DD/YYYY',
+            locale: 'en',
+            icons: {
+                up: 'fa fa-chevron-up',
+                down: 'fa fa-chevron-down',
+                previous: 'fa fa-chevron-left',
+                next: 'fa fa-chevron-right'
+            }
+        })
+    });
+
     var select_placeholder='<option>{{trans('global.pleaseSelect')}}</option>';
     $("select[name=country]").change(function (){
         console.log($(this).val());
@@ -1132,6 +1155,29 @@
                 $('select[name=city_id]').html(data.html);
             }
         });
+    });
+    $(".favourite").click(function (){
+        @auth
+        var id=$(this).data('id');
+        var favimg=$(this);
+        $.ajax({
+            url: "{{ route('frontend.account.favourite') }}?trip_id=" + id,
+            method: 'GET',
+            success: function(data) {
+                console.log(data.status);
+                if(parseInt($.trim(data.status))===1){
+                    // favimg.addClass('favourite-filter');
+                    console.log(data);
+                    favimg.toggleClass('favourite-filter');
+                    favimg.css({'filter': 'invert(15%) sepia(76%) saturate(6401%) hue-rotate(357deg) brightness(100%) contrast(114%)'});
+                }else{
+                    favimg.removeClass('favourite-filter');
+                }
+            }
+        });
+        @elseauth
+        window.location.href='{{route('login')}}';
+        @endauth
     });
 </script>
 </body>

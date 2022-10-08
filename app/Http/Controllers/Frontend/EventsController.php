@@ -18,6 +18,7 @@ use Carbon\CarbonPeriod;
 use Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 use JetBrains\PhpStorm\Pure;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Symfony\Component\HttpFoundation\Response;
@@ -134,11 +135,23 @@ class EventsController extends Controller
         if($trip->duration>2){
             list($date_range_1, $date_range_2) = array_chunk($dates, ceil(count($dates) / 2));
             $data['range'][0]['date']=Arr::first($date_range_1).' > '.Arr::last($date_range_1);
+            $data['range'][0]['duration']=count($date_range_1);
             $data['range'][0]['price']=($trip->daily_price*count($date_range_1))*$data['travelers'];
         }
+        $data['low_total']=$data['range'][0]['price'];
+        $data['low_deposit']=($data['range'][0]['price']*((float)DEPOSIT_AMOUNT_PERCENT/100));
+        $installment=$data['range'][0]['price']-$data['low_deposit'];
+        $data['low_installment']=($installment/(int)TOTAL_INSTALLMENTS);
+
+
         $data['total_event_tickets']=count($trip->tickets);
-        $data['range'][1]['date']=date('d-M-Y',strtotime($trip->event_start)).' - '.date('d-M-Y',strtotime($trip->event_end));
+        $data['range'][1]['date']=date('d-M-Y',strtotime($trip->event_start)).' > '.date('d-M-Y',strtotime($trip->event_end));
+        $data['range'][1]['duration']=count($dates);
         $data['range'][1]['price']=($trip->daily_price*$trip->duration)*$data['travelers'];
+        $data['intent'] = auth()->user()->createSetupIntent();
+        $data['payment_method']=Auth::user()->defaultPaymentMethod()->id;
+//        echo $data['payment_method']->id;
+//        dd($data['payment_method']);
         //var_dump($data = $this->request->session()->all());
         return view('front.trips.custom_trip',$data);
     }
@@ -149,7 +162,8 @@ class EventsController extends Controller
         $data['page_name']=$trip_title;
         $data['page_type']='trip';
         $event->load('country', 'state', 'city');
-
+        $data['featured_trips']=Event::where('event_start','>',date('Y-m-d'))
+            ->orderBy('event_start','asc')->limit(3)->get();
         $data['trip']=$event;
 
         return view('front.trips.trip-event', $data);

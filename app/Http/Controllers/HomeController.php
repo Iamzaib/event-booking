@@ -6,8 +6,11 @@ use App\Models\ContentPage;
 use App\Models\Event;
 use App\Models\FaqCategory;
 use App\Models\FaqQuestion;
+use App\Models\User;
+use App\Notifications\ContactEmailNotification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 
 class HomeController extends Controller
 {
@@ -34,6 +37,31 @@ class HomeController extends Controller
         $data['featured_trips']=Event::where('event_start','>',date('Y-m-d'))
             ->orderBy('event_start','asc')->limit(3)->get();
         return view('front.home.index',$data);
+    }
+    public function contact(Request $request){
+        $data['success']='';
+        if(isset($request->firstname)){
+            $validated=$request->validate([
+                    'firstname' => [
+                        'string',
+                        'required',
+                    ],
+                    'lastname' => [
+                        'string',
+                        'required',
+                    ],
+                    'email' => [
+                        'required',
+                    ],
+                    'message' => [
+                        'required',
+                    ],
+                ]);
+            $users = User::whereHas('roles', function ($q) { return $q->where('title', 'Admin'); })->get();
+             Notification::send($users, new ContactEmailNotification((object)$validated));
+             $data['success']='Message sent successfully';
+        }
+        return view('front.others.contact',$data);
     }
     public function trips(){
         $sort='id';$sort_type='desc';

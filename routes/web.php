@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 Route::get('userVerification/{token}', 'UserVerificationController@approve')->name('userVerification');
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('/help-center', 'HomeController@help')->name('help_center');
+Route::get('/contact-us', 'HomeController@contact')->name('contact');
+Route::post('/contact-us', 'HomeController@contact')->name('contact');
 Route::get('/trips', 'HomeController@trips')->name('trips');
 Route::get('/email-verify-now', 'VerificationController@show')->name('email_verification');
 
@@ -31,6 +33,7 @@ Route::controller(CheckoutController::class)->group(function () {
             Route::get('checkout-payment', 'checkout_payment')->name('checkout_payment');
             Route::post('checkout-update-payment', 'checkout_payment_save')->name('checkout_payment_save');
             Route::get('checkout-confirmation', 'checkout_confirm')->name('checkout_confirm');
+            Route::post('custom-booking-process', 'custom_order_process')->name('custom_order_process');
             Route::get('booking-complete', 'checkout_complete')->name('checkout_complete');
         });
 });
@@ -42,7 +45,9 @@ Route::controller(CheckoutController::class)->group(function () {
             ->group(function () {
                 Route::get('', 'index')->name('index');
                 Route::get('edit-profile', 'edit')->name('edit');
-                Route::post('save-profile', 'update')->name('save');
+                Route::get('add-favorite', 'favourite')->name('favourite');
+                Route::post('save-profile/{user}', 'update')->name('save');
+                Route::post('save/media', 'storeMedia')->name('storeMedia');
             });
         Route::get('custom-trip/{trip_title}/{trip}', 'EventsController@customized_trip')->name('custom_trip');
     });

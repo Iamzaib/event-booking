@@ -32,6 +32,7 @@ class Traveler extends Model
         'email',
         'phone',
         'gender',
+        'shirt_size',
         'notes',
         'costume_id',
         'created_at',

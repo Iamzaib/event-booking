@@ -34,7 +34,7 @@
                     <div class="box_grid">
 
                         <figure>
-                            <a href="{{route('frontend.trip_view',['trip_title'=>$featured_trip->event_title,'event'=>$featured_trip->id])}}"><img src="{{ $featured_trip->featured_image->getUrl()??asset('assets/front/img/tour_1.jpg')}}" class="img-fluid" alt="" width="800"
+                            <a href="{{route('frontend.trip_view',['trip_title'=>$featured_trip->event_title,'event'=>$featured_trip->id])}}"><img src="{{ $featured_trip->featured_image?$featured_trip->featured_image->getUrl():asset('assets/front/img/tour_1.jpg')}}" class="img-fluid" alt="" width="800"
                                                             height="533"></a>
                             <div class="tourdivf1">
 {{--                                <div>--}}
@@ -42,7 +42,7 @@
 {{--                                </div>--}}
 
                                 <div>
-                                    <img class="favoriteicoimg" data-id="{{$featured_trip->id}}" src="{{ asset('assets/front/img/heart.svg')}}" />
+                                    <img class="favoriteicoimg {{favorite_check($featured_trip->id,auth()->id())?'favourite-filter':''}} favourite" data-id="{{$featured_trip->id}}" src="{{ asset('assets/front/img/heart2.svg')}}" />
                                 </div>
                             </div>
                         </figure>
@@ -65,70 +65,6 @@
                     </div>
                 </div>
                 @endforeach
-                <div class="col-xl-4 col-lg-4 col-md-4">
-                    <div class="box_grid">
-                        <figure>
-                            <a href="!#"><img src="{{ asset('assets/front/img/tour_2.jpg')}}" class="img-fluid" alt="" width="800"
-                                                            height="533"></a>
-                            <div class="tourdivf1">
-                                <div>
-                                    <small><img src="{{ asset('assets/front/img/clock.png')}}" /> 25:26:31</small>
-                                </div>
-
-                                <div>
-                                    <img class="favoriteicoimg" src="{{ asset('assets/front/img/heart.svg')}}" />
-                                </div>
-                            </div>
-                        </figure>
-                        <div class="">
-                            <a href="!#" class="titltxt">Cinnamon Dhonveli: The sunny side of life</a>
-                            <div class="tourdivf2">
-                                <div>
-                                    <img src="{{ asset('assets/front/img/calendar.svg')}}" />
-                                    <span>4 Days</span>
-                                </div>
-                                <div>
-                                    <img src="{{ asset('assets/front/img/location.svg')}}" />
-                                    <span>Maldives, Maldives</span>
-                                </div>
-                            </div>
-
-                        </div>
-
-                    </div>
-                </div>
-                <div class="col-xl-4 col-lg-4 col-md-4">
-                    <div class="box_grid">
-                        <figure>
-                            <a href="!#"><img src="{{ asset('assets/front/img/tour_3.jpg')}}" class="img-fluid" alt="" width="800"
-                                                            height="533"></a>
-                            <div class="tourdivf1">
-                                <div>
-                                    <small><img src="{{ asset('assets/front/img/clock.png')}}" /> 25:26:31</small>
-                                </div>
-
-                                <div>
-                                    <img class="favoriteicoimg" src="{{ asset('assets/front/img/heart.svg')}}" />
-                                </div>
-                            </div>
-                        </figure>
-                        <div class="">
-                            <a href="!#" class="titltxt">Cinnamon Dhonveli: The sunny side of life</a>
-                            <div class="tourdivf2">
-                                <div>
-                                    <img src="{{ asset('assets/front/img/calendar.svg')}}" />
-                                    <span>4 Days</span>
-                                </div>
-                                <div>
-                                    <img src="{{ asset('assets/front/img/location.svg')}}" />
-                                    <span>Maldives, Maldives</span>
-                                </div>
-                            </div>
-
-                        </div>
-
-                    </div>
-                </div>
 
             </div>
             <!-- /row -->

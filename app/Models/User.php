@@ -44,6 +44,7 @@ class User extends Authenticatable implements HasMedia,MustVerifyEmail
 
     protected $dates = [
         'email_verified_at',
+        'dob',
         'verified_at',
         'created_at',
         'updated_at',
@@ -56,6 +57,7 @@ class User extends Authenticatable implements HasMedia,MustVerifyEmail
         'email',
         'phone',
         'gender',
+        'dob',
         'address',
         'address_2',
         'city_id',
@@ -188,6 +190,9 @@ class User extends Authenticatable implements HasMedia,MustVerifyEmail
         return $this->belongsToMany(Role::class);
     }
 
+    public function favourite_trips(){
+        return $this->belongsToMany(Event::class,'event_favorites');
+    }
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->format('Y-m-d H:i:s');

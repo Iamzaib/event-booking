@@ -1,8 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.front')
 @section('content')
-    <div class="container-fluid">
+    <div class="container-fluid margin_80_0">
         <div class="row justify-content-center">
-            <div class="col-12 col-md-5 col-lg-6 col-xl-4 px-lg-6 my-5 align-self-center">
+
+            <div class="col-4 px-lg-6 my-5 align-self-center">
 
                 <!-- Heading -->
                 <h1 class="display-4 text-center mb-3">
@@ -82,9 +83,9 @@
                         @endif
 
                             <!-- Icon -->
-                            <span class="input-group-text" id="view-pass">
-                                  <i class="fe fe-eye"></i>
-                            </span>
+{{--                            <span class="input-group-text" id="view-pass">--}}
+{{--                                  <i class="fe fe-eye"></i>--}}
+{{--                            </span>--}}
 
                         </div>
                     </div>
@@ -96,24 +97,23 @@
                         </label>
                     </div>
                     <!-- Submit -->
-                    <button class="btn btn-lg w-100 btn-primary mb-3" type="submit">
+                    <button class="btn_1  btngrad" style="width: 100%" type="submit">
                         Sign in
                     </button>
 
                     <!-- Link -->
+                    <p class="text-center mt-3 mb-3">
+                        <span class="arwsqft">
+                            Forget Password? <a href="{{route('password.request')}}">Reset Password</a>.
+                        </span>
+                    </p>
                     <p class="text-center">
-                        <small class="text-muted text-center">
+                        <span class="arwsqft">
                             Don't have an account yet? <a href="{{route('register')}}">Sign up</a>.
-                        </small>
+                        </span>
                     </p>
 
                 </form>
-
-            </div>
-            <div class="col-12 col-md-7 col-lg-6 col-xl-8 d-none d-lg-block">
-
-                <!-- Image -->
-                <div class="bg-cover h-100 min-vh-100 mt-n1 me-n3" style="background-image: url({{asset('assets/img/covers/auth-side-cover.jpg')}});"></div>
 
             </div>
         </div> <!-- / .row -->
