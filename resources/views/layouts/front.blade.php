@@ -16,7 +16,15 @@
 
     <!-- Favicon-->
     <link rel="shortcut icon" href="{{ asset('assets/front/img/favicon.svg')}}" type="image/x-icon">
-
+    <style>
+        @font-face {
+            font-family: CircularStd;
+            src: url({{asset('assets/fonts/circular-std/CircularStd-Black.woff2')}});
+        }
+        body{
+            font-family: CircularStd, sans-serif !important;
+        }
+    </style>
 
 {{--    <link href="{{ asset('assets/front/css/bootstrap.min.css') }}" rel="stylesheet" />--}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
@@ -30,6 +38,7 @@
 
 
     <style type="text/css">
+
         .favourite-filter{
             filter: invert(15%) sepia(76%) saturate(6401%) hue-rotate(357deg) brightness(100%) contrast(114%);
         }
