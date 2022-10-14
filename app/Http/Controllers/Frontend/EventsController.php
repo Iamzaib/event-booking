@@ -12,8 +12,10 @@ use App\Models\Costume;
 use App\Models\Country;
 use App\Models\Event;
 use App\Models\EventAddon;
+use App\Models\Hotel;
 use App\Models\HotelRoom;
 use App\Models\State;
+use App\Models\Testimonial;
 use Carbon\CarbonPeriod;
 use Gate;
 use Illuminate\Http\Request;
@@ -149,7 +151,11 @@ class EventsController extends Controller
         $data['range'][1]['duration']=count($dates);
         $data['range'][1]['price']=($trip->daily_price*$trip->duration)*$data['travelers'];
         $data['intent'] = auth()->user()->createSetupIntent();
-        $data['payment_method']=Auth::user()->defaultPaymentMethod()->id;
+        $paymentMethods = Auth::user()->paymentMethods()->map(function($paymentMethod){
+            return $paymentMethod->asStripePaymentMethod();
+        });
+        $data['payment_method']=(count($paymentMethods)>0?$paymentMethods:'');
+        $data['no_accommodation']=Hotel::find(2);
 //        echo $data['payment_method']->id;
 //        dd($data['payment_method']);
         //var_dump($data = $this->request->session()->all());
@@ -164,8 +170,38 @@ class EventsController extends Controller
         $event->load('country', 'state', 'city');
         $data['featured_trips']=Event::where('event_start','>',date('Y-m-d'))
             ->orderBy('event_start','asc')->limit(3)->get();
-        $data['trip']=$event;
+//        $data['reviews']=Testimonial::where('')
+        $reviews=array();
+        $ratings_=[];
+        foreach ($event->bookingEventEventBookings as $books){
+            foreach ($books->booking_reviews as $rev){
+                $reviews[]=$rev;
+                $ratings_[]=$rev->ratings;
+            }
 
+        }
+//        dd($reviews);
+        $total_reviews=count($reviews);
+        $ratings_count=[];
+        for ($rc=1;$rc<=5;$rc++){$ratings_count[$rc]=[];$ratings_count[$rc]['count']=0;$ratings_count[$rc]['percent']=0;}
+            if($total_reviews>0){
+            foreach ($reviews as $review){
+                $ratings_count[$review->ratings]['count']+=1;
+            }
+            foreach ($ratings_count as $ratings => $count){
+                $ratings_count[$ratings]['percent']=($count['count']/$total_reviews)*100;
+            }
+        }
+        $data['ratings_percent']=array_reverse($ratings_count,true);
+$data['reviews']=$reviews;
+$data['avg_ratings']=0;
+        $ratings_ = array_filter($ratings_);
+        if(count($ratings_)) {
+            $data['avg_ratings'] = array_sum($ratings_)/count($ratings_);
+        }
+//echo $reviews->avg('ratings');
+        $data['trip']=$event;
+//        dd($reviews,array_reverse($ratings_count,true));
         return view('front.trips.trip-event', $data);
     }
 

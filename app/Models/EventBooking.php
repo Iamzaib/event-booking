@@ -60,11 +60,15 @@ class EventBooking extends Model
     }
     public function booking_rooms()
     {
-        return $this->hasMany(BookingRoom::class);
+        return $this->hasMany(BookingRoom::class,'booking_for_id');
     }
-    public function tavelers()
+    public function booking_reviews()
     {
-        return $this->hasMany(Traveler::class);
+        return $this->hasMany(Testimonial::class,'event_trip_booking_id');
+    }
+    public function travelers()
+    {
+        return $this->hasMany(Traveler::class,'booking_id');
     }
     public function booking_payment()
     {

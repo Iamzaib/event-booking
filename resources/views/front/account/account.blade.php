@@ -6,37 +6,38 @@
             <div class="col-lg-3 col-md-3 col-sm-12 mblscroll">
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link {{!isset(request()->tab)||(isset(request()->tab)&&request()->tab=='profile')?'active ':''}}" id="general-tab" data-bs-toggle="tab" data-bs-target="#general"
+                        <button class="nav-link {{!isset(request()->tab)||(isset(request()->tab)&&request()->tab=='profile')?'active ':''}}"
+                                id="general-tab" data-bs-toggle="tab" data-bs-target="#general" onclick="history.replaceState('', '', '?tab=profile');"
                                 type="button" role="tab" aria-controls="general" aria-selected="true">
                             General
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link {{isset(request()->tab)&&request()->tab=='trips'?'active ':''}}" id="mytrip-tab" data-bs-toggle="tab" data-bs-target="#mytrip" type="button"
+                        <button class="nav-link {{isset(request()->tab)&&request()->tab=='trips'?'active ':''}}" onclick="history.replaceState('', '', '?tab=trips');" id="mytrip-tab" data-bs-toggle="tab" data-bs-target="#mytrip" type="button"
                                 role="tab" aria-controls="mytrip" aria-selected="true">
                             My Trips
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link {{isset(request()->tab)&&request()->tab=='payment'?'active ':''}}" id="paymentmethod-tab" data-bs-toggle="tab" data-bs-target="#paymentmethod"
+                        <button class="nav-link {{isset(request()->tab)&&request()->tab=='payment'?'active ':''}}"  onclick="history.replaceState('', '', '?tab=payment');" id="paymentmethod-tab" data-bs-toggle="tab" data-bs-target="#paymentmethod"
                                 type="button" role="tab" aria-controls="paymentmethod" aria-selected="false">
                             Payment
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link {{isset(request()->tab)&&request()->tab=='favorites'?'active ':''}}" id="Offers-tab" data-bs-toggle="tab" data-bs-target="#Offers" type="button"
+                        <button class="nav-link {{isset(request()->tab)&&request()->tab=='favorites'?'active ':''}}" onclick="history.replaceState('', '', '?tab=favorites');" id="Offers-tab" data-bs-toggle="tab" data-bs-target="#Offers" type="button"
                                 role="tab" aria-controls="Offers" aria-selected="false">
                             Favorites
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link {{isset(request()->tab)&&request()->tab=='password'?'active ':''}}" id="chpass-tab" data-bs-toggle="tab" data-bs-target="#chpass" type="button"
+                        <button class="nav-link {{isset(request()->tab)&&request()->tab=='password'?'active ':''}}" onclick="history.replaceState('', '', '?tab=password');" id="chpass-tab" data-bs-toggle="tab" data-bs-target="#chpass" type="button"
                                 role="tab" aria-controls="chpass" aria-selected="false">
                             Change Password
                         </button>
                     </li>
                     <li class="nav-item " role="presentation">
-                        <button class="nav-link {{isset(request()->tab)&&request()->tab=='reviews'?'active ':''}}" id="Reviews-tab" data-bs-toggle="tab" data-bs-target="#Reviews" type="button"
+                        <button class="nav-link {{isset(request()->tab)&&request()->tab=='reviews'?'active ':''}}" onclick="history.replaceState('', '', '?tab=reviews');" id="Reviews-tab" data-bs-toggle="tab" data-bs-target="#Reviews" type="button"
                                 role="tab" aria-controls="Reviews" aria-selected="false">
                             Reviews
                         </button>
@@ -49,14 +50,14 @@
                     <div class="tab-pane fade {{!isset(request()->tab)||(isset(request()->tab)&&request()->tab=='profile')?'active show':''}}" id="general" role="tabpanel" aria-labelledby="general-tab">
                         <div class="generaltabmin">
                             <div class="usercover1">
-{{--                                <img class="userblurimg" src="{{$user->profileimage??asset('assets/front/img/Ellipse 33.png')}}" />--}}
+{{--                                <img class="userblurimg" src="{{$user->profileimage??asset('assets/front/img/profile-placeholder.png')}}" />--}}
 
                             </div>
                             <form action="{{route('frontend.account.save',['user'=>$user->id])}}" method="post" enctype="multipart/form-data">
                                 @csrf
                             <div class="userimgchngr">
-                                <img class="userblurimg" id="profileimage" src="{{$user->profileimage?$user->profileimage->getUrl():asset('assets/front/img/Ellipse 33.png')}}" />
-                                <input type="file" id="profileimage-upload" name="profileimage-upload" onchange="readURL(this,'{{$user->profileimage?$user->profileimage->getUrl():asset('assets/front/img/Ellipse 33.png')}}')" style="visibility: hidden">
+                                <img class="userblurimg" id="profileimage" src="{{$user->profileimage?$user->profileimage->getUrl():asset('assets/front/img/profile-placeholder.png')}}" />
+                                <input type="file" id="profileimage-upload" name="profileimage-upload" onchange="readURL(this,'{{$user->profileimage?$user->profileimage->getUrl():asset('assets/front/img/profile-placeholder.png')}}')" style="visibility: hidden">
                                 <div class="editimgbar">
                                     <img src="{{asset('assets/front/img/edit-2.svg')}}" onclick="$('#profileimage-upload').trigger('click'); return false;" />
                                 </div>
@@ -245,10 +246,10 @@
                                                                                     </ul>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="row">
+                                                                            <div class="row mb-3 mt-3">
                                                                                 <div class="col-6">Total: {{display_currency($booking->booking_payment->amount_total)}}</div>
-                                                                                <div class="col-2"></div>
-                                                                                <div class="col-4">Balance: {{display_currency($booking->booking_payment->amount_balance)}}</div>
+{{--                                                                                <div class="col-2"></div>--}}
+                                                                                <div class="col-6">Balance: {{display_currency($booking->booking_payment->amount_balance)}}</div>
                                                                             </div>
                                                                             @if($booking->booking_payment->amount_balance>0)
                                                                             <div class="row">
@@ -276,56 +277,84 @@
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
-                                                                {{--                                                            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>--}}
+                                                               <h5 class="modal-title w-100 text-center" id="exampleModalLabel">Pay By Card</h5>
                                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                             </div>
                                                             <div class="modal-body">
-                                                                <div class="card mb-3 tripsdiv " >
-
+                                                                <div class="card mb-3  " >
+                                                                    <form class="card-form" action="{{route('frontend.trip_balance_payment',['payment'=>$booking->booking_payment->id])}}" method="post">
+                                                                    @csrf
+                                                                        <input type="hidden" name="pay_amount" id="pay_amount">
                                                                     <div class="card-body">
-                                                                        <h6 class="p-3">Amount</h6>
-                                                                        <div class="container ">
-                                                                        <div class="row">
-                                                                            <div class="col-6">
-                                                                                <input type="radio" name="payment" value="custom"  class="form-check-inline payradio " id="payradio1">
+                                                                        <h6 class="p-0">Amount</h6>
+                                                                        <div class="tripsdiv">
+                                                                        <div class="container">
+                                                                        <div class="row pt-2 pb-2 border-bottom-1">
+                                                                            <div class="col-6 input-col-custom-padding-05">
+                                                                                <input type="radio" name="payment" value="custom"  class="form-check-circle amountradio " id="payradio1">
                                                                                 <label for="payradio1">Enter Amount</label>
                                                                             </div>
-                                                                            <div class="col-6">
-                                                                                <input type="text" name="amount[custom]" value="{{$booking->booking_payment->amount_balance}}"  class=" form-control " id="">
+                                                                            <div class="col-6 input-col-custom-padding-02">
+                                                                                <input type="number" step=".01"  name="amount[custom]" max="{{$booking->booking_payment->amount_balance}}" value="{{$booking->booking_payment->amount_balance}}"  class=" form-control " id="amount_custom">
                                                                             </div>
                                                                         </div>
-                                                                            <div class="row">
-                                                                            <div class="col-6">
-                                                                                <input type="radio" name="payment" value="full"  class="form-check-inline payradio " id="payradio2">
+                                                                            <div class="row  pt-2 pb-2 border-bottom-2">
+                                                                            <div class="col-6 input-col-custom-padding-05">
+                                                                                <input type="radio" name="payment" value="full" checked class="form-check-circle amountradio " id="payradio2">
                                                                                 <label for="payradio2">Complete</label>
                                                                             </div>
-                                                                            <div class="col-6">
-                                                                                <input type="text" name="amount" disabled value="{{$booking->booking_payment->amount_balance}}"  class=" form-control " id="">
-                                                                                <input type="hidden" name="amount[full]" value="{{$booking->booking_payment->amount_balance}}">
+                                                                            <div class="col-6 input-col-custom-padding-02">
+                                                                                <input type="text" name="amount" disabled value="{{$booking->booking_payment->amount_balance}}"  class=" form-control "  id="">
+                                                                                <input type="hidden" name="amount[full]" id="amount_full" value="{{$booking->booking_payment->amount_balance}}">
                                                                             </div>
                                                                         </div>
                                                                         </div>
-                                                                        <h6 class="p-3">Payment Method</h6>
-                                                                        <div class="container  mt-5">
-                                                                            @php
-                                                                                $paymentMethods = $user->paymentMethods()->map(function($paymentMethod){
-                                                                                            return $paymentMethod->asStripePaymentMethod();
-                                                                                        });
-                                                                                @endphp
+                                                                        </div>
+                                                                        <h6 class="pt-3">Payment Method</h6>
+                                                                            <div class="tripsdiv">
+                                                                        <div class="container mt-2 ">
+
                                                                             @foreach($paymentMethods as $paymentmethod)
-                                                                                <div class="row">
-                                                                                    <div class="col-6">
-                                                                                        <input type="radio" name="paymentmethod" value="custom"  class="form-check-inline payradio " id="paymentmethod">
-                                                                                        <label for="paymentmethod">{{$paymentmethod->card->network}} ending in {{$paymentmethod->card->last4}}</label>
+                                                                                <div class="row  pt-2 pb-2 border-bottom-1">
+                                                                                    <div class="col-10 input-col-custom-padding-02">
+                                                                                        <input type="radio" name="paymentmethod" value="{{$paymentmethod->id}}"  class="form-check-inline payradio " id="payment-method{{$loop->index}}">
+                                                                                        <label for="payment-method{{$loop->index}}">{{ucfirst($paymentmethod->card->brand)}} ending in {{$paymentmethod->card->last4}}</label>
                                                                                     </div>
-                                                                                    <div class="col-6">
-                                                                                        <img src="{{asset('assets/front/img/'.$paymentmethod->card->brand.'.svg')}}" style="width:66px;height: 42px;border-radius: 5px" class="imgcdpic" />
+                                                                                    <div class="col-2">
+                                                                                        <img src="{{asset('assets/front/img/'.$paymentmethod->card->brand.'.svg')}}" style="width:50px;height: auto;border-radius: 5px" class="imgcdpic" />
                                                                                     </div>
                                                                                 </div>
                                                                             @endforeach
 
+                                                                            <div class="row  pt-2 pb-2 border-bottom-2">
+                                                                                <a class="p-1" onclick="$('.stripe_form').toggle()"><strong>Add New Card</strong></a>
+                                                                                <div class="col-12 stripe_form" style="display: none">
+                                                                                    <div id="card-element" class="mt-3 mb-3"></div>
+                                                                                    <div id="card-errors" role="alert"></div>
+                                                                                    <input type="hidden" name="payment_method" class="payment-method">
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </div>
+                                                                            </div>
+                                                                        <div class="row">
+                                                                            <div class="col-9">
+                                                                                &nbsp;
+                                                                            </div>
+                                                                            <div class="col-3">
+                                                                                <span>Total: <span id="total_amount_payable">{{display_currency($booking->booking_payment->amount_balance)}}</span></span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            <div class="col-6">
+                                                                                <button class="cancel btn_1 btn-close-white btnfull">Cancel</button>
+                                                                            </div>
+                                                                            <div class="col-6">
+                                                                                <button class="pay btn_1 btngrad btnfull">Pay</button>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
+                                                                    </form>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -358,10 +387,10 @@
                     </div>
                     <div class="tab-pane fade {{isset(request()->tab)&&request()->tab=='payment'?'active show':''}}" id="paymentmethod" role="tabpanel" aria-labelledby="paymentmethod-tab">
                         <div>
-                            <div class="alert alert-danger">
-                                <i class="fe fe-info me-1"></i> You are near your API
-                                limits.
-                            </div>
+{{--                            <div class="alert alert-danger">--}}
+{{--                                <i class="fe fe-info me-1"></i> You are near your API--}}
+{{--                                limits.--}}
+{{--                            </div>--}}
                             <div class="card mt2form2">
                                 <div class="card-header">
                                     <div class="row align-items-center">
@@ -372,7 +401,7 @@
                                         <div class="col-auto">
                                             <!-- Button -->
                                             <button class="btn_1  btngrad btn-sm btnsm2" href="#" style="font-size: 13px" type="button"
-                                                    data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                                    data-bs-toggle="modal" data-bs-target="#addpayment">
                                                 Add new
                                             </button>
                                         </div>
@@ -381,24 +410,28 @@
                                 <div class="card-body">
                                     <!-- List group -->
                                     <div class="list-group list-group-flush my-n3">
+                                        @if(count($paymentMethods)>0)
+                                        @foreach($paymentMethods as $paymentmethod)
                                         <div class="list-group-item">
                                             <div class="row align-items-center">
                                                 <div class="col-auto">
                                                     <!-- Image -->
-                                                    <img class="img-fluid" src="{{asset('assets/front/img/visa.svg')}}" alt="..." style="max-width: 38px" />
+                                                    <img class="img-fluid" src="{{asset('assets/front/img/'.$paymentmethod->card->brand.'.svg')}}" alt="..." style="max-width: 38px" />
                                                 </div>
                                                 <div class="col ms-n2">
                                                     <!-- Heading -->
-                                                    <h5 class="headingtbg2">Visa ending in 1234</h5>
+                                                    <h5 class="headingtbg2">{{ucfirst($paymentmethod->card->brand)}} ending in {{$paymentmethod->card->last4}}</h5>
 
                                                     <!-- Text -->
                                                     <small class="text-muted">
-                                                        Expires 3/2024
+                                                        Expires {{$paymentmethod->card->exp_month}}/{{$paymentmethod->card->exp_year}}
                                                     </small>
                                                 </div>
                                                 <div class="col-auto me-n3">
                                                     <!-- Badge -->
+                                                    @if($defaultpaymentMethod->id==$paymentmethod->id)
                                                     <span class="badge bglight2"> Default </span>
+                                                        @endif
                                                 </div>
                                                 <div class="col-auto">
                                                     <!-- Dropdown -->
@@ -411,51 +444,65 @@
                                                             <img class="moreverti" src="{{asset('assets/front/img/more-vertical.svg')}}" />
                                                         </a>
                                                         <div class="dropdown-menu dropdown-menu-end" style="">
-                                                            <button class="dropdown-item">Edit</button>
+                                                            @if($defaultpaymentMethod->id!=$paymentmethod->id)
+                                                            <button class="dropdown-item" onclick="window.location.href='{{route('frontend.account.default_remove_payment',['paymentmethod'=>$paymentmethod->id])}}'">Set as default</button>
+                                                          @endif
+                                                            <button class="dropdown-item" onclick="window.location.href='{{route('frontend.account.default_remove_payment',['paymentmethod'=>$paymentmethod->id,'type'=>'remove'])}}'">Remove this</button>
+
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <!-- / .row -->
                                         </div>
-                                        <div class="list-group-item">
-                                            <div class="row align-items-center">
-                                                <div class="col-auto">
-                                                    <!-- Image -->
-                                                    <img class="img-fluid" src="{{asset('assets/front/img/mastercard.svg')}}" alt="..." style="max-width: 38px" />
-                                                </div>
-                                                <div class="col ms-n2">
-                                                    <!-- Heading -->
-                                                    <h5 class="headingtbg2">
-                                                        Mastercard ending in 1234
-                                                    </h5>
 
-                                                    <!-- Text -->
-                                                    <small class="text-muted">
-                                                        Expires 3/2024
-                                                    </small>
+
+                                            @endforeach
+                                            @else
+                                                <div class="list-group-item">
+                                                    <div class="row align-items-center">
+                                                        <div class="col-auto">
+                                                            No Payment Methods
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="col-auto">
-                                                    <!-- Dropdown -->
-                                                    <div class="dropdown">
-                                                        <a class="
-                                      dropdown-ellipses dropdown-toggle
-                                      colordrop
-                                    " href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true"
-                                                           aria-expanded="false">
-                                                            <img class="moreverti" src="{{asset('assets/front/img/more-vertical.svg')}}" />
-                                                        </a>
-                                                        <div class="dropdown-menu dropdown-menu-end">
-                                                            <button class="dropdown-item">Edit</button>
+                                            @endif
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal fade" id="addpayment" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                                                                                        <h5 class="modal-title" id="exampleModalLabel">Add Payment Method</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="card mb-3 tripsdiv " >
+
+                                                <div class="card-body">
+                                                    <h6 class="p-3">Enter your card information</h6>
+                                                    <div class="container ">
+                                                        <div class="row">
+                                                            <div class="col-12">
+                                                                <form action="{{route('frontend.account.add_payment_method')}}" method="post" id="paymentmethodform">
+                                                                <div id="card-element" class="mt-3 mb-3"></div>
+                                                                <div id="card-errors" role="alert"></div>
+                                                                <input type="hidden" name="payment_method_add" class="payment-method_add">
+                                                                    @csrf
+                                                                <button class="pay btn_1 btngrad btnfull" data-type="addpayment" data-formid="paymentmethodform">Add Card</button>
+                                                                </form>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <!-- / .row -->
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
                             <div class="card mt2form2">
                                 <div class="card-header">
                                     <!-- Title -->
@@ -472,54 +519,22 @@
                                         </tr>
                                         </thead>
                                         <tbody class="fs-base">
-                                        <tr>
-                                            <td>
-                                                <a href="invoice.html">Invoice #10395</a>
-                                            </td>
-                                            <td>
-                                                <time datetime="2020-04-24">Apr. 24, 2020</time>
-                                            </td>
-                                            <td>$29.00</td>
-                                            <td>
-                                                <span class="badge bglight2">Outstanding</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <a href="invoice.html">Invoice #10244</a>
-                                            </td>
-                                            <td>
-                                                <time datetime="2020-03-24">Mar. 24, 2020</time>
-                                            </td>
-                                            <td>$29.00</td>
-                                            <td>
-                                                <span class="badge bglight2">Paid</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <a href="invoice.html">Invoice #10119</a>
-                                            </td>
-                                            <td>
-                                                <time datetime="2020-02-24">Feb. 24, 2020</time>
-                                            </td>
-                                            <td>$29.00</td>
-                                            <td>
-                                                <span class="badge bglight2">Paid</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <a href="invoice.html">Invoice #10062</a>
-                                            </td>
-                                            <td>
-                                                <time datetime="2020-01-24">Jan. 24, 2020</time>
-                                            </td>
-                                            <td>$29.00</td>
-                                            <td>
-                                                <span class="badge bglight2">Paid</span>
-                                            </td>
-                                        </tr>
+                                        @foreach($user->payments as $payments_user)
+                                            @foreach($payments_user->invoices as $invoice)
+                                            <tr>
+                                                <td>
+                                                    <a href="{{route('frontend.invoice_view',['invoice'=>$invoice->id])}}">Invoice #{{invoice_number($payments_user->id,$invoice->id)}}</a>
+                                                </td>
+                                                <td>
+                                                    <time datetime="{{date('Y-m-d',strtotime($invoice->created_at))}}">{{date('M. d,Y',strtotime($invoice->created_at))}}</time>
+                                                </td>
+                                                <td>{{display_currency($invoice->payment_done)}}</td>
+                                                <td>
+                                                    <span class="badge bglight2">{{'Paid'}}</span>
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                        @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -614,9 +629,9 @@
                                 <div class="col-12 col-xl-auto">
 
                                     <!-- Button -->
-                                    <button class="btn_1 btngrad">
-                                        Forgot your password?
-                                    </button>
+{{--                                    <button class="btn_1 btngrad">--}}
+{{--                                        Forgot your password?--}}
+{{--                                    </button>--}}
 
                                 </div>
                             </div>
@@ -648,9 +663,9 @@
                                                 <li>
                                                     At least one number
                                                 </li>
-                                                <li>
-                                                    Can’t be the same as a previous password
-                                                </li>
+{{--                                                <li>--}}
+{{--                                                    Can’t be the same as a previous password--}}
+{{--                                                </li>--}}
                                             </ul>
 
                                         </div>
@@ -660,19 +675,21 @@
                                 <div class="col-12 col-md-6">
 
                                     <!-- Form -->
-                                    <form>
+                                    <form method="POST" action="{{ route("frontend.profile.password") }}">
 
+{{--                                        <div class="prel">--}}
+{{--                                            <input type="password" class="inputText" required />--}}
+{{--                                            <span class="floating-label">Current password</span>--}}
+{{--                                        </div>--}}
                                         <div class="prel">
-                                            <input type="password" class="inputText" required />
-                                            <span class="floating-label">Current password</span>
+                                            <label for="password">New Password</label>
+                                            <input type="password" class="inputText"  required name="password" id="password"/>
+{{--                                            <span class="floating-label">New password</span>--}}
                                         </div>
                                         <div class="prel">
-                                            <input type="password" class="inputText" required />
-                                            <span class="floating-label">New password</span>
-                                        </div>
-                                        <div class="prel">
-                                            <input type="password" class="inputText" required />
-                                            <span class="floating-label">Confirm new password</span>
+                                            <label for="password_confirmation">Confirm new password</label>
+                                            <input type="password" class="inputText" required  name="password_confirmation" id="password_confirmation"/>
+{{--                                            <span class="floating-label">Confirm new password</span>--}}
                                         </div>
 
                                         <!-- Submit -->
@@ -694,103 +711,73 @@
 
 
                                     <div class="reviews-container">
-
+                                    @foreach($user->reviews as $review)
                                         <!-- /review-box -->
                                         <div class="review-box clearfix" style="padding-left: 0px;">
 
                                             <div class="rev-content">
                                                 <div class="rating">
-                                                    <img src="{{asset('assets/front/img/star.svg')}}" style="width: 14px; height: 14px"><img src="{{asset('assets/front/img/star.svg')}}"
-                                                                                                                     style="width: 14px; height: 14px"><img src="{{asset('assets/front/img/star.svg')}}"
-                                                                                                                                                            style="width: 14px; height: 14px"><img src="{{asset('assets/front/img/star.svg')}}"
-                                                                                                                                                                                                   style="width: 14px; height: 14px"><img src="{{asset('assets/front/img/star.svg')}}"
-                                                                                                                                                                                                                                          style="width: 14px; height: 14px">
+                                                    @for($star=1;$star<=$review->ratings;$star++)
+                                                    <img src="{{asset('assets/front/img/star.svg')}}" style="width: 14px; height: 14px">
+                                                    @endfor
                                                 </div>
-                                                <div class="rev-info">Ahsan – April 01, 2016:</div>
+                                                <div class="rev-info">{{$user->name}} – {{date('M. d,Y',strtotime($review->review_date))}}:</div>
                                                 <div class="rev-text">
                                                     <p>
-                                                        Sed eget turpis a pede tempor malesuada. Vivamus
-                                                        quis mi at leo pulvinar hendrerit. Cum sociis
-                                                        natoque penatibus et magnis dis
+                                                        {{$review->review_text}}
                                                     </p>
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- /review-box -->
-                                        <div class="review-box clearfix" style="padding-left: 0px;">
-                                            <div class="rev-content">
-                                                <div class="rating">
-                                                    <img src="{{asset('assets/front/img/star.svg')}}" style="width: 14px; height: 14px"><img src="{{asset('assets/front/img/star.svg')}}"
-                                                                                                                     style="width: 14px; height: 14px"><img src="{{asset('assets/front/img/star.svg')}}"
-                                                                                                                                                            style="width: 14px; height: 14px"><img src="{{asset('assets/front/img/star.svg')}}"
-                                                                                                                                                                                                   style="width: 14px; height: 14px"><img src="{{asset('assets/front/img/star.svg')}}"
-                                                                                                                                                                                                                                          style="width: 14px; height: 14px">
-                                                </div>
-                                                <div class="rev-info">Sara – March 31, 2016:</div>
-                                                <div class="rev-text">
-                                                    <p>
-                                                        Sed eget turpis a pede tempor malesuada. Vivamus
-                                                        quis mi at leo pulvinar hendrerit. Cum sociis
-                                                        natoque penatibus et magnis dis
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- /review-box -->
+                                    @endforeach
                                     </div>
                                     <!-- /review-container -->
+                                </div>
                             </section>
+                            @if(count($user->bookingByUserEventBookings)>0)
                             <div class="add-review">
                                 <h5>Leave a Review</h5>
-                                <form>
+                                <form method="post" action="{{route('frontend.testimonials.store')}}">
+                                    @csrf
+                                    <input type="hidden" name="user_id" value="{{auth()->id()}}">
+                                    <input type="hidden" name="review_date" value="{{date(config('panel.date_format'))}}">
                                     <div class="row">
-                                        <div class=" col-md-6">
-                                            <div class="prel">
-                                                <input type="text" class="inputText" required />
-                                                <span class="floating-label">Full Name</span>
-                                            </div>
-                                        </div>
-                                        <div class=" col-md-6">
-                                            <div class="prel">
-                                                <input type="text" class="inputText" required />
-                                                <span class="floating-label">Email</span>
-                                            </div>
-                                        </div>
-                                        <div class="form-group col-md-12">
 
-                                            <div class="custom-select-form">
-                                                <select name="rating_review" id="rating_review" class="wide" style="display: none;">
+                                        <div class="form-group col-md-6">
+
+                                                <label for="trip-event">Select Your Trip</label>
+                                                <select name="event_trip_booking_id" id="trip-event" class="form-select" required>
+                                                    <option>Select Your Trip</option>
+                                                        @foreach($user->bookingByUserEventBookings as $booking)
+                                                            <option value="{{$booking->id}}">{{$booking->booking_event->event_title.' ('.date('M. d,Y',strtotime($booking->booking_event->event_start)).')'}}</option>
+                                                        @endforeach
+                                                </select>
+                                        </div>
+                                        <div class="form-group col-md-6">
+
+                                                <label for="ratings">Ratings(stars)</label>
+                                                <select name="ratings" id="ratings" class="form-select" required style="">
                                                     <option value="1">1 (lowest)</option>
                                                     <option value="2">2</option>
                                                     <option value="3">3</option>
                                                     <option value="4">4</option>
-                                                    <option value="5" selected="">5 (medium)</option>
-                                                    <option value="6">6</option>
-                                                    <option value="7">7</option>
-                                                    <option value="8">8</option>
-                                                    <option value="9">9</option>
-                                                    <option value="10">10 (highest)</option>
+                                                    <option value="5" selected>5 (highest)</option>
                                                 </select>
-                                                <div class="nice-select wide" tabindex="0"><span class="current">Ratting</span>
-                                                    <ul class="list">
-                                                        <li data-value="1" class="option">1 (lowest)</li>
-                                                        <li data-value="2" class="option">2</li>
-                                                        <li data-value="3" class="option">3</li>
-                                                        <li data-value="4" class="option">4</li>
-                                                        <li data-value="5" class="option selected">5 (medium)</li>
-                                                        <li data-value="6" class="option">6</li>
-                                                        <li data-value="7" class="option">7</li>
-                                                        <li data-value="8" class="option">8</li>
-                                                        <li data-value="9" class="option">9</li>
-                                                        <li data-value="10" class="option">10 (highest)</li>
-                                                    </ul>
-                                                </div>
-                                            </div>
+{{--                                                <div class="nice-select wide" tabindex="0"><span class="current">Ratting</span>--}}
+{{--                                                    <ul class="list">--}}
+{{--                                                        <li data-value="1" class="option">1 (lowest)</li>--}}
+{{--                                                        <li data-value="2" class="option">2</li>--}}
+{{--                                                        <li data-value="3" class="option">3</li>--}}
+{{--                                                        <li data-value="4" class="option">4</li>--}}
+{{--                                                        <li data-value="5" class="option selected">5 (highest)</li>--}}
+{{--                                                    </ul>--}}
+{{--                                                </div>--}}
+
                                         </div>
                                         <div class="col-md-12">
                                             <div class="form-floating">
                               <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2"
-                                        style="height: 100px"></textarea>
+                                        style="height: 100px" name="review_text"></textarea>
                                                 <label for="floatingTextarea2">Your Review</label>
                                             </div>
                                         </div>
@@ -800,6 +787,7 @@
                                     </div>
                                 </form>
                             </div>
+                                @endif
                         </div>
                     </div>
 
@@ -900,5 +888,93 @@
                 $('#profileimage').attr('src', profileimg);
             }
         }
+    </script>
+
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        let stripe = Stripe("{{ env('STRIPE_KEY') }}")
+        let elements = stripe.elements()
+        let style = {
+            base: {
+                color: '#32325d',
+                fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+                fontSmoothing: 'antialiased',
+                fontSize: '16px',
+                '::placeholder': {
+                    color: '#aab7c4'
+                }
+            },
+            invalid: {
+                color: '#fa755a',
+                iconColor: '#fa755a'
+            }
+        }
+        let card = elements.create('card', {hidePostalCode: true,style: style})
+        card.mount('#card-element')
+        let paymentMethod = null;
+        let payment_field=$('.payment-method');
+        let payment_form=$('.card-form');
+        let amount_type='full';
+        $('.payradio').change(function (){
+            paymentMethod=$(this).val();
+        });
+        $('.amountradio').change(function (){
+            amount_type=$(this).val();
+        });
+        $('#amount_custom').change(function (){
+            $('#total_amount_payable').html($(this).val());
+        });
+        let payment_method_only=false;
+        $('.pay').on('click', function (e) {
+            $(this).html('<img src="{{asset('loading.gif')}}" style="width: 35px;height: 35px;">');
+            var name='{{auth()->user()->name.' '.auth()->user()->lastname}}';
+            var pay_button=$(this);
+            pay_button.attr('disabled', true)
+            if(pay_button.data('type')=='addpayment'){
+                payment_method_only=true;
+                payment_field=$('.payment-method_add');
+                payment_form=$('#paymentmethodform');
+            }else{
+                payment_method_only=false;
+                payment_field=$('.payment-method');
+                payment_form=$('.card-form');
+                $('#pay_amount').val($('#amount_'+amount_type).val());
+                console.log($('#pay_amount').val());
+            }
+            if (paymentMethod&&payment_method_only===false) {
+                payment_field.val(paymentMethod);
+                payment_form.submit();
+                return true
+            }
+            stripe.confirmCardSetup(
+                "{{ $intent->client_secret }}",
+                {
+                    payment_method: {
+                        card: card,
+                        billing_details: {name: name}
+                    }
+                }
+            ).then(function (result) {
+                console.log(result);
+                if (result.error) {
+                    $('#card-errors').text(result.error.message)
+                    pay_button.removeAttr('disabled');
+                    pay_button.html('Add Card');
+                } else {
+                        paymentMethod = result.setupIntent.payment_method
+                        payment_field.val(paymentMethod);
+                        payment_form.submit()
+                }
+            })
+            return false
+        })
+        $( "#amount_custom" ).change(function() {
+            var max = parseFloat($(this).attr('max'));
+            //var min = parseInt($(this).attr('min'));
+            if ($(this).val() > max)
+            {
+                $(this).val(max);
+            }
+        });
     </script>
 @endsection

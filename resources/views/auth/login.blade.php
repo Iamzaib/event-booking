@@ -18,7 +18,7 @@
                 <!-- Form -->
                 @if(session('message'))
                     <div class="alert alert-info" role="alert">
-                        {{ session('message') }}
+                        {!!  session('message') !!}
                     </div>
                 @endif
 

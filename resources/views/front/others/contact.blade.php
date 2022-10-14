@@ -44,7 +44,7 @@
                                 <div class="mb-3 form-check">
                                     <input type="checkbox" class="form-check-input" id="exampleCheck1" required>
                                     <label class="form-check-label" for="exampleCheck1">You agree to our friendly <a
-                                            href="#" class="atagst2">privacy policy</a>.</label>
+                                            href="{{route('page_view',['page_name'=>'Privacy-Policy','pID'=>2])}}" class="atagst2">privacy policy</a>.</label>
                                 </div>
                             </div>
                         </div>

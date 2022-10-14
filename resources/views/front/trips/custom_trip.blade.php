@@ -6,7 +6,7 @@
     <div class="checkutpagemain">
         <div class="container contch">
             <div class="checkout1box custrip1">
-                <h1 class="arwsqft"><img src="{{asset('assets/front/img/arrow-square-left.svg')}}" /><a href="{{route('frontend.trip_view',['trip_title'=>$trip->event_title,'event'=>$trip->id])}}">Go back</a></h1>
+                <h1 class="arwsqft"><img src="{{asset('assets/front/img/arrow-square-left.svg')}}" /><a href="{{route('frontend.trip_view',['trip_title'=>str_replace(' ','-',$trip->event_title),'event'=>$trip->id])}}">Go back</a></h1>
                 <h2>Create your custom trip.</h2>
                 @if(isset($error))
                     {{$error}}
@@ -87,7 +87,7 @@
                                 @foreach($range as $index => $date_range)
                                     <div class="col-md-6">
                                         <div class="choosepaymemyrad">
-                                            <input type="radio" id="range{{$index}}" class="date_range"  name="range" data-range="{{$date_range['date']}}%{{$date_range['price']}}" value="{{$date_range['date']}}%{{$date_range['price']}}%{{$date_range['duration']}}">
+                                            <input type="radio" id="range{{$index}}" class="date_range"  name="range" data-range="{{$date_range['date']}}%{{$date_range['price']}}" {{old('range','')==($date_range['date'].'%'.$date_range['price'].'%'.$date_range['duration'])?'checked':'' }} value="{{$date_range['date']}}%{{$date_range['price']}}%{{$date_range['duration']}}">
                                             <label for="range{{$index}}">
                                                 <div class="boxchlabl border0 ">
                                                     <p><img src="{{asset('assets/front/img/calendar2.svg')}}"/>Date</p>
@@ -107,7 +107,40 @@
                             <h3 class="texthead22">Choose your Accommodation</h3>
                             <p>Sed eget turpis a pede tempor malesuada. Vivamus quis mi at leo pulvinar hendrerit. Cum sociis natoque penatibus </p>
                             <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card" style="border: 1px solid #ced4da;border-radius: 6px">
+                                        <div class="card-header">
+                                            <div class="row">
+                                                <div class="col-6"><strong>No Accommodation</strong></div>
+                                                <div class="col-6 text-center">No. of Person</div>
+                                            </div>
+
+                                        </div>
+                                        <div class="card-body">
+
+                                            @foreach($no_accommodation->rooms as $room)
+                                                <div class="row mt-3 pl-3 pr-3"  style="    padding: 0 1rem;    border-bottom: 1px solid #ced4da;    margin: 0.1rem;">
+                                                    <div class="col-6">
+                                                        <h6><b>{{$room->room_title}}</b></h6>
+                                                        <p>
+                                                            {{$room->details}}
+                                                        </p>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <select name="room_persons[{{$room->id}}]" class="form-control room" data-id="{{$room->id}}" data-roomprice="{{$room->room_price}}" id="">
+                                                            <option value="0">--Please Select--</option>
+                                                            @for($i=1;$i<=($room->room_capacity>$travelers?$travelers:$room->room_capacity);$i++)
+                                                                <option value="{{$i}}">{{$i}} Person(s)</option>
+                                                            @endfor
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
                                 @foreach($trip->hotels as $hotel)
+                                    @if($hotel->id==2) @continue @endif
                                     <div class="col-md-12">
                                         <div class="card" style="border: 1px solid #ced4da;border-radius: 6px">
                                             <div class="card-header">
@@ -118,23 +151,23 @@
 
                                             </div>
                                             <div class="card-body">
-                                                <div class="row mt-3 pl-3 pr-3" style="    padding: 0 1rem;    border-bottom: 1px solid #ced4da;    margin: 0.1rem;">
-                                                    <div class="col-6">
-                                                        <h6><b>*No Accommodation</b></h6>
-                                                        <p>
-                                                            Number of travellers in your group if you have your own accommodation.
-                                                        </p>
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <select name="room_persons[0]" class="form-control room" data-roomprice="0" data-id="0" onchange="" id="">
-                                                            <option value="0">--Please Select--</option>
-                                                            @for($i=1;$i<=$travelers;$i++)
-                                                                <option value="{{$i}}">{{$i}} Person(s)</option>
-                                                            @endfor
-                                                        </select>
-                                                    </div>
-                                                    <hr style="margin:5px;background-color:#ced4da">
-                                                </div>
+{{--                                                <div class="row mt-3 pl-3 pr-3" style="    padding: 0 1rem;    border-bottom: 1px solid #ced4da;    margin: 0.1rem;">--}}
+{{--                                                    <div class="col-6">--}}
+{{--                                                        <h6><b>*No Accommodation</b></h6>--}}
+{{--                                                        <p>--}}
+{{--                                                            Number of travellers in your group if you have your own accommodation.--}}
+{{--                                                        </p>--}}
+{{--                                                    </div>--}}
+{{--                                                    <div class="col-6">--}}
+{{--                                                        <select name="room_persons[0]" class="form-control room" data-roomprice="0" data-id="0" onchange="" id="">--}}
+{{--                                                            <option value="0">--Please Select--</option>--}}
+{{--                                                            @for($i=1;$i<=$travelers;$i++)--}}
+{{--                                                                <option value="{{$i}}">{{$i}} Person(s)</option>--}}
+{{--                                                            @endfor--}}
+{{--                                                        </select>--}}
+{{--                                                    </div>--}}
+{{--                                                    <hr style="margin:5px;background-color:#ced4da">--}}
+{{--                                                </div>--}}
                                                 @foreach($hotel->rooms as $room)
                                                     <div class="row mt-3 pl-3 pr-3"  style="    padding: 0 1rem;    border-bottom: 1px solid #ced4da;    margin: 0.1rem;">
                                                         <div class="col-6">
@@ -178,7 +211,7 @@
                                                 <select class="form-select costume" formsele="" name="costume[{{$t}}]"  data-traveler="{{$t}}"  aria-label="Default select example">
                                                     <option value="0">Choose Costume</option>
                                                     @foreach($trip->costumes as $costume)
-                                                        <option value="{{$costume->id}}" >{{$costume->costume_title}}</option>
+                                                        <option value="{{$costume->id}}" {{old('costume.'.$t)&&old('costume.'.$t)==$costume->id?'selected':''}}>{{$costume->costume_title}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -187,18 +220,18 @@
                                     <div class="row">
                                         @foreach($trip->costumes as $costume)
                                             @foreach($costume->options as $option)
-                                                <div class="col-md-6 costume_options_{{$t}}{{$costume->id}} costume_options_{{$t}} costume_options" style="display: none">
+                                                <div class="col-md-6 costume_options_{{$t}}{{$costume->id}} costume_options_{{$t}} costume_options" style="display: {{old('costume.'.$t)&&old('costume.'.$t)==$costume->id?'block':'none'}}">
                                                     <label for="option_{{$option->id}}">
                                                         {{$option->title}}  &nbsp;</label>
                                                     @if($option->values!='')
                                                         <select class="form-select" name="costume_option[{{$t}}][{{$costume->id}}][{{$option->id}}]" id="option_{{$option->id}}">
                                                             <option value="">Select {{$option->title}} type</option>
                                                             @foreach(explode(',',$option->values) as $value)
-                                                                <option value="{{$value}}">{{$value}}</option>
+                                                                <option value="{{$value}}" {{old('costume_option.'.$t.'.'.$costume->id.'.'.$option->id)&&old('costume_option.'.$t.'.'.$costume->id.'.'.$option->id)==$value?'selected':''}}>{{$value}}</option>
                                                             @endforeach
                                                         </select>
                                                     @else
-                                                        <input type="text" class="form-control" name="costume_option[{{$t}}][{{$costume->id}}][{{$option->id}}]" id="option_{{$option->id}}" placeholder="Please Enter {{$option->title}}">
+                                                        <input type="text" class="form-control" name="costume_option[{{$t}}][{{$costume->id}}][{{$option->id}}]" id="option_{{$option->id}}" value="{{old('costume_option.'.$t.'.'.$costume->id.'.'.$option->id)}}" placeholder="Please Enter {{$option->title}}">
                                                     @endif
 
                                                 </div>
@@ -217,7 +250,7 @@
                                         @foreach($trip->tickets as $ticket)
                                             <div class="col-md-6">
                                                 <div class="choosepaymemyrad">
-                                                    <input type="checkbox" id="ticket_{{$t}}{{$ticket->id}}" class="ticket" name="ticket[{{$t}}][{{$ticket->id}}]" data-traveler="{{$t}}" value="{{$ticket->id}}" data-ticketprice="{{$ticket->ticket_price}}">
+                                                    <input type="checkbox" id="ticket_{{$t}}{{$ticket->id}}" class="ticket" name="ticket[{{$t}}][{{$ticket->id}}]" {{old('ticket.'.$t.'.'.$ticket->id)&&old('ticket.'.$t.'.'.$ticket->id)==$ticket->id?'checked':''}} data-traveler="{{$t}}" value="{{$ticket->id}}" data-ticketprice="{{$ticket->ticket_price}}">
                                                     <label for="ticket_{{$t}}{{$ticket->id}}">
                                                         <div class="boxchlabl priceflex1 border0 ">
                                                             <div>
@@ -244,7 +277,7 @@
                                         @foreach($trip->addons as $addon)
                                             <div class="col-md-4">
                                                 <div class="choosepaymemyrad">
-                                                    <input type="checkbox" id="addon_{{$addon->id}}" class="addons" name="addon[{{$addon->id}}]" value="{{$addon->id}}" data-addonprice="{{$addon->addon_price}}">
+                                                    <input type="checkbox" id="addon_{{$addon->id}}" class="addons" name="addon[{{$addon->id}}]" {{old('addon.'.$addon->id)&&old('addon.'.$addon->id)==$addon->id?'checked':''}} value="{{$addon->id}}" data-addonprice="{{$addon->addon_price}}">
                                                     <label for="addon_{{$addon->id}}" class="text-center">
                                                         <div class="boxchlabl priceflex1 d-block border0 ">
                                                             <div class="text-center">
@@ -269,7 +302,7 @@
 
                                 <div class="col-md-6">
                                     <div class="choosepaymemyrad">
-                                        <input type="radio" id="pay1" class="payment_type" name="payment_type" value="Installment">
+                                        <input type="radio" id="pay1" class="payment_type" name="payment_type" {{old('paymentmethod')=='Installment'?'checked':''}} value="Installment">
                                         <label for="pay1">
 
                                             <div class="boxchlabl">
@@ -294,7 +327,7 @@
 
                                     <div class="choosepaymemyrad">
 
-                                        <input type="radio" id="pay2" name="payment_type" class="payment_type" value="Full">
+                                        <input type="radio" id="pay2" name="payment_type" class="payment_type" {{old('paymentmethod')=='Full'?'checked':''}} value="Full">
                                         <label for="pay2">
 
                                             <div class="boxchlabl">
@@ -338,7 +371,7 @@
                                                             <!-- <label for="firstname" class="form-label">First name</label>
                                                             <input type="text" class="form-control" placeholder="First name" id="firstname" required=""> -->
                                                             <div class="prel">
-                                                                <input type="text" class="inputText " required  name="first_name[{{$t}}]" />
+                                                                <input type="text" class="inputText " required value="{{old('first_name.'.$t)}}" name="first_name[{{$t}}]" />
                                                                 <span class="floating-label">First name</span>
                                                             </div>
                                                         </div>
@@ -348,7 +381,7 @@
                                                             <!-- <label for="lastname" class="form-label">Last name</label>
                                                             <input type="text" class="form-control" placeholder="Last name" id="lastname" required=""> -->
                                                             <div class="prel">
-                                                                <input type="text" class="inputText " required  name="last_name[{{$t}}]" />
+                                                                <input type="text" class="inputText " required value="{{old('last_name.'.$t)}}" name="last_name[{{$t}}]" />
                                                                 <span class="floating-label">Last name</span>
                                                             </div>
                                                         </div>
@@ -357,7 +390,7 @@
                                                     <div class="col-md-6">
                                                         <div class="mb-3">
                                                             <label for="" class="form-label">Phone number</label>
-                                                            <input type="text" class="form-control " name="phone[{{$t}}]" placeholder="+1 (555) 000-0000">
+                                                            <input type="text" class="form-control " value="{{old('phone.'.$t)}}"  name="phone[{{$t}}]" placeholder="+1 (555) 000-0000">
                                                             <input type="hidden" name="phone_locale" value="{{auth()->user()->country->short_code}}">
                                                             {{--                                                        <div class="row phonetxtcols">--}}
                                                             {{--                                                            <div class="col-3 col-md-3 pr0">--}}
@@ -375,7 +408,7 @@
                                                     <div class="col-md-6">
                                                         <div class="mb-3">
                                                             <label for="EmailAddress" class="form-label">Email Address</label>
-                                                            <input type="email" class="form-control" placeholder="Email Address" id="EmailAddress" name="email[{{$t}}]">
+                                                            <input type="email" class="form-control" value="{{old('email.'.$t)}}" placeholder="Email Address" id="EmailAddress" name="email[{{$t}}]">
                                                             <!-- <div class="prel">
                                                               <input type="text" class="inputText " required />
                                                               <span class="floating-label">Email Address</span>
@@ -390,7 +423,7 @@
                                                             <label>{{ trans('cruds.user.fields.gender') }}</label>
                                                             @foreach(App\Models\User::GENDER_RADIO as $key => $label)
                                                                 <div class="form-check {{ $errors->has('gender') ? 'is-invalid' : '' }}">
-                                                                    <input class="form-check-input" type="radio" id="gender_{{ $key }}" name="gender[{{$t}}]" value="{{ $key }}" >
+                                                                    <input class="form-check-input" type="radio" id="gender_{{ $key }}" name="gender[{{$t}}]" value="{{ $key }}" {{old('gender.'.$t)&&old('gender.'.$t)==$key?'checked':''}}>
                                                                     <label class="form-check-label" for="gender_{{ $key }}">{{ $label }}</label>
                                                                 </div>
                                                             @endforeach
@@ -402,7 +435,7 @@
                                                             <select name="shirt_size[{{$t}}]" class="form-select"  onchange="" id="shirt_size{{$t}}">
                                                                 <option value="0">--Please Select--</option>
                                                                 @for($i=10;$i<=30;$i++)
-                                                                    <option value="{{$i}}">{{$i}} </option>
+                                                                    <option value="{{$i}}" {{old('shirt_size.'.$t)&&old('shirt_size.'.$t)==$i?'selected':''}}>{{$i}} </option>
                                                                 @endfor
                                                             </select>
                                                         </div>
@@ -411,7 +444,7 @@
                                                         <div class="mb-3">
                                                             {{--                                                        <div class="prel">--}}
                                                             <label for="Notes{{$t}}">Notes</label>
-                                                            <textarea type="text" class="inputText " name="notes[{{$t}}]" style="height: auto" id="Notes{{$t}}" rows="4"></textarea>
+                                                            <textarea type="text" class="inputText " name="notes[{{$t}}]" style="height: auto" id="Notes{{$t}}" rows="4">{{old('notes.'.$t)}}</textarea>
                                                             {{--                                                            <span class="floating-label">Notes</span>--}}
                                                             {{--                                                        </div>--}}
                                                         </div>
@@ -430,11 +463,11 @@
                                             <div class="col-12 mb-4" style="padding-left: 5px" >
                                                 <h3 class="texthead22">Terms And Conditions.</h3>
                                                 <div style="margin-left: 1.5rem">
-                                                    <label for="terms" class="form-check-label"><input type="checkbox" class="form-check-inline" name="terms" id="terms">
-                                                        &nbsp;You agree with out friendly&nbsp;<a href="#">Privacy Policy</a></label>
-                                                    <label for="terms" class="form-check-label"><input type="checkbox" class="form-check-inline form-check" name="terms" id="terms">
+                                                    <label for="terms" class="form-check-label"><input type="checkbox" class="form-check-inline" name="terms[]" id="terms">
+                                                        &nbsp;You agree with out friendly&nbsp;<a href="{{route('page_view',['page_name'=>'Privacy-Policy','pID'=>2])}}">Privacy Policy</a></label>
+                                                    <label for="terms" class="form-check-label"><input type="checkbox" class="form-check-inline form-check" name="terms[]" id="terms">
                                                         &nbsp;Nunc bibendum velit sit amet leo interdum, eget suscipit nulla posuere.</label>
-                                                    <label for="terms" class="form-check-label"><input type="checkbox" class="form-check-inline form-check" name="terms" id="terms">
+                                                    <label for="terms" class="form-check-label"><input type="checkbox" class="form-check-inline form-check" name="terms[]" id="terms">
                                                         &nbsp;Aliquam risus velit, ornare sed bibendum at, tristique blandit nibh.</label>
                                                 </div>
 
@@ -447,6 +480,23 @@
                                                         <h6 class="" style="margin: 20px 0;">Pay By Card</h6>
                                                     </div>
                                                     <div class="card-body p-3">
+                                                        @if($payment_method!='')
+                                                        <div class="row"><div class="col-3"><strong>Choose from already added Card(s)</strong></div></div>
+                                                            @foreach($payment_method as $paymentmethod)
+{{--                                                                @dd($paymentmethod)--}}
+                                                                <div class="row mt-2">
+                                                                    <div class="col-10">
+                                                                        <input type="radio" name="paymentmethod" value="{{$paymentmethod->id}}" {{old('paymentmethod')==$paymentmethod->id?'checked':''}}  class="form-check-inline payradio " id="payment-method{{$paymentmethod->card->last4}}">
+                                                                        <label for="payment-method{{$paymentmethod->card->last4}}">{{strtoupper($paymentmethod->card->brand)}} ending in {{$paymentmethod->card->last4}} Expiry ({{$paymentmethod->card->exp_month}}/{{$paymentmethod->card->exp_year}})</label>
+                                                                    </div>
+                                                                    <div class="col-2">
+                                                                        <img src="{{asset('assets/front/img/'.$paymentmethod->card->brand.'.svg')}}" style="width:55px;height: auto;border-radius: 5px" class="imgcdpic" />
+                                                                    </div>
+                                                                </div>
+                                                            @endforeach
+
+                                                        @endif
+                                                            <div class="row"><div class="col-3"><strong>Add new Card</strong></div></div>
                                                         <div id="card-element" class="mt-3 mb-3"></div>
                                                         <div id="card-errors" role="alert"></div>
                                                         <input type="hidden" name="payment_method" class="payment-method">
@@ -591,6 +641,9 @@
         let card = elements.create('card', {hidePostalCode: true,style: style})
         card.mount('#card-element')
         let paymentMethod = null;
+        $('.payradio').change(function (){
+           paymentMethod=$(this).val();
+        });
         $('.pay').on('click', function (e) {
             var name='{{auth()->user()->name.' '.auth()->user()->lastname}}';
             $('.pay').attr('disabled', true)
@@ -640,7 +693,9 @@ var total_travelers={{$travelers}};
                 tickets[{{$ticket->id}}]='{{$ticket->ticket_price}}';
                 tickets_titles[{{$ticket->id}}]='{{$ticket->ticket_title}}';
             @endforeach
-
+                rooms[0]='{{NO_ACCOMMODATION_PRICE}}';
+                rooms_titles[0]='{{'No Accommodation'}}';
+                room_previous[0]='';
             @foreach($trip->hotels as $hotel)
                 @foreach($hotel->rooms as $room)
                     rooms[{{$room->id}}]='{{$room->room_price>$room->discount_price?$room->discount_price:$room->room_price}}';
@@ -666,7 +721,7 @@ var total_travelers={{$travelers}};
                 Deposit=parseFloat(total)*Deposit;
                 var installment=(parseFloat(total)-Deposit)/totalinstallment_;
                 console.log(payment_type+'$'+Deposit+' Deposit + $'+installment+' for '+totalinstallment_+' Months');
-                $('#install').html('$'+Deposit+' Deposit + $'+installment+' for '+totalinstallment_+' Months')
+                $('#install').html('$'+Deposit.toFixed(2)+' Deposit + $'+installment.toFixed(2)+' for '+totalinstallment_+' Months')
                 if(payment_type==='Installment'){console.log(payment_type+'$'+Deposit+' Deposit + $'+installment+' for '+totalinstallment_+' Months');
                     var Installment_this = '<div class="priceflex1" id="deposit-total">' +
                         '<div>' +
@@ -846,7 +901,7 @@ var total_travelers={{$travelers}};
                     let id_found = false;
 
                     // console.log('persons:'+room_persons+'-id:'+room_id);
-                        if(room_id>0){
+                    //     if(room_id>0){
                         for (var v = 0; v < rooms_added.length; v++) {
                             if (rooms_added[v] === room_id) {
                                 id_found = true;
@@ -893,13 +948,13 @@ var total_travelers={{$travelers}};
                                 subprices_div.find('#rooms').hide();
                             }
                         }
-                    }else{
-                            if(room_previous[room_id]&&room_previous[room_id]>0){
-                                total_room_persons-=room_previous[room_id];
-                            }
-                            total_room_persons+=parseInt(room_persons);
+                    // }else{
+                    //         if(room_previous[room_id]&&room_previous[room_id]>0){
+                    //             total_room_persons-=room_previous[room_id];
+                    //         }
+                    //         total_room_persons+=parseInt(room_persons);
                             // console.log('total room persons:'+total_room_persons);
-                        }
+                        // }
                     room_previous[room_id]=room_persons;
                     calculate_total();
                // }
@@ -947,7 +1002,7 @@ var total_travelers={{$travelers}};
             Deposit=total*Deposit;
             var installment=(total-Deposit)/totalinstallment_;
             // console.log(payment_type+'$'+Deposit+' Deposit + $'+installment+' for '+totalinstallment_+' Months');
-            $('#install').html('$'+Deposit+' Deposit + $'+installment+' for '+totalinstallment_+' Months')
+            $('#install').html('$'+Deposit.toFixed(2)+' Deposit + $'+installment.toFixed(2)+' for '+totalinstallment_+' Months')
         }
     </script>
 @endsection

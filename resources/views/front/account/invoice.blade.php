@@ -8,10 +8,15 @@
                         <div class="col text-end">
 
                             <!-- Badge -->
-                            <div class="badge bg-success">
-                                Paid
-                            </div>
-
+{{--                            @if($payment->amount_balance>0)--}}
+{{--                                <div class="badge bg-danger">--}}
+{{--                                    Payment Pending--}}
+{{--                                </div>--}}
+{{--                            @else--}}
+                                <div class="badge bg-success">
+                                    Paid
+                                </div>
+{{--                            @endif--}}
                         </div>
                     </div> <!-- / .row -->
                     <div class="row">
@@ -27,7 +32,7 @@
 
                             <!-- Text -->
                             <p class="text-muted mb-6">
-                                Invoice #{{$booking->payment->id}}
+                                Invoice #{{invoice_number($payment->id,$invoice->id)}}
                             </p>
 
                         </div>
@@ -55,7 +60,7 @@
 
                             <!-- Text -->
                             <p class="mb-4">
-                                #{{$booking->payment->id}}
+                                #{{invoice_number($payment->id,$invoice->id)}}
                             </p>
 
                         </div>
@@ -68,10 +73,10 @@
 
                             <!-- Text -->
                             <p class="text-muted mb-4">
-                                <strong class="text-body">{{$booking->billing_name.' '.$booking->billing_lastname}}</strong> <br>
-                                {{$booking->billing_address}} <br>
-                                {{$booking->billing_address_2}}<br>
-                                {{city_name($booking->billing_city_id)}}, {{state_name($booking->billing_state_id)}}
+                                <strong class="text-body">{{$payment->payment_booking->billing_name.' '.$payment->payment_booking->billing_lastname}}</strong> <br>
+                                {{$payment->payment_booking->billing_address}} <br>
+                                {{$payment->payment_booking->billing_address_2}}<br>
+                                {{city_name($payment->payment_booking->billing_city_id)}}, {{state_name($payment->payment_booking->billing_state_id)}}
                             </p>
 
                             <!-- Heading -->
@@ -95,47 +100,103 @@
                                     <thead>
                                     <tr>
                                         <th class="px-0 bg-transparent border-top-0">
-                                            <span class="h6">Description</span>
+                                            <span class="h6">Booking</span>
                                         </th>
                                         <th class="px-0 bg-transparent border-top-0">
-                                            <span class="h6">Hours</span>
+                                            <span class="h6">Travelers</span>
                                         </th>
                                         <th class="px-0 bg-transparent border-top-0 text-end">
-                                            <span class="h6">Cost</span>
+                                            <span class="h6">Total</span>
+                                        </th>
+                                        <th class="px-0 bg-transparent border-top-0 text-end">
+                                            <span class="h6">Total Paid</span>
                                         </th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr>
                                         <td class="px-0">
-                                            Custom theme development
+                                            {{$payment->payment_booking->booking_details}}
                                         </td>
                                         <td class="px-0">
-                                            125
+                                            {{count($payment->payment_booking->travelers)}}
                                         </td>
                                         <td class="px-0 text-end">
-                                            $6,250
+                                            {{display_currency($payment->amount_total)}}
+                                        </td>
+                                        <td class="px-0 text-end">
+                                            {{display_currency($payment->amount_paid)}}
                                         </td>
                                     </tr>
+{{--                                    <tr>--}}
+{{--                                        <td class="px-0 border-top border-top-2">--}}
+
+{{--                                        </td>--}}
+{{--                                        <td class="px-0 border-top border-top-2">--}}
+{{--                                            <strong>Processing:</strong>--}}
+{{--                                        </td>--}}
+{{--                                        <td  class="px-0 text-end border-top border-top-2">--}}
+{{--                                            <span class="h3">--}}
+{{--                                              {{display_currency($payment->processing_fee)}}--}}
+{{--                                            </span>--}}
+{{--                                        </td>--}}
+{{--                                    </tr>--}}
+{{--                                    <tr>--}}
+{{--                                        <td class="px-0 border-top border-top-2">--}}
+
+{{--                                        </td>--}}
+{{--                                        <td class="px-0 border-top border-top-2">--}}
+{{--                                            <strong>Total amount:</strong>--}}
+{{--                                        </td>--}}
+{{--                                        <td  class="px-0 text-end border-top border-top-2">--}}
+{{--                                            <span class="h3">--}}
+{{--                                              {{display_currency($payment->amount_total)}}--}}
+{{--                                            </span>--}}
+{{--                                        </td>--}}
+{{--                                    </tr>--}}
+{{--                                    <tr>--}}
+{{--                                        <td class="px-0 border-top border-top-2">--}}
+
+{{--                                        </td>--}}
+{{--                                        <td class="px-0 border-top border-top-2">--}}
+{{--                                            <strong>Total Amount Paid:</strong>--}}
+{{--                                        </td>--}}
+{{--                                        <td  class="px-0 text-end border-top border-top-2">--}}
+{{--                                            <span class="h3">--}}
+{{--                                              {{display_currency($payment->amount_paid)}}--}}
+{{--                                            </span>--}}
+{{--                                        </td>--}}
+{{--                                    </tr>--}}
                                     <tr>
-                                        <td class="px-0">
-                                            Logo design
+                                        <td class="px-0 border-top border-top-2">
+
                                         </td>
-                                        <td class="px-0">
-                                            15
+                                        <td class="px-0 border-top border-top-2">
+
                                         </td>
-                                        <td class="px-0 text-end">
-                                            $750
+                                        <td class="px-0 border-top border-top-2">
+                                            <strong>Invoice Payment:</strong>
+                                        </td>
+                                        <td  class="px-0 text-end border-top border-top-2">
+                                            <span class="h3">
+                                              {{display_currency($invoice->payment_done)}}
+                                            </span>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="px-0 border-top border-top-2">
-                                            <strong>Total amount due</strong>
+
                                         </td>
-                                        <td colspan="2" class="px-0 text-end border-top border-top-2">
-                            <span class="h3">
-                              $7,000
-                            </span>
+                                        <td class="px-0 border-top border-top-2">
+
+                                        </td>
+                                        <td class="px-0 border-top border-top-2">
+                                            <strong>Total Amount Due:</strong>
+                                        </td>
+                                        <td  class="px-0 text-end border-top border-top-2">
+                                            <span class="h3">
+                                              {{display_currency($payment->amount_balance)}}
+                                            </span>
                                         </td>
                                     </tr>
                                     </tbody>

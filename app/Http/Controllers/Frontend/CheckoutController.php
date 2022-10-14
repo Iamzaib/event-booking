@@ -18,6 +18,7 @@ use App\Models\EventTicket;
 use App\Models\Hotel;
 use App\Models\HotelRoom;
 use App\Models\InstallmentPayments;
+use App\Models\Invoices;
 use App\Models\Payment;
 use App\Models\State;
 use App\Models\Traveler;
@@ -27,6 +28,7 @@ use Illuminate\Http\Request;
 use Gate;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class CheckoutController extends Controller
 {
@@ -37,8 +39,36 @@ class CheckoutController extends Controller
     }
     public function custom_order_process(){
 
-        $rq=$this->request;
-//dd($rq->input());
+//        $rq=$this->request;
+        $rq=$this->request->validate([
+            "trip_id" => "required",
+              "travelers" => "required",
+              "range" => "required",
+            'payment_type'=>'required',
+            'room_persons' => 'required|array',
+            'room_persons.*' => 'sometimes|integer',
+            'costume'=>'array',
+            'costume_option'=>'array',
+            'ticket'=>'array',
+            'addon'=>'array',
+            'first_name'=>'required|array',
+            'first_name.*'=>'required|string',
+            'last_name'=>'required|array',
+            'last_name.*'=>'required|string',
+            'phone'=>'required|array',
+            'phone.*'=>'required|string',
+            'email'=>'required|array',
+            'email.*'=>'required|email',
+            'gender'=>'required|array',
+            'gender.*'=>'required|string',
+            'shirt_size'=>'required|array',
+            'shirt_size.*'=>'required|string',
+            'notes'=>'array',
+            'terms'=>'array|required',
+            'terms.*'=>'required',
+            'payment_method'=>'required|string',
+        ]);
+//dd($rq->input(),$rqv);
         $data['trip']=$trip=Event::find($rq->trip_id);
         if(!isset($trip->id)){
             redirect()->back()->with($rq->input());
@@ -121,12 +151,14 @@ class CheckoutController extends Controller
                 ]);
             }
         }
-        if(isset($this->request->addon)){
-            $addon=EventAddon::find($this->request->addon);
-            if(isset($addon->id)){
-                $data['addons'][$addon->id]=$addon;
-                $booking->booking_event_addons()->sync([$addon->id=>['addon_price'=>$addon->addon_price]]);
-                $subtotal+=(float)$addon->addon_price;
+        if(isset($rq->addon)&&count($rq->addon)>0){
+            foreach ($rq->addon as $addon_id){
+                $addon=EventAddon::find($addon_id);
+                if(isset($addon->id)){
+                    $data['addons'][$addon->id]=$addon;
+                    $booking->booking_event_addons()->sync([$addon->id=>['addon_price'=>$addon->addon_price]]);
+                    $subtotal+=(float)$addon->addon_price;
+                }
             }
         }
         $data['costumes_options']=[];
@@ -142,33 +174,36 @@ class CheckoutController extends Controller
                 'notes'=>$rq->notes[$t],
             ]);
             $tID=$Traveler->id;
-            if($rq->costume[$t]!=0){
-                $costume=Costume::find($rq->costume[$t]);
-                if(isset($costume->id)){
-                    $data['costumes'][$costume->id]=$costume;
-                    $booking->booking_event_costumes()->sync([$costume->id=>['costume_price'=>$costume->costume_price]]);
-                    $Traveler->update(['costume_id'=>$costume->id]);
-                    $subtotal+=(float)$costume->costume_price;
-                    $user_details['roommate'][$t]['costume_id']=$costume->id;
-                    foreach ($rq->costume_option[$t][$costume->id] as $option_id => $option_value){
-                        $costume_attr=CostumeAttribute::find($option_id);
-                        if(isset($costume_attr->id)&&$rq->costume_option[$t][$costume->id][$option_id]!=''){
+            if(isset($rq->costume)&&count($rq->costume)>0&&$rq->costume[$t]!=0){
+//                if(){
+                    $costume=Costume::find($rq->costume[$t]);
+                    if(isset($costume->id)){
+                        $data['costumes'][$costume->id]=$costume;
+                        $booking->booking_event_costumes()->sync([$costume->id=>['costume_price'=>$costume->costume_price]]);
+                        $Traveler->update(['costume_id'=>$costume->id]);
+                        $subtotal+=(float)$costume->costume_price;
+                        $user_details['roommate'][$t]['costume_id']=$costume->id;
+                        foreach ($rq->costume_option[$t][$costume->id] as $option_id => $option_value){
+                            $costume_attr=CostumeAttribute::find($option_id);
+                            if(isset($costume_attr->id)&&$rq->costume_option[$t][$costume->id][$option_id]!=''){
 //                            $data['costumes_options'][$t][$costume->id][$option_id]=$costume_attr;
 //                            $data['costumes_options'][$t][$costume->id][$option_id]->value=$option_value;
-                            CostumeBookingAttribute::create([
-                                'booking_id'=>$booking->id,
-                                'traveler_id'=>$tID,
-                                'costume_id'=>$costume->id,
-                                'costume_attribute_id'=>$option_id,
-                                'values'=>$option_value,
-                            ]);
+                                CostumeBookingAttribute::create([
+                                    'booking_id'=>$booking->id,
+                                    'traveler_id'=>$tID,
+                                    'costume_id'=>$costume->id,
+                                    'costume_attribute_id'=>$option_id,
+                                    'values'=>$option_value,
+                                ]);
+                            }
+
                         }
 
                     }
-
-                }
+//                }
             }
-            if(count($rq->ticket)>0&&count($rq->ticket[$t])>0){
+
+            if(isset($rq->ticket)&&count($rq->ticket)>0&&count($rq->ticket[$t])>0){
                 foreach ($rq->ticket[$t] as $ticket_id => $ticket){
                     $ticket_get=EventTicket::find($ticket_id);
                     if(isset($ticket_get->id)){
@@ -196,15 +231,15 @@ class CheckoutController extends Controller
             $user->createOrGetStripeCustomer();
             $user->updateDefaultPaymentMethod($paymentMethod);
             $payment= $user->charge(((float)$amount_to_paid*100), $paymentMethod);
-//            $booking_=$order->booking->first();
             $booking_payment=EventBooking::where('id',$booking->id)->update([
                 'stripe_id'=>$payment->id,
                 'stripe_status'=>$payment->status
             ]);
         } catch (\Exception $exception) {
             //   return back()->with('error', );
-            echo $exception->getMessage();
-//            return redirect()->back()->with('error',$exception->getMessage());
+//            echo $exception->getMessage();
+            Session::flash('error',$exception->getMessage());
+            return redirect()->back()->with('error',$exception->getMessage());
             exit;
         }
         $paymentUpdate=Payment::create([
@@ -221,6 +256,17 @@ class CheckoutController extends Controller
             'coupon_code'=>'',
             'processing_fee'=>(float)PROCESSING_FEE,
             'subtotal'=>$subtotal,
+            'deposit'=>($rq->payment_type=='Installment'?$deposit:0),
+            'installment'=>($rq->payment_type=='Installment'?$installment_1:0),
+            'total_installments'=>($rq->payment_type=='Installment'?(int)TOTAL_INSTALLMENTS:0),
+            'amount_balance'=>($rq->payment_type=='Installment'?($installment):0),
+        ]);
+        Invoices::create([
+            'payment_id'=>$paymentUpdate->id,
+            'amount_total'=>$total,
+            'amount_paid'=>$amount_to_paid,
+            'payment_method'=>'CC',
+            'payment_details'=>json_encode($payment),
             'deposit'=>($rq->payment_type=='Installment'?$deposit:0),
             'installment'=>($rq->payment_type=='Installment'?$installment_1:0),
             'total_installments'=>($rq->payment_type=='Installment'?(int)TOTAL_INSTALLMENTS:0),
@@ -244,7 +290,7 @@ class CheckoutController extends Controller
                 ]);
             }
         }
-        return redirect()->route('frontend.account.index',['tab','trips']);
+        return redirect()->route('frontend.account.index',['tab'=>'trips']);
 
     }
     public function checkout_review($step,Event $trip,HotelRoom $room){

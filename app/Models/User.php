@@ -18,7 +18,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Laravel\Cashier\Billable;
 
-class User extends Authenticatable implements HasMedia,MustVerifyEmail
+class User extends Authenticatable implements HasMedia
 {
     use SoftDeletes;
     use Notifiable;
@@ -190,8 +190,17 @@ class User extends Authenticatable implements HasMedia,MustVerifyEmail
         return $this->belongsToMany(Role::class);
     }
 
-    public function favourite_trips(){
+    public function favourite_trips()
+    {
         return $this->belongsToMany(Event::class,'event_favorites');
+    }
+    public function payments()
+    {
+        return $this->hasMany(Payment::class,'payment_user_id');
+    }
+    public function reviews()
+    {
+        return $this->hasMany(Testimonial::class);
     }
     protected function serializeDate(DateTimeInterface $date)
     {

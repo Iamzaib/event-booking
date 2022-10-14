@@ -10,10 +10,12 @@
                         with confidence.
                     </p>
                     <div class="searchtour">
+                        <form action="{{route('trips')}}">
                         <img src="{{ asset('assets/front/img/search2.svg')}}" />
-                        <input type="text" class="" placeholder="where do you want to go?">
-                        <button class="btn_1  btngrad btngrad"
+                        <input type="text" class="" name="search" placeholder="where do you want to go?">
+                        <button type="submit" class="btn_1  btngrad btngrad"
                                 style="margin: auto; padding: 6px 13px !important;">Search</button>
+                        </form>
                     </div>
                 </div>
 

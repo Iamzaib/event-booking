@@ -68,6 +68,7 @@ class EventsController extends Controller
         }
         Itinerary::where('event_id',$event->id)->delete();
         foreach ($request->input('number') as $index => $itinerary){
+            if($request->title[$index]!=''){
                 Itinerary::create([
                     'event_id'=>$event->id,
                     'number'=>$request->number[$index],
@@ -76,6 +77,17 @@ class EventsController extends Controller
                     'time'=>$request->time[$index],
                     'duration'=>$request->duration[$index],
                 ]);
+            }
+
+        }
+        foreach ($request->input('faq_question') as $index => $faq){
+            if($request->faq_question[$index]!=''&&$request->faq_answer[$index]!=''){
+                EventFaq::create([
+                    'event_id'=>$event->id,
+                    'question'=>$request->faq_question[$index],
+                    'answer'=>$request->faq_answer[$index],
+                ]);
+            }
         }
 
         return redirect()->route('admin.events.index');
@@ -121,22 +133,26 @@ class EventsController extends Controller
         }
         Itinerary::where('event_id',$event->id)->delete();
         foreach ($request->input('number') as $index => $itinerary){
-            Itinerary::create([
-                'event_id'=>$event->id,
-                'number'=>$request->number[$index],
-                'title'=>$request->title[$index],
-                'detail'=>$request->details[$index],
-                'time'=>$request->datetime[$index],
-                'duration'=>$request->durations[$index],
-            ]);
+            if($request->title[$index]!='') {
+                Itinerary::create([
+                    'event_id' => $event->id,
+                    'number' => $request->number[$index],
+                    'title' => $request->title[$index],
+                    'detail' => $request->details[$index],
+                    'time' => $request->datetime[$index],
+                    'duration' => $request->durations[$index],
+                ]);
+            }
         }
         EventFaq::where('event_id',$event->id)->delete();
         foreach ($request->input('faq_question') as $index => $faq){
-            EventFaq::create([
-                'event_id'=>$event->id,
-                'question'=>$request->faq_question[$index],
-                'answer'=>$request->faq_answer[$index],
-            ]);
+            if($request->faq_question[$index]!=''&&$request->faq_answer[$index]!='') {
+                EventFaq::create([
+                    'event_id' => $event->id,
+                    'question' => $request->faq_question[$index],
+                    'answer' => $request->faq_answer[$index],
+                ]);
+            }
         }
         return redirect()->route('admin.events.index');
     }

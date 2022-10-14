@@ -82,12 +82,19 @@
                     <div class="flexbnjh">
                         <div class="titletourhead">
                             <div class="starstriptitle">
-                                <img src="{{asset('assets/front/img/stars.svg')}}" />
-                                <img src="{{asset('assets/front/img/stars.svg')}}" />
-                                <img src="{{asset('assets/front/img/stars.svg')}}" />
-                                <img src="{{asset('assets/front/img/stars.svg')}}" />
-                                <img src="{{asset('assets/front/img/stars.svg')}}" />
-                                <span>(24 Review)</span>
+                                @if(count($reviews)>0)
+                                    @for($str=1;$str<=$avg_ratings;$str++)
+                                        <img src="{{asset('assets/front/img/stars.svg')}}" />
+                                    @endfor
+                                        @else
+                                            <img src="{{asset('assets/front/img/star-nfill.svg')}}" />
+                                            <img src="{{asset('assets/front/img/star-nfill.svg')}}" />
+                                            <img src="{{asset('assets/front/img/star-nfill.svg')}}" />
+                                            <img src="{{asset('assets/front/img/star-nfill.svg')}}" />
+                                            <img src="{{asset('assets/front/img/star-nfill.svg')}}" />
+
+                                            @endif
+                                <span>({{count($reviews)}} Review)</span>
                             </div>
                             <h4>{{$trip->event_title}}</h4>
                         </div>
@@ -95,15 +102,28 @@
                             <div class="grid-sort-icon docfil">
                                 <img src="{{asset('assets/front/img/heart2.svg')}}" class="favourite {{favorite_check($trip->id,auth()->id())?'favourite-filter':''}}" data-id="{{$trip->id}}">
                             </div>
-                            <div class="grid-sort-icon docfil">
-                                <img src="{{asset('assets/front/img/export.svg')}}">
-                            </div>
+{{--                            <div class="grid-sort-icon docfil">--}}
+{{--                                <img src="{{asset('assets/front/img/export.svg')}}">--}}
+{{--                            </div>--}}
                         </div>
                     </div>
 
                 </div>
                 <div class="col-lg-9">
-
+                    <div class="newseclocatimain mb-3" style="background: none;padding: 12px 0px;">
+                        <div class="inclusb">
+                            <img src="{{asset('assets/front/img/locationsp.svg')}}" />
+                            <p>{{$trip->city->city_name}}, {{$trip->country->name}}</p>
+                        </div>
+                        <div class="inclusb">
+                            <img src="{{asset('assets/front/img/calendar.svg')}}" />
+                            <p>{{$trip->duration}} Days</p>
+                        </div>
+                        <div class="inclusb">
+                            <img src="{{asset('assets/front/img/age.svg')}}" />
+                            <p>Age {{$trip->age}}</p>
+                        </div>
+                    </div>
 
                     <nav class="secondary_nav sticky_horizontal">
                         <div class="container" style="padding: 0px">
@@ -154,45 +174,33 @@
 
                         </div>
 
-                        <div class="newseclocatimain">
-                            <div class="inclusb">
-                                <img src="{{asset('assets/front/img/locationsp.svg')}}" />
-                                <p>{{$trip->city->city_name}}, {{$trip->country->name}}</p>
-                            </div>
-                            <div class="inclusb">
-                                <img src="{{asset('assets/front/img/calendar.svg')}}" />
-                                <p>{{$trip->duration}} Days</p>
-                            </div>
-                            <div class="inclusb">
-                                <img src="{{asset('assets/front/img/age.svg')}}" />
-                                <p>Age {{$trip->age}}</p>
-                            </div>
-                        </div>
+
 
 
 
                     </section>
                     <section id="rooms" class="nbfdj">
-                        <div class="priceflex1">
-                            <div>
-                                <h3 class="texthead22 marbot0 martop0">Choose a room</h3>
-                            </div>
-                            <div>
-                                <h1 class="arwsqft marbot0">
-                                    <a onclick="dropdown('myDropdown')"  style="color: #1C1C1C; border-bottom: 1px solid #1C1C1C;" ><b class="dropbtn" id="selected_room">1 room, 2 travelers </b></a><img onclick="dropdown('myDropdown')" class="dropbtn" src="{{asset('assets/front/img/arrow-square-down.svg')}}">
+{{--                        <div class="priceflex1">--}}
+{{--                            <div>--}}
+{{--                                <h3 class="texthead22 marbot0 martop0">Choose a room</h3>--}}
+{{--                            </div>--}}
+{{--                            <div>--}}
+{{--                                <h1 class="arwsqft marbot0">--}}
+{{--                                    <a onclick="dropdown('myDropdown')"  style="color: #1C1C1C; border-bottom: 1px solid #1C1C1C;" ><b class="dropbtn" id="selected_room">1 room, 2 travelers </b></a><img onclick="dropdown('myDropdown')" class="dropbtn" src="{{asset('assets/front/img/arrow-square-down.svg')}}">--}}
 
-                                    <div class="dropdown">
-                                        <div id="myDropdown" class="dropdown-content">
-                                            <a href="Javascript:void('');" onclick="document.getElementById('selected_room').innerHTML=this.innerHTML;filter_room(this)" data-capacity="2">1 room, 2 travelers </a>
-                                            <a href="Javascript:void('');" onclick="document.getElementById('selected_room').innerHTML=this.innerHTML;filter_room(this)" data-capacity="4">2 room, 4 travelers </a>
-                                        </div>
-                                    </div>
-                                </h1>
-                            </div>
-                        </div>
+{{--                                    <div class="dropdown">--}}
+{{--                                        <div id="myDropdown" class="dropdown-content">--}}
+{{--                                            <a href="Javascript:void('');" onclick="document.getElementById('selected_room').innerHTML=this.innerHTML;filter_room(this)" data-capacity="2">1 room, 2 travelers </a>--}}
+{{--                                            <a href="Javascript:void('');" onclick="document.getElementById('selected_room').innerHTML=this.innerHTML;filter_room(this)" data-capacity="4">2 room, 4 travelers </a>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                </h1>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
 
                         <div class="roomsdetails">
                             @foreach($trip->hotels as $hotel)
+                                @if($hotel->id==2) @continue @endif
                                     @foreach($hotel->rooms as $room)
 
 
@@ -245,13 +253,14 @@
 {{--                                                </h1>--}}
                                             </div>
                                         </div>
-                                        <div class="roomsdetailprice">
-                                            @if($room->discount_price!=''&&$room->room_price>$room->discount_price)
-                                                <h2> <span>{{display_currency($room->room_price)}}</span> {{display_currency($room->discount_price)}}</h2>
-                                            @else
-                                                <h2> {{display_currency($room->room_price)}}</h2>
-                                            @endif
+                                        <div class="roomsdetailprice" style="width: 30%">
+{{--                                            @if($room->discount_price!=''&&$room->room_price>$room->discount_price)--}}
+{{--                                                <h2> <span>{{display_currency($room->room_price)}}</span> {{display_currency($room->discount_price)}}</h2>--}}
+{{--                                            @else--}}
+{{--                                                <h2> {{display_currency($room->room_price)}}</h2>--}}
+{{--                                            @endif--}}
 {{--                                            <a href="{{route('frontend.checkout_review',['step'=>'review','trip'=>$trip->id,'room'=>$room->id])}}" class="btn_1  btngrad">Reserve</a>--}}
+{{--                                        --}}
                                         </div>
                                     </div>
                                     @endforeach
@@ -259,6 +268,7 @@
 
                         </div>
                     </section>
+                    @if(count($trip->itinerary)>0)
                     <section id="Itinerary" class="nbfdj">
                         <h4>Itinerary</h4>
                         <ul class="cbp_tmtimeline">
@@ -285,6 +295,7 @@
 
                         <!-- /row -->
                     </section>
+                    @endif
                     <section id="information" class="nbfdj">
                         <h3 class="texthead22">Information</h3>
                         <p class="hjfgeiau">
@@ -292,20 +303,21 @@
                         </p>
 
                     </section>
-                    <section id="faq" class="nbfdj">
-                        <h3 class="texthead22">FAQ</h3>
-                        <div class="">
-                            @foreach($trip->faqs as $faq)
-                                <details class="faq-card">
-                                    <summary>{{$faq->question}} <span class="faq-open-icon"><i class="fa fa-angle-up"></i></span>
-                                    </summary>
-                                    <span class="faq-card-spoiler">{{$faq->answer}}</span>
-                                </details>
-                            @endforeach
-                        </div>
+                    @if(count($trip->faqs)>0)
+                        <section id="faq" class="nbfdj">
+                            <h3 class="texthead22">FAQ</h3>
+                            <div class="">
+                                @foreach($trip->faqs as $faq)
+                                    <details class="faq-card">
+                                        <summary>{{$faq->question}} <span class="faq-open-icon"><i class="fa fa-angle-up"></i></span>
+                                        </summary>
+                                        <span class="faq-card-spoiler">{{$faq->answer}}</span>
+                                    </details>
+                                @endforeach
+                            </div>
 
-                    </section>
-
+                        </section>
+                    @endif
 
                     <section id="reviews" class="gduuuuu">
                         <h3 class="texthead22">Reviews</h3>
@@ -314,72 +326,25 @@
                             <div class="row">
                                 <div class="col-lg-3 col-md-3">
                                     <div id="review_summary">
-                                        <strong>8.5</strong>
-                                        <em>Superb</em>
-                                        <small>Based on 5 reviews</small>
+                                        <strong>{{$avg_ratings}}</strong>
+                                        <em></em>
+                                        <small>Based on {{count($reviews)}} reviews</small>
                                     </div>
                                 </div>
                                 <div class="col-lg-9 col-md-9">
+                                    @foreach($ratings_percent as $ratings => $percent)
                                     <div class="row">
                                         <div class="col-lg-10 col-9">
                                             <div class="progress">
-                                                <div class="progress-bar" role="progressbar" style="width: 90%" aria-valuenow="90"
+                                                <div class="progress-bar" role="progressbar" style="width: {{$percent['percent']}}%" aria-valuenow="{{$percent['percent']}}"
                                                      aria-valuemin="0" aria-valuemax="100"></div>
                                             </div>
                                         </div>
                                         <div class="col-lg-2 col-3">
-                                            <small><strong>5 stars</strong></small>
+                                            <small><strong>{{$ratings}} stars</strong></small>
                                         </div>
                                     </div>
-                                    <!-- /row -->
-                                    <div class="row">
-                                        <div class="col-lg-10 col-9">
-                                            <div class="progress">
-                                                <div class="progress-bar" role="progressbar" style="width: 5%" aria-valuenow="95"
-                                                     aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-2 col-3">
-                                            <small><strong>4 stars</strong></small>
-                                        </div>
-                                    </div>
-                                    <!-- /row -->
-                                    <div class="row">
-                                        <div class="col-lg-10 col-9">
-                                            <div class="progress">
-                                                <div class="progress-bar" role="progressbar" style="width: 3%" aria-valuenow="60"
-                                                     aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-2 col-3">
-                                            <small><strong>3 stars</strong></small>
-                                        </div>
-                                    </div>
-                                    <!-- /row -->
-                                    <div class="row">
-                                        <div class="col-lg-10 col-9">
-                                            <div class="progress">
-                                                <div class="progress-bar" role="progressbar" style="width: 2%" aria-valuenow="20"
-                                                     aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-2 col-3">
-                                            <small><strong>2 stars</strong></small>
-                                        </div>
-                                    </div>
-                                    <!-- /row -->
-                                    <div class="row">
-                                        <div class="col-lg-10 col-9">
-                                            <div class="progress">
-                                                <div class="progress-bar" role="progressbar" style="width: 0" aria-valuenow="0"
-                                                     aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-2 col-3">
-                                            <small><strong>1 stars</strong></small>
-                                        </div>
-                                    </div>
-                                    <!-- /row -->
+                                @endforeach
                                 </div>
                             </div>
                             <!-- /row -->
@@ -388,103 +353,43 @@
 
 
                         <div class="reviews-container">
-                            <div class="review-box clearfix">
+                            @if(count($reviews)>0)
+                                @foreach($reviews as $review)
+                            <div class="review-box clearfix {{$loop->count>3&&$loop->index>2?'hidden-reviews':''}}" style="{{$loop->count>3&&$loop->index>2?'display:none':''}}">
                                 <div class="rev-content">
                                     <div class="reviewflex">
                                         <div class="revflexsub">
                                             <div>
-                                                <img src="{{asset('assets/front/img/avatar1.jpg')}}" />
+                                                <img src="{{isset($review->user->profileimage)?$review->user->profileimage->getUrl():asset('assets/front/img/avatar1.jpg')}}" />
                                             </div>
                                             <div>
-                                                <h4>Annette Black</h4>
-                                                <p>Co-founder</p>
+                                                <h4>{{$review->user->name.' '.$review->user->lastname}}</h4>
+{{--                                                <p>Co-founder</p>--}}
                                             </div>
                                         </div>
                                         <div>
                                             <div class="rating">
-                                                <img src="{{asset('assets/front/img/stars.svg')}}" style="width: 14px; height: 14px" /><img src="{{asset('assets/front/img/stars.svg')}}"
-                                                                                                                    style="width: 14px; height: 14px" /><img src="{{asset('assets/front/img/stars.svg')}}"
-                                                                                                                                                             style="width: 14px; height: 14px" /><img src="{{asset('assets/front/img/stars.svg')}}"
-                                                                                                                                                                                                      style="width: 14px; height: 14px" /><img src="{{asset('assets/front/img/stars.svg')}}"
-                                                                                                                                                                                                                                               style="width: 14px; height: 14px" />
+                                                @for($star=1;$star<=$review->ratings;$star++)
+                                                <img src="{{asset('assets/front/img/stars.svg')}}" style="width: 14px; height: 14px" />
+
+                                                @endfor
                                             </div>
                                         </div>
                                     </div>
                                     <div class="rev-text">
                                         <p>
-                                            ”Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sollicitudin tincidunt etiam diam
-                                            rhoncus, quis ut quam aliquam. Ultricies tempus laoreet at ipsum dui est. Eget nibh odio ac
-                                            lacus duis elit arcu, vitae. Volutpat in accumsan quam ac ante nunc.”
+                                            ”{{$review->review_text}}”
                                         </p>
                                     </div>
                                 </div>
                             </div>
-                            <!-- /review-box -->
-                            <div class="review-box clearfix">
-                                <div class="rev-content">
-                                    <div class="reviewflex">
-                                        <div class="revflexsub">
-                                            <div>
-                                                <img src="{{asset('assets/front/img/avatar1.jpg')}}" />
-                                            </div>
-                                            <div>
-                                                <h4>Annette Black</h4>
-                                                <p>Co-founder</p>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div class="rating">
-                                                <img src="{{asset('assets/front/img/stars.svg')}}" style="width: 14px; height: 14px" /><img src="{{asset('assets/front/img/stars.svg')}}"
-                                                                                                                    style="width: 14px; height: 14px" /><img src="{{asset('assets/front/img/stars.svg')}}"
-                                                                                                                                                             style="width: 14px; height: 14px" /><img src="{{asset('assets/front/img/stars.svg')}}"
-                                                                                                                                                                                                      style="width: 14px; height: 14px" /><img src="{{asset('assets/front/img/stars.svg')}}"
-                                                                                                                                                                                                                                               style="width: 14px; height: 14px" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="rev-text">
-                                        <p>
-                                            ”Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sollicitudin tincidunt etiam diam
-                                            rhoncus, quis ut quam aliquam. Ultricies tempus laoreet at ipsum dui est. Eget nibh odio ac
-                                            lacus duis elit arcu, vitae. Volutpat in accumsan quam ac ante nunc.”
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /review-box -->
-                            <div class="review-box clearfix">
-                                <div class="rev-content">
-                                    <div class="reviewflex">
-                                        <div class="revflexsub">
-                                            <div>
-                                                <img src="{{asset('assets/front/img/avatar1.jpg')}}" />
-                                            </div>
-                                            <div>
-                                                <h4>Annette Black</h4>
-                                                <p>Co-founder</p>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div class="rating">
-                                                <img src="{{asset('assets/front/img/stars.svg')}}" style="width: 14px; height: 14px" /><img src="{{asset('assets/front/img/stars.svg')}}"
-                                                                                                                    style="width: 14px; height: 14px" /><img src="{{asset('assets/front/img/stars.svg')}}"
-                                                                                                                                                             style="width: 14px; height: 14px" /><img src="{{asset('assets/front/img/stars.svg')}}"
-                                                                                                                                                                                                      style="width: 14px; height: 14px" /><img src="{{asset('assets/front/img/stars.svg')}}"
-                                                                                                                                                                                                                                               style="width: 14px; height: 14px" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="rev-text">
-                                        <p>
-                                            ”Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sollicitudin tincidunt etiam diam
-                                            rhoncus, quis ut quam aliquam. Ultricies tempus laoreet at ipsum dui est. Eget nibh odio ac
-                                            lacus duis elit arcu, vitae. Volutpat in accumsan quam ac ante nunc.”
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /review-box -->
-                            <h1 class="arwsqft"><a href="#">Show all 24 reviews</a> <img src="{{asset('assets/front/img/arrow-square-down.svg')}}"></h1>
+
+                                @endforeach
+@if(count($reviews)>3)
+                                    <h1 class="arwsqft" onclick="text_toggle();"><a id="hide_show_reviews">Show More {{count($reviews)-3}} reviews</a> <img src="{{asset('assets/front/img/arrow-square-down.svg')}}"></h1>
+@endif
+                            @endif
+
 
                         </div>
                         <!-- /review-container -->
@@ -504,7 +409,7 @@
                             Vero consequat cotidieque ad eam. Ea duis errem qui, impedit blandit sed eu. Ius diam vivendo ne. Vero
                             consequat cotidieque
                         </p>
-                        <a href="{{route('frontend.custom_trip',['trip_title'=>$trip->event_title,'trip'=>$trip->id])}}" class="full-width whitebtnmain">Reserve</a>
+                        <a href="{{route('frontend.custom_trip',['trip_title'=>str_replace(' ','-',$trip->event_title),'trip'=>$trip->id])}}" class="full-width whitebtnmain">Reserve</a>
                     </div>
 
                     <div class="pricebox2">
@@ -513,7 +418,30 @@
                             Vero consequat cotidieque ad eam. Ea duis errem qui, impedit blandit sed eu. Ius diam vivendo ne. Vero
                             consequat cotidieque ad eam.
                         </p>
-                        <a href="{{route('frontend.custom_trip',['trip_title'=>$trip->event_title,'trip'=>$trip->id])}}" class="outlinebtn2">Customized Trip</a>
+                        <a href="tel:{{AGENT_NUMBER}}" class="outlinebtn2">Speak To Agent</a>
+
+                    </div>
+                    <div class="pricebox2">
+                        <h2>Contact Information.</h2>
+                        <div class="mt-4">
+                            <p>
+                                <a href="mailto:{{INFO_EMAIL}}"><img src="{{asset('assets/front/img/sms.svg')}}" alt="">  {{INFO_EMAIL}}</a>
+                            </p>
+                            <p>
+                                <a href="tel:{{AGENT_NUMBER}}"><img src="{{asset('assets/front/img/call-calling.svg')}}" alt="">  Speak to Agent</a>
+                            </p>
+                        </div>
+
+
+
+                    </div>
+                    <div class="pricebox2">
+                        <h2>Why Book with Carnival Utopia.</h2>
+                        <p>
+                            Vero consequat cotidieque ad eam. Ea duis errem qui, impedit blandit sed eu. Ius diam vivendo ne. Vero
+                            consequat cotidieque ad eam.
+                        </p>
+
 
                     </div>
                 </aside>
@@ -584,7 +512,22 @@
     <script>
         $(function (){
            $('#trip-overview').find('ul').addClass('bullets2 bbbhssgdu') ;
+
         });
+        var show=false;
+        function text_toggle(){
+            $('.hidden-reviews').toggle();
+            var link=$('#hide_show_reviews');
+            // console.log(link);
+            if(show===false){
+                link.html('Hide More {{count($trip->reviews)-3}} reviews');
+                show=true;
+            }else{
+
+                show=false; link.html('Show More {{count($trip->reviews)-3}} reviews');
+            }
+
+        }
         /* Устанавливаем индекс слайда по умолчанию */
         var slideIndex=[];
        // showSlides(slideIndex);

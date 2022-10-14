@@ -29,7 +29,7 @@
 
                     <div class="row">
                         <div class="col-12">
-                            <button type="submit" class="btn_1  btngrad" style="width: 100%">
+                            <button type="submit" class="btn_1  btngrad btnfull" style="width: 100%">
                                 {{ trans('global.send_password') }}
                             </button>
                         </div>

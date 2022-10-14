@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\FaqCategory;
 use App\Models\Setting;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Pagination\Paginator;
@@ -37,6 +38,7 @@ class AppServiceProvider extends ServiceProvider
             define($setting->setting_key,$setting->setting_value);
         }
         View::share('setting', $settings);
+        View::share('faq_cats', FaqCategory::all());
 
         Paginator::useBootstrapFive();
         //

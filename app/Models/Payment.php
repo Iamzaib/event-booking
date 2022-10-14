@@ -56,6 +56,10 @@ class Payment extends Model
     {
         return $this->hasMany(InstallmentPayments::class);
     }
+    public function invoices()
+    {
+        return $this->hasMany(Invoices::class);
+    }
 
     public function payment_user()
     {

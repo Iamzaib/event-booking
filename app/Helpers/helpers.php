@@ -31,6 +31,10 @@ if(!function_exists('currency_icons')){
         return $icons[$currency];
     }
 }
+function invoice_number($pid,$id)
+{
+    return 10000+$pid.'-'.(int)$id;
+}
 function city_name($id){
     return \App\Models\City::find($id)->city_name;
 }

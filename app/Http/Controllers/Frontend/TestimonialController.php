@@ -39,7 +39,7 @@ class TestimonialController extends Controller
     {
         $testimonial = Testimonial::create($request->all());
 
-        return redirect()->route('frontend.testimonials.index');
+        return redirect()->route('frontend.account.index',['tab'=>'reviews']);
     }
 
     public function edit(Testimonial $testimonial)

@@ -9,6 +9,17 @@
         </div>
     </div>
 @endcan
+<div style="margin-bottom: 10px;" class="row">
+    <div class="col-lg-12">
+        <label>Setting Group</label>
+        <select class="form-control {{ $errors->has('setting_group') ? 'is-invalid' : '' }}" onchange="window.location.href='{{route('admin.settings.index',['group'=>'webgroup'])}}'.replace('webgroup',this.value)" name="setting_group" id="setting_group" >
+            <option value disabled {{ old('setting_group', null) === null ? 'selected' : '' }}>Select Setting Group</option>
+            @foreach(App\Models\Setting::SETTING_GROUPS as $key => $label)
+                <option value="{{ $key }}" {{ old('setting_group', request()->group) === (string) $key ? 'selected' : '' }}>{{ $label }}</option>
+            @endforeach
+        </select>
+    </div>
+</div>
 <div class="card">
     <div class="card-header">
         {{ trans('cruds.setting.title_singular') }} {{ trans('global.list') }}
@@ -55,14 +66,13 @@
                                 {{ $setting->details ?? '' }}
                             </td>
                             <td>
-                                <form method="POST" action="{{ route("admin.settings.update", [$setting->id]) }}" enctype="multipart/form-data">
+                                <form method="POST" action="{{ route("admin.settings.update_single", [$setting->id]) }}" enctype="multipart/form-data">
                                 @method('PUT')
                                 @csrf
-{{--                                {{ $setting->setting_value ?? '' }}--}}
+
 
                                     <div class="row">
                                         <div class="col-8">
-{{--                                            <label class="required" for="setting_value_{{$setting->id}}">{{ trans('cruds.setting.fields.setting_value') }}</label>--}}
                                             @if($setting->setting_type=='text')
                                             <input class="form-control d-inline-flex {{ $errors->has('setting_value') ? 'is-invalid' : '' }}" type="text" name="setting_value" id="setting_value_{{$setting->id}}" value="{{ old('setting_value', $setting->setting_value) }}" required>
                                            @elseif($setting->setting_type=='true-false')

@@ -13,11 +13,14 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SettingController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         abort_if(Gate::denies('setting_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        $settings = Setting::all();
+        $group='Web';
+        if(isset($request->group)&&$request->group!=''){
+            $group=$request->group;
+        }
+        $settings = Setting::where('setting_group',$group)->get();
 
         return view('admin.settings.index', compact('settings'));
     }
@@ -33,7 +36,7 @@ class SettingController extends Controller
     {
         $setting = Setting::create($request->all());
 
-        return redirect()->route('admin.settings.index');
+        return redirect()->route('admin.settings.index',['group'=>$request->setting_group]);
     }
 
     public function edit(Setting $setting)
@@ -48,6 +51,15 @@ class SettingController extends Controller
         $setting->update($request->all());
 
         return redirect()->route('admin.settings.index');
+    }
+    public function update_single(Request $request, Setting $setting)
+    {
+        if($request->setting_value!=''){
+            $setting->update([
+                'setting_value'=>$request->setting_value
+            ]);
+        }
+        return redirect()->route('admin.settings.index',['group'=>$setting->setting_group]);
     }
 
     public function show(Setting $setting)

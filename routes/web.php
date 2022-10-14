@@ -6,13 +6,20 @@ use App\Http\Controllers\Frontend\UsersController;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('userVerification/{token}', 'UserVerificationController@approve')->name('userVerification');
+Route::get('userVerification-resend/{token}', 'UserVerificationController@resend')->name('userVerification.resend');
 Route::get('/', 'HomeController@index')->name('home');
-Route::get('/help-center', 'HomeController@help')->name('help_center');
+Route::get('/help-center/{name?}/{category?}', 'HomeController@help')->name('help_center');
+Route::get('/blogs', 'HomeController@blogs')->name('blogs');
+Route::get('/blog/{name}/{id}', 'HomeController@blogs')->name('blog');
 Route::get('/contact-us', 'HomeController@contact')->name('contact');
 Route::post('/contact-us', 'HomeController@contact')->name('contact');
 Route::get('/trips', 'HomeController@trips')->name('trips');
 Route::get('/email-verify-now', 'VerificationController@show')->name('email_verification');
-
+Route::get('/verification/verify', 'Auth\VerificationController@verify')->name('verification.verify');
+Route::get('log-out',function (){
+    Auth::logout();
+    return redirect()->route('home');
+})->name('log-out');
 Route::get('/page/{page_name}/{pID}', 'HomeController@page')->name('page_view');
 Auth::routes();
 Route::get('cities_list/get_by_state', 'Admin\CitiesController@get_by_state')->name('cities.get_by_state');
@@ -23,6 +30,8 @@ Route::group(['middleware' => ['auth']], function () {
 Route::group(['as' => 'frontend.', 'namespace' => 'Frontend'], function () {
 
     Route::get('/home', 'HomeController@index')->name('home');
+    Route::post('/newsletter', 'HomeController@newsletter')->name('newsletter');
+    Route::get('/newsletter/{do}/{token}', 'HomeController@newsletter')->name('unsubscribe_newsletter');
     Route::get('/trip/{trip_title}/{event}', 'EventsController@trip_view')->name('trip_view');
     //checkout routes
 Route::controller(CheckoutController::class)->group(function () {
@@ -44,12 +53,18 @@ Route::controller(CheckoutController::class)->group(function () {
             ->as('account.')
             ->group(function () {
                 Route::get('', 'index')->name('index');
+                Route::post('add-payment-method', 'add_payment_method')->name('add_payment_method');
                 Route::get('edit-profile', 'edit')->name('edit');
                 Route::get('add-favorite', 'favourite')->name('favourite');
+                Route::get('update-payment-method/{paymentmethod}/{type?}', 'default_remove_payment')->name('default_remove_payment');
                 Route::post('save-profile/{user}', 'update')->name('save');
                 Route::post('save/media', 'storeMedia')->name('storeMedia');
             });
         Route::get('custom-trip/{trip_title}/{trip}', 'EventsController@customized_trip')->name('custom_trip');
+        Route::get('invoice/{invoice}', 'PaymentsController@invoice')->name('invoice_view');
+        Route::post('new-payment/{payment}', 'PaymentsController@trip_balance_payment')->name('trip_balance_payment');
+        Route::post('frontend/profile/password', 'ProfileController@password')->name('profile.password');
+        Route::resource('testimonials', 'TestimonialController')->only(['store']);
     });
     /*
         // Permissions
@@ -292,6 +307,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     // Event Booking
     Route::delete('event-bookings/destroy', 'EventBookingController@massDestroy')->name('event-bookings.massDestroy');
+    Route::get('event-bookings/new-booking/{trip}', 'EventBookingController@create_booking')->name('event-bookings.create_booking');
     Route::resource('event-bookings', 'EventBookingController');
 
     // Traveler
@@ -320,6 +336,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     // Setting
     Route::delete('settings/destroy', 'SettingController@massDestroy')->name('settings.massDestroy');
+    Route::put('settings_update/{setting}', 'SettingController@update_single')->name('settings.update_single');
     Route::resource('settings', 'SettingController');
 
     // Testimonial

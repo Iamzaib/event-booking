@@ -27,16 +27,16 @@
                     <!-- Toggle -->
                     <a href="#" id="sidebarIcon" class="dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <div class="avatar avatar-sm avatar-online">
-                            <img src="{{asset('assets/img/avatars/profiles/avatar-1.jpg')}}assets/img/avatars/profiles/avatar-1.jpg" class="avatar-img rounded-circle" alt="...">
+                            <img src="{{asset('assets/img/avatars/profiles/avatar-1.jpg')}}" class="avatar-img rounded-circle" alt="...">
                         </div>
                     </a>
 
                     <!-- Menu -->
                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="sidebarIcon">
-                        <a href="./profile-posts.html" class="dropdown-item">Profile</a>
-                        <a href="./account-general.html" class="dropdown-item">Settings</a>
+                        <a href="{{ route('profile.password.edit') }}" class="dropdown-item">Profile</a>
+                        <a href="{{route('admin.settings.index')}}" class="dropdown-item">Settings</a>
                         <hr class="dropdown-divider">
-                        <a href="./sign-in.html" class="dropdown-item">Logout</a>
+                        <a href="{{route('log-out')}}" class="dropdown-item">Logout</a>
                     </div>
 
                 </div>

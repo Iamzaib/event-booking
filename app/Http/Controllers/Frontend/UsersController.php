@@ -17,6 +17,7 @@ use App\Models\User;
 use Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,21 +29,82 @@ class UsersController extends Controller
     public function index(Request $request)
     {
 //        abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        $cities=$states= [''=>trans('global.pleaseSelect')];
+//        if(isset($request->payment_method_add)&&$request->payment_method_add!=''){
+//            $new_payment_method=$this->add_payment_method($request);
+//            if($new_payment_method===true){
+//                Session::flash('message', $this->get_msg('newpayadded'));
+//            }
+//        }
+        $data['cities']=$data['states']= [''=>trans('global.pleaseSelect')];
         $user = User::find(auth()->id());
         if($user->country_id>0){
-            $states = State::where('country_id',$user->country_id)->pluck('state_name', 'id')->prepend(trans('global.pleaseSelect'), '');
+            $data['states'] = State::where('country_id',$user->country_id)->pluck('state_name', 'id')->prepend(trans('global.pleaseSelect'), '');
         }
         if($user->state_id>0) {
-            $cities = City::where('state_id',$user->state_id)->pluck('city_name', 'id')->prepend(trans('global.pleaseSelect'), '');
+            $data['cities'] = City::where('state_id',$user->state_id)->pluck('city_name', 'id')->prepend(trans('global.pleaseSelect'), '');
         }
-        $countries = Country::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-        $booking=EventBooking::where('booking_by_user_id',Auth::id())->get();
+        $data['countries']= Country::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-
-        return view('front.account.account', compact('user','cities', 'countries',  'states'));
+        $paymentMethods = $user->paymentMethods()->map(function($paymentMethod){
+            return $paymentMethod->asStripePaymentMethod();
+        });
+//        dd($paymentMethods,$user->defaultPaymentMethod()->asStripePaymentMethod());
+        $data['intent'] = auth()->user()->createSetupIntent();
+        $data['paymentMethods']=$paymentMethods;
+        $data['defaultpaymentMethod']=($user->defaultPaymentMethod())?$user->defaultPaymentMethod()->asStripePaymentMethod():'';
+        $data['user']=$user;
+        $view=view('front.account.account', $data);
+        return (isset($request->message)&&$request->message!=''?$view->with('message',$this->get_msg($request->message)):$view);
     }
+        private function get_msg($type){
+                $messages=[
+                  'newpayadded'=>'New Payment Method Added',
+                  'defaultpay'=>'Default Payment Method Updated',
+                  'removedpay'=>'Payment Method Removed',
+                    'profile'=>'Profile Updated Successfully',
+                    'payed'=>'Payment Successful',
+                    'reviewed'=>'Review Added'
+                ];
+                return $messages[$type];
+        }
+        public function add_payment_method(Request $request){
+            $paymentMethod = $request->payment_method_add;
+            $user=Auth::user();
+            try {
+                $user->createOrGetStripeCustomer();
+                $user->addPaymentMethod($paymentMethod);
+            } catch (\Exception $exception) {
+                //   return back()->with('error', );
+                return redirect()->back()->with('error',$exception->getMessage());
+                exit;
+            }
+            return redirect()->route('frontend.account.index',['tab'=>'payment'])->with('message',$this->get_msg('newpayadded'));
+        }
+        public function default_remove_payment($paymentmethod,$type='default'){
+            $user=Auth::user();
+            if($type=='remove'){
 
+                try {
+                    $user->createOrGetStripeCustomer();
+                    $user->deletePaymentMethod($paymentmethod);
+                } catch (\Exception $exception) {
+                    //   return back()->with('error', );
+                    return redirect()->back()->with('error',$exception->getMessage());
+                    exit;
+                }
+                return redirect()->route('frontend.account.index',['tab'=>'payment'])->with('message',$this->get_msg('removedpay'));
+            }
+                try {
+                    $user->createOrGetStripeCustomer();
+                    $user->updateDefaultPaymentMethod($paymentmethod);
+                } catch (\Exception $exception) {
+                    //   return back()->with('error', );
+                    return redirect()->back()->with('error',$exception->getMessage());
+                    exit;
+                }
+                return redirect()->route('frontend.account.index',['tab'=>'payment'])->with('message',$this->get_msg('defaultpay'));
+
+        }
 //    public function create()
 //    {
 //        abort_if(Gate::denies('user_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
@@ -68,7 +130,7 @@ class UsersController extends Controller
                     'trip' => $trip->event_title,
                 ]);
             }
-            $response=Auth::user()->favourite_trips()->sync($trip->id);
+            $response=Auth::user()->favourite_trips()->attach($trip->id);
             return response()->json([
                 'status'          => 1,
                 'trip' => $trip->event_title,

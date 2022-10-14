@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'site_title' => 'event-booking',
+    'site_title' => env('APP_NAME','Carnival Utopia'),
 ];

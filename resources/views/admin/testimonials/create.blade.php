@@ -21,7 +21,7 @@
             </div>
             <div class="form-group">
                 <label class="required" for="ratings">{{ trans('cruds.testimonial.fields.ratings') }}</label>
-                <input class="form-control {{ $errors->has('ratings') ? 'is-invalid' : '' }}" type="text" name="ratings" id="ratings" value="{{ old('ratings', '') }}" required>
+                <input class="form-control {{ $errors->has('ratings') ? 'is-invalid' : '' }}" type="number" min="1" max="5" name="ratings" id="ratings" value="{{ old('ratings', '1') }}" required>
                 @if($errors->has('ratings'))
                     <div class="invalid-feedback">
                         {{ $errors->first('ratings') }}

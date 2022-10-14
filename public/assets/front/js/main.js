@@ -274,12 +274,12 @@
 		if (width <= 991) {
 			$('.sticky_horizontal').stick_in_parent({
 				bottoming:false,
-				offset_top: 50
+				offset_top: 65
 			});
 		} else {
 			$('.sticky_horizontal').stick_in_parent({
 				bottoming:false,
-				offset_top: 55
+				offset_top: 65
 			});
 		}
 	});

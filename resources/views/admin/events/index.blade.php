@@ -31,14 +31,17 @@
                         <th>
                             {{ trans('cruds.event.fields.daily_price') }}
                         </th>
-                        <th>
-                            {{ trans('cruds.event.fields.featured_image') }}
-                        </th>
+{{--                        <th>--}}
+{{--                            {{ trans('cruds.event.fields.featured_image') }}--}}
+{{--                        </th>--}}
                         <th>
                             {{ trans('cruds.event.fields.event_start') }}
                         </th>
                         <th>
                             {{ trans('cruds.event.fields.event_end') }}
+                        </th>
+                        <th>
+                            Booking
                         </th>
                         <th>
                             &nbsp;
@@ -60,18 +63,25 @@
                             <td>
                                 {{ $event->daily_price ?? '' }}
                             </td>
-                            <td>
-                                @if($event->featured_image)
-                                    <a href="{{ $event->featured_image->getUrl() }}" target="_blank" style="display: inline-block">
-                                        <img src="{{ $event->featured_image->getUrl('thumb') }}">
-                                    </a>
-                                @endif
-                            </td>
+{{--                            <td>--}}
+{{--                                @if($event->featured_image)--}}
+{{--                                    <a href="{{ $event->featured_image->getUrl() }}" target="_blank" style="display: inline-block">--}}
+{{--                                        <img src="{{ $event->featured_image->getUrl('thumb') }}">--}}
+{{--                                    </a>--}}
+{{--                                @endif--}}
+{{--                            </td>--}}
                             <td>
                                 {{ $event->event_start ?? '' }}
                             </td>
                             <td>
                                 {{ $event->event_end ?? '' }}
+                            </td>
+                            <td>
+                                @can('event_show')
+                                    <a class="btn btn-xs btn-success" href="{{ route('admin.event-bookings.create_booking', ['trip'=>$event->id]) }}">
+                                        Book this Event/Trip
+                                    </a>
+                                @endcan
                             </td>
                             <td>
                                 @can('event_show')

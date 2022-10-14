@@ -77,7 +77,7 @@ class BlogPostController extends Controller
                 $query->where('title', 'LIKE', "%{$search}%");
                 $query->orWhere('page_text', 'LIKE', "%{$search}%");
                 $query->orWhere('excerpt', 'LIKE', "%{$search}%");
-                $query->orWhereHas('categories', function ($q) use ($search) { return $q->where('name', 'LIKE', "%{$search}%"); });
+                    $query->orWhereHas('categories', function ($q) use ($search) { return $q->where('name', 'LIKE', "%{$search}%"); });
                 $query->orWhereHas('tags', function ($q) use ($search) { return $q->where('name', 'LIKE', "%{$search}%"); });
             })->when($request->category, function ($query, $category) {
                 if($category!='*') {
