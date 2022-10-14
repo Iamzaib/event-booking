@@ -39,8 +39,8 @@ class CheckoutController extends Controller
     }
     public function custom_order_process(){
 
-//        $rq=$this->request;
-        $rq=$this->request->validate([
+//        $rqv=$this->request;
+        $rq=(object)$this->request->validate([
             "trip_id" => "required",
               "travelers" => "required",
               "range" => "required",
@@ -265,6 +265,7 @@ class CheckoutController extends Controller
             'payment_id'=>$paymentUpdate->id,
             'amount_total'=>$total,
             'amount_paid'=>$amount_to_paid,
+            'payment_done'=>$amount_to_paid,
             'payment_method'=>'CC',
             'payment_details'=>json_encode($payment),
             'deposit'=>($rq->payment_type=='Installment'?$deposit:0),

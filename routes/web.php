@@ -308,6 +308,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // Event Booking
     Route::delete('event-bookings/destroy', 'EventBookingController@massDestroy')->name('event-bookings.massDestroy');
     Route::get('event-bookings/new-booking/{trip}', 'EventBookingController@create_booking')->name('event-bookings.create_booking');
+    Route::post('event-bookings/new-booking-create', 'EventBookingController@custom_order_process')->name('event-bookings.custom_order_process');
     Route::resource('event-bookings', 'EventBookingController');
 
     // Traveler
