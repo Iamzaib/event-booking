@@ -140,9 +140,10 @@ class EventsController extends Controller
             $data['range'][0]['duration']=count($date_range_1);
             $data['range'][0]['price']=($trip->daily_price*count($date_range_1))*$data['travelers'];
         }
-        $data['low_total']=$data['range'][0]['price'];
-        $data['low_deposit']=($data['range'][0]['price']*((float)DEPOSIT_AMOUNT_PERCENT/100));
-        $installment=$data['range'][0]['price']-$data['low_deposit'];
+        $range_low_price=$trip->date_ranges()->orderBy('range_price', 'asc')->first()->range_price;
+        $data['low_total']=$range_low_price;
+        $data['low_deposit']=($range_low_price*((float)DEPOSIT_AMOUNT_PERCENT/100));
+        $installment=$range_low_price-$data['low_deposit'];
         $data['low_installment']=($installment/(int)TOTAL_INSTALLMENTS);
 
 

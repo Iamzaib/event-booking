@@ -17,6 +17,7 @@ use App\Models\Hotel;
 use App\Models\Itinerary;
 use App\Models\PackageAmenity;
 use App\Models\State;
+use App\Models\TripDateRange;
 use Gate;
 use Illuminate\Http\Request;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -66,7 +67,18 @@ class EventsController extends Controller
         if ($media = $request->input('ck-media', false)) {
             Media::whereIn('id', $media)->update(['model_id' => $event->id]);
         }
-        Itinerary::where('event_id',$event->id)->delete();
+//        Itinerary::where('event_id',$event->id)->delete();
+        foreach ($request->input('range_price') as $index => $range){
+            if($request->range_start[$index]!=''&&$request->range_end[$index]!=''&&$request->range_price[$index]!=''){
+                TripDateRange::create([
+                    'event_id'=>$event->id,
+                    'range_title'=>$request->range_title[$index],
+                    'range_start'=>$request->range_start[$index],
+                    'range_end'=>$request->range_end[$index],
+                    'range_price'=>$request->range_price[$index],
+                ]);
+            }
+        }
         foreach ($request->input('number') as $index => $itinerary){
             if($request->title[$index]!=''){
                 Itinerary::create([
@@ -130,6 +142,20 @@ class EventsController extends Controller
             }
         } elseif ($event->featured_image) {
             $event->featured_image->delete();
+        }
+        if(isset($request->range_id)){
+            TripDateRange::whereNotIn('id',$request->range_id)->delete();
+        }
+        foreach ($request->input('range_price') as $index => $range){
+            if($request->range_start[$index]!=''&&$request->range_end[$index]!=''&&$request->range_price[$index]!=''){
+                TripDateRange::updateOrCreate(
+                    ['id'=>(isset($request->range_id)?$request->range_id[$index]:null),'event_id'=>$event->id],
+                    ['range_title'=>$request->range_title[$index],
+                    'range_start'=>$request->range_start[$index],
+                    'range_end'=>$request->range_end[$index],
+                    'range_price'=>$request->range_price[$index],
+                ]);
+            }
         }
         Itinerary::where('event_id',$event->id)->delete();
         foreach ($request->input('number') as $index => $itinerary){

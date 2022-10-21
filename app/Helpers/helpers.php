@@ -44,5 +44,11 @@ function state_name($id){
 function country_name($id){
     return \App\Models\Country::find($id)->name;
 }
-
+function processing_fee($total){
+    if($total>0){
+        $p_fee_percent=(float)PROCESSING_FEE;
+        return $total*($p_fee_percent/100);
+    }
+    return 0;
+}
 

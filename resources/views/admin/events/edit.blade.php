@@ -21,6 +21,40 @@
                 <span class="help-block">{{ trans('cruds.event.fields.event_title_helper') }}</span>
             </div>
             <div class="form-group">
+                <label for="">Trip Duration Ranges</label>
+                <div id="Datarange">
+                    <table class="table" id="daterange_fields">
+                        <tr>
+                            <th>Title</th>
+                            <th>Start Date</th>
+                            <th>End date</th>
+                            <th>Fixed Price For all These days</th>
+                            <th><span class="btn btn-info" onclick="add_new_daterange()">Add New Range</span></th>
+                        </tr>
+                        @foreach($event->date_ranges as $d_range)
+                        <tr>
+                            <td>
+                                <input type="text" value="{{$d_range->range_title}}" name="range_title[]" id="" class="form-control" >
+                            </td>
+                            <td>
+                                <input type="date" value="{{date('Y-m-d',strtotime($d_range->range_start))}}" name="range_start[]" id="" class="form-control" >
+                            </td>
+                            <td>
+                                <input type="date" value="{{date('Y-m-d',strtotime($d_range->range_end))}}" name="range_end[]" id="" class="form-control" >
+                            </td>
+                            <td>
+                                <input type="number" value="{{$d_range->range_price}}" step="0.01" name="range_price[]" id="" class="form-control" >
+                                <input type="hidden" name="range_id[]" value="{{$d_range->id}}">
+                            </td>
+                                                        <td>
+                                                            <span class="btn btn-danger" onclick="remove_new_Itinerary(this)">Remove This</span>
+                                                        </td>
+                        </tr>
+                        @endforeach
+                    </table>
+                </div>
+            </div>
+            <div class="form-group">
                 <label for="overview">{{ trans('cruds.event.fields.overview') }}</label>
                 <textarea class="form-control ckeditor {{ $errors->has('overview') ? 'is-invalid' : '' }}" name="overview" id="overview">{!! old('overview', $event->overview) !!}</textarea>
                 @if($errors->has('overview'))
@@ -336,7 +370,25 @@
     </div>
 </div>
 
-
+<table class="d-none" id="new_date_range_">
+    <tr>
+        <td>
+            <input type="text" name="range_title[]" id="" class="form-control">
+        </td>
+        <td>
+            <input type="date" name="range_start[]" id="" class="form-control">
+        </td>
+        <td>
+            <input type="date" name="range_end[]" id="" class="form-control">
+        </td>
+        <td>
+            <input type="number" step="0.01" name="range_price[]" id="" class="form-control">
+        </td>
+        <td>
+            <span class="btn btn-danger" onclick="remove_new_Itinerary(this)">Remove This</span>
+        </td>
+    </tr>
+</table>
 
 @endsection
 
@@ -350,6 +402,7 @@
     var image_exists=true;
     var image_src={!! json_encode($event->featured_image) !!}
     @endif
+    var new_date_range=$('#new_date_range_ tbody').html();
     var new_Itinerary=' <tr><td> <input type="text" name="number[]" id="" class="form-control">        </td>' +
         ' <td>        <input type="text" name="title[]" id="" class="form-control">    </td>' +
         ' <td>' +
@@ -376,6 +429,9 @@
         '</tr>';
     function add_new_faq(){
         $('#faq_fields tbody').append(new_FAQ);
+    }
+    function add_new_daterange(){
+        $('#daterange_fields tbody').append(new_date_range);
     }
     function remove_new_Itinerary(btn){
         $(btn).parent().parent().remove();

@@ -20,6 +20,7 @@ use App\Models\InstallmentPayments;
 use App\Models\Invoices;
 use App\Models\Payment;
 use App\Models\Traveler;
+use App\Models\TripDateRange;
 use App\Models\User;
 use Carbon\CarbonPeriod;
 use Gate;
@@ -81,9 +82,10 @@ class EventBookingController extends Controller
             $data['range'][0]['duration']=count($date_range_1);
             $data['range'][0]['price']=($trip->daily_price*count($date_range_1))*$data['travelers'];
         }
-        $data['low_total']=$data['range'][0]['price'];
-        $data['low_deposit']=($data['range'][0]['price']*((float)DEPOSIT_AMOUNT_PERCENT/100));
-        $installment=$data['range'][0]['price']-$data['low_deposit'];
+        $range_low_price=$trip->date_ranges()->orderBy('range_price', 'asc')->first()->range_price;
+        $data['low_total']=$range_low_price;
+        $data['low_deposit']=($range_low_price*((float)DEPOSIT_AMOUNT_PERCENT/100));
+        $installment=$range_low_price-$data['low_deposit'];
         $data['low_installment']=($installment/(int)TOTAL_INSTALLMENTS);
 
 
@@ -150,17 +152,20 @@ class EventBookingController extends Controller
             $room=$rooms[$room_one_id];
         }
         $total_traveler=$rq->travelers;
-        $subtotal=($trip->daily_price*$trip->duration)*$total_traveler;
-        $range_=explode('%',$rq->range);
-        $range=explode(' > ',Arr::first($range_));
-        for ($r=0, $rMax = count($range); $r< $rMax; $r++){
-            $range[$r]=date(config('panel.date_format'),strtotime($range[$r]));
-        }
-//        var_dump($range);exit;
-        $duration=Arr::last($range_);
-        if($trip->duration>2) {
-            $subtotal=($trip->daily_price * $duration) * $total_traveler;
-        }
+//        $subtotal=($trip->daily_price*$trip->duration)*$total_traveler;
+//        $range_=explode('%',$rq->range);
+//        $range=explode(' > ',Arr::first($range_));
+//        for ($r=0, $rMax = count($range); $r< $rMax; $r++){
+//            $range[$r]=date(config('panel.date_format'),strtotime($range[$r]));
+//        }
+////        var_dump($range);exit;
+//        $duration=Arr::last($range_);
+//        if($trip->duration>2) {
+//            $subtotal=($trip->daily_price * $duration) * $total_traveler;
+//        }
+        $range=TripDateRange::find($rq->range);
+        $total_traveler=$rq->travelers;
+        $subtotal=$range->range_price*$total_traveler;
 
 
 
@@ -168,7 +173,7 @@ class EventBookingController extends Controller
         $data['savings']=0;
         $data['coupon_amount']=0.00;
         $data['coupon_code']='';
-        $data['processing_fee']=(float)PROCESSING_FEE;
+//        $data['processing_fee']=(float)PROCESSING_FEE;
 //        $data['trip']=$trip;
         $data['room']=$room;
         $data['rooms']=$rooms;
@@ -183,6 +188,9 @@ class EventBookingController extends Controller
             'booking_event_id'=>$trip->id,
             'booking_by_user_id'=>$user->id,
             'order_payment_type'=>$rq->payment_type,
+            'range_id'=>$rq->range,
+            'booking_from'=>$range->range_start,
+            'booking_to'=>$range->range_end,
             "billing_name"=> $user->name,
             "billing_lastname"=> $user->lastname,
             "billing_address"=>$user->address,
@@ -195,8 +203,6 @@ class EventBookingController extends Controller
             $booking->update([
                 'room_id'=>$room->id,
                 'room_price'=>$room->room_price,
-                'booking_from'=>$range[0],
-                'booking_to'=>$range[1],
             ]);
         }
         if(count($rooms)>0){
@@ -205,8 +211,8 @@ class EventBookingController extends Controller
                     'room_id'=>$room->id,
                     'booking_for_id'=>$booking->id,
                     'room_booking_rate'=>$room->room_price,
-                    'booking_from'=>$range[0],
-                    'booking_to'=>$range[1],
+                    'booking_from'=>$range->range_start,
+                    'booking_to'=>$range->range_end,
                 ]);
             }
         }
@@ -273,7 +279,7 @@ class EventBookingController extends Controller
             }
         }
 
-        $total=$subtotal+(float)PROCESSING_FEE;
+        $total=$subtotal+processing_fee($subtotal);
         $booking->update([
             'booking_total'=>$total,
         ]);
@@ -315,7 +321,7 @@ class EventBookingController extends Controller
             'savings'=>0,
             'coupon_amount'=>0,
             'coupon_code'=>'',
-            'processing_fee'=>(float)PROCESSING_FEE,
+            'processing_fee'=>processing_fee($subtotal),
             'subtotal'=>$subtotal,
             'deposit'=>($rq->payment_type=='Installment'?$deposit:0),
             'installment'=>($rq->payment_type=='Installment'?$installment_1:0),
@@ -335,7 +341,7 @@ class EventBookingController extends Controller
             'amount_balance'=>($rq->payment_type=='Installment'?($installment):0),
         ]);
         $booking->update([
-            'status'=>($rq->payment_type=='Installment'?'pending-payment':'active')
+            'status'=>'active'
         ]);
         if($rq->payment_type=='Installment'){
             for ($p=1;$p<=TOTAL_INSTALLMENTS;$p++){

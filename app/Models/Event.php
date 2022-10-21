@@ -121,6 +121,10 @@ class Event extends Model implements HasMedia
     {
         return $this->hasMany(Itinerary::class);
     }
+    public function date_ranges()
+    {
+        return $this->hasMany(TripDateRange::class);
+    }
     public function reviews()
     {
         return $this->hasManyThrough(Testimonial::class,EventBooking::class,'id','event_trip_booking_id');

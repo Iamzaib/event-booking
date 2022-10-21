@@ -20,6 +20,38 @@
                 <span class="help-block">{{ trans('cruds.event.fields.event_title_helper') }}</span>
             </div>
             <div class="form-group">
+                <label for="">Trip Duration Ranges</label>
+                <div id="Datarange">
+                    <table class="table" id="daterange_fields">
+                        <tr>
+                            <th>Title</th>
+                            <th>Start Date</th>
+                            <th>End date</th>
+                            <th>Fixed Price For all These days</th>
+                            <th><span class="btn btn-info" onclick="add_new_daterange()">Add New Range</span></th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="text" name="range_title[]" id="" class="form-control" required>
+                            </td>
+                            <td>
+                                <input type="date" name="range_start[]" id="" class="form-control" required>
+                            </td>
+                            <td>
+                                <input type="date" name="range_end[]" id="" class="form-control" required>
+                            </td>
+                            <td>
+                                <input type="number" step="0.01" name="range_price[]" id="" class="form-control" required>
+                            </td>
+{{--                            <td>--}}
+{{--                                <span class="btn btn-danger" onclick="remove_new_Itinerary(this)">Remove This</span>--}}
+{{--                            </td>--}}
+                        </tr>
+
+                    </table>
+                </div>
+            </div>
+            <div class="form-group">
                 <label for="overview">{{ trans('cruds.event.fields.overview') }}</label>
                 <textarea class="form-control ckeditor {{ $errors->has('overview') ? 'is-invalid' : '' }}" name="overview" id="overview">{!! old('overview') !!}</textarea>
                 @if($errors->has('overview'))
@@ -39,6 +71,7 @@
                 @endif
                 <span class="help-block">{{ trans('cruds.event.fields.duration_helper') }}</span>
             </div>
+
             <div class="form-group">
                 <label for="age">{{ trans('cruds.event.fields.age') }}</label>
                 <input class="form-control {{ $errors->has('age') ? 'is-invalid' : '' }}" type="text" name="age" id="age" value="{{ old('age', '') }}">
@@ -299,7 +332,25 @@
         </form>
     </div>
 </div>
-
+<table class="d-none" id="new_date_range_">
+    <tr>
+        <td>
+            <input type="text" name="range_title[]" id="" class="form-control">
+        </td>
+        <td>
+            <input type="date" name="range_start[]" id="" class="form-control">
+        </td>
+        <td>
+            <input type="date" name="range_end[]" id="" class="form-control">
+        </td>
+        <td>
+            <input type="number" step="0.01" name="range_price[]" id="" class="form-control">
+        </td>
+        <td>
+            <span class="btn btn-danger" onclick="remove_new_Itinerary(this)">Remove This</span>
+        </td>
+    </tr>
+</table>
 
 
 @endsection
@@ -329,6 +380,7 @@
             '<span class="btn btn-danger" onclick="remove_new_Itinerary(this)">Remove This</span>' +
             '</td>' +
             '</tr>';
+        var new_date_range=$('#new_date_range_ tbody').html();
 
         var new_FAQ=' <tr><td> <input type="text" name="faq_question[]" id="" class="form-control">        </td>' +
             ' <td>        <textarea name="faq_answer[]" class="form-control" cols="30" rows="3"></textarea>    </td>' +
@@ -340,6 +392,8 @@
         $('#Itinerary_fields tbody').append(new_Itinerary);
     }function add_new_faq(){
         $('#faq_fields tbody').append(new_FAQ);
+    }function add_new_daterange(){
+        $('#daterange_fields tbody').append(new_date_range);
     }
     function remove_new_Itinerary(btn){
         $(btn).parent().parent().remove();

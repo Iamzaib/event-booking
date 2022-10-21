@@ -1,13 +1,47 @@
 @extends('layouts.front')
 
 @section('styles')
+<style>
+.choosepaymemyrad input[type="radio"] + label p {
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 15px;
+    color: #545455;
+    letter-spacing: -.022em;
+    margin-top: 4px;
+    margin-bottom: 0px;
+    width: 50%;
+    float: left;
+    margin-bottom: 15px;
+}
+	.choosepaymemyrad input[type="radio"]+label h3 {
+    color: #545455;
+    font-size: 13px;
+    font-weight: 500;
+    width: 50%;
+    float: left;
+    margin-bottom: 12px !important;
+}
+	.choosepaymemyrad .basic_inner_text {
+    background-color: #dadada;
+    padding: 4px 10px;
+    border-radius: 5px;
+}
+	.choosepaymemyrad input[type="radio"]:checked+label .basic_inner_text {
+   color: #4a00e0;
+}
+	.checkout1box h2 {
+    font-size: 30px !important;
+    margin-top: 35px !important;
+}
+</style>
 @endsection
 @section('content')
     <div class="checkutpagemain">
         <div class="container contch">
             <div class="checkout1box custrip1">
                 <h1 class="arwsqft"><img src="{{asset('assets/front/img/arrow-square-left.svg')}}" /><a href="{{route('frontend.trip_view',['trip_title'=>str_replace(' ','-',$trip->event_title),'event'=>$trip->id])}}">Go back</a></h1>
-                <h2>Create your custom trip.</h2>
+                <h2>Create your trip.</h2>
                 @if(isset($error))
                     {{$error}}
                     @endif
@@ -32,7 +66,7 @@
                                 <h4 class="marbot0 texthead22">{{$trip->event_title}}</h4>
                             </div>
                             <div>
-                                <h4 class="marbot0 texthead22"><sup>Starting From</sup>&nbsp;<span id="starting_top" style="font-size: 20px"> {{display_currency($low_total)}}</span></h4>
+                                <h4 class="marbot0 texthead22"><sup>Starting From</sup>&nbsp;<span id="" style="font-size: 20px"> {{display_currency($low_total)}}</span></h4>
                             </div>
                         </div>
                         <div class="cb1sbt6">
@@ -84,17 +118,26 @@
                                 <div class="col-md-12">
                                     <h5>Choose Your Dates</h5>
                                 </div>
-                                @foreach($range as $index => $date_range)
+{{--                                @foreach($range as $index => $date_range)--}}
+                                    @foreach($trip->date_ranges as $date_range)
                                     <div class="col-md-6">
                                         <div class="choosepaymemyrad">
-                                            <input type="radio" id="range{{$index}}" class="date_range"  name="range" data-range="{{$date_range['date']}}%{{$date_range['price']}}" {{old('range','')==($date_range['date'].'%'.$date_range['price'].'%'.$date_range['duration'])?'checked':'' }} value="{{$date_range['date']}}%{{$date_range['price']}}%{{$date_range['duration']}}">
-                                            <label for="range{{$index}}">
+                                            <input type="radio" id="range{{$date_range->id}}" class="date_range"  name="range" data-range="{{date('d-M-Y',strtotime($date_range->range_start)).' > '.date('d-M-Y',strtotime($date_range->range_end))}}%{{$date_range->range_price}}" {{old('range','')==($date_range->id)?'checked':'' }} value="{{$date_range->id}}">
+                                            <label for="range{{$date_range->id}}">
                                                 <div class="boxchlabl border0 ">
-                                                    <p><img src="{{asset('assets/front/img/calendar2.svg')}}"/>Date</p>
-                                                    <h3 class="marbot0 mt-2"><b>{{$date_range['date']}}</b></h3>
-                                                    <h3 class="marbot0 mt-2 text-right" style="text-align: right"><sup>Starting From</sup>&nbsp;<b>{{display_currency($date_range['price'])}}</b></h3>
+													<div class="bottom_text_custom_trip">
+                                                    <p class="basic_trip"><span class="basic_inner_text">{{$date_range->range_title}}</span></p>
+                                                    <h3 class="marbot0 mt-2 text-right" style="text-align: right"><b><sup>Starting From</sup>&nbsp;{{display_currency($date_range->range_price)}}</b></h3>
                                                     {{--                                                <p>Room, 2 Queen Beds, Sleeps 4</p>--}}
                                                 </div>
+													<div class="top_text_custom_trip">
+                                                    <p><img src="{{asset('assets/front/img/calendar2.svg')}}"/>Date</p>
+                                                    <h3 class="marbot0 mt-2 text-right" style="text-align: right">{{date('d-M-Y',strtotime($date_range->range_start)).' > '.date('d-M-Y',strtotime($date_range->range_end))}}
+
+														</b></h3>
+                                                    {{--                                                <p>Room, 2 Queen Beds, Sleeps 4</p>--}}
+                                                </div>
+												</div>
                                             </label>
                                         </div>
                                     </div>
@@ -517,18 +560,30 @@
                     </div>
                     <div class="col-md-4">
                         <div class="pricech1 pricechb1">
-                            <h2 class="">Price Details</h2>
+                            <h2 class=""><img src="{{asset('assets/front/img/trip-summary.JPG')}}" style="width: 30px;">Trip Summary</h2>
+							<h6 class="marbot0 mt-2"  style="color: black;">{{$trip->event_title}}
+
+														</h6>
+						<h6 class="marbot0 mt-2"  style="color: black;">{{$date_range['date']}}
+
+														</h6>
 {{--                            <h1 class="">Add coupon code</h1>--}}
 
                             <div class="mainmaxprice" id="subprices">
                                 <div class="priceflex1">
+<!--
                                     <div>
                                         <p>Starting Price</p>
                                     </div>
+-->
+<!--
                                     <div>
                                         <p class="starting">{{display_currency($low_total)}}</p>
                                     </div>
+-->
                                 </div>
+
+
 {{--                                <div class="priceflex1">--}}
 {{--                                    <div>--}}
 {{--                                        <p>Trip Saving</p>--}}
@@ -551,22 +606,33 @@
 {{--                                        <p style="">$2.96</p>--}}
 {{--                                    </div>--}}
 {{--                                </div>--}}
+                                @for($tr=1;$tr<=$travelers;$tr++)
+                                <div id="trvler_{{$tr}}">
+                                    <h6 onclick="$('#tr_details{{$tr}}').toggle();$(this).find('i').toggleClass('fa-angle-up');" class="text-black">Traveler {{$tr}} <i class="fa  fa-angle-down"></i></h6>
+
+                                    <div id="tr_details{{$tr}}" style="display: none">
+                                        <div id="trip_cost{{$tr}}" class="trip-cost">
+                                            <h6 class="text-black" style="display: none">Trip Cost</h6>
+                                        </div>
+                                        <div id="costume{{$tr}}">
+                                            <h6 class="text-black" style="display: none">Costume(s)</h6>
+                                        </div>
+                                        <div id="tickets{{$tr}}">
+                                            <h6 class="text-black" style="display: none">Ticket(s)</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endfor
                                 <div id="rooms">
                                     <span style="font-size: 17px;font-weight: bolder">Room(s)</span>
 
                                 </div>
-                                <div id="costume">
-                                    <span style="font-size: 17px;font-weight: bolder">Costume(s)</span>
 
-                                </div>
                                 <div id="addons">
                                     <span style="font-size: 17px;font-weight: bolder">Addon(s)</span>
 
                                 </div>
-                                <div id="tickets">
-                                    <span style="font-size: 17px;font-weight: bolder">Ticket(s)</span>
 
-                                </div>
 
 
                                 </div>
@@ -588,7 +654,7 @@
                                             </button></p>
                                     </div>
                                     <div>
-                                        <p >{{display_currency((float)PROCESSING_FEE)}}</p>
+                                        <p id="processing_fee">{{display_currency(processing_fee($low_total))}}</p>
                                     </div>
                                 </div>
 
@@ -603,7 +669,7 @@
                                 </div>
                                 <div class="flex22">
                                     <img src="{{asset('assets/front/img/usd.svg')}}" />
-                                    <h4 class="finaltotal">{{display_currency($low_total+(float)PROCESSING_FEE)}}</h4>
+                                    <h4 class="finaltotal">{{display_currency($low_total+processing_fee($low_total))}}</h4>
                                 </div>
                             </div>
                             <a href="#" class="pay">Book Now</a>
@@ -680,6 +746,10 @@
         var addons_titles=[],costumes_titles=[],rooms_titles=[],tickets_titles=[];
         var addons_added=[],costumes_added=[],rooms_added=[],tickets_added=[];
         var costume_total=0,addons_total=0,rooms_total=0,tickets_total=0,total=0,total_room_persons=0,duration_total= {{$low_total}};
+        var date_ranges=[];
+        @foreach($trip->date_ranges as $d_range)
+        date_ranges[{{$d_range->id}}]={{$d_range->range_price}};
+        @endforeach
 var total_travelers={{$travelers}};
         @foreach($trip->addons as $addon)
             addons[{{$addon->id}}]='{{$addon->addon_price}}';
@@ -750,11 +820,21 @@ var total_travelers={{$travelers}};
             });
             $('.date_range').change(function () {
                 var val=$(this).val();
-                val=val.split('%');
-                duration_total=parseFloat(val[1]);
+                $('.trip-cost').find('.starting__').remove();
+                var starting__ = '<div class="priceflex1 starting__" >' +
+                    '<div>' +
+                    '<p>Trip Cost</p>' +
+                    '</div>' +
+                    '<div>' +
+                    '<p style="">$' + (parseFloat(date_ranges[val])) + '</p>' +
+                    '</div>' +
+                    '</div>';
+                // val=val.split('%');
+                $('.trip-cost').append(starting__);
+                duration_total=parseFloat(date_ranges[val])*total_travelers;
                 // console.log(duration_total);
                 $('.starting').html('$'+duration_total.toFixed(2));
-                $('#starting_top').html('$'+duration_total.toFixed(2));
+                // $('#starting_top').html('$'+duration_total.toFixed(2));
                 calculate_total();
             });
                     @if(count($trip->costumes)>0)
@@ -789,8 +869,8 @@ var total_travelers={{$travelers}};
                                 '<p style="">$' + (parseFloat(costumes[costume_id])) + '</p>' +
                                 '</div>' +
                                 '</div>';
-                            subprices_div.find('#costume').show();
-                            subprices_div.find('#costume').append(costume_this);
+                            // $('#costume'+trvlr).show();
+                            $('#costume'+trvlr).append(costume_this);
 
                         } else {
                             for (var i = 0; i < costumes_added[trvlr].length; i++) {
@@ -801,7 +881,7 @@ var total_travelers={{$travelers}};
                                 }
                             }
                             if (costumes_added[trvlr].length <= 0) {
-                                subprices_div.find('#costume').hide();
+                                $('#costume'+trvlr).hide();
                             }
                         }
 
@@ -874,8 +954,8 @@ var total_travelers={{$travelers}};
                                 '<p style="">$'+(parseFloat(tickets[ticket_id]))+'</p>'+
                                 '</div>'+
                                 '</div>';
-                            subprices_div.find('#tickets').show();
-                            subprices_div.find('#tickets').append(ticket_this);
+                            // $('#tickets'+trvlr).show();
+                            $('#tickets'+trvlr).append(ticket_this);
                         }else{
                             for (var i=0;i<tickets_added[trvlr].length;i++){
                                 if(tickets_added[trvlr][i]===ticket_id){
@@ -885,7 +965,7 @@ var total_travelers={{$travelers}};
                                 }
                             }
                             if(tickets_added[trvlr].length<=0){
-                                subprices_div.find('#tickets').hide();
+                                $('#tickets'+trvlr).hide();
                             }
                         }
                         console.log('');
@@ -915,13 +995,13 @@ var total_travelers={{$travelers}};
                                 $('#room_subtotal'+room_id).remove();
                             }
                             // console.log(rooms_added+' added')
-                            rooms_total += (parseFloat(rooms[room_id])*parseInt(room_persons));
+                            rooms_total += (parseFloat(rooms[room_id]));
                             var room_this='<div class="priceflex1" id="room_subtotal'+room_id+'">'+
                                 '<div>'+
                                     '<p>'+rooms_titles[room_id]+' for '+room_persons+ '</p>'+
                                 '</div>'+
                                 '<div>'+
-                                    '<p style="">$'+(parseFloat(rooms[room_id])*parseInt(room_persons))+'</p>'+
+                                    '<p style="">$'+parseFloat(rooms[room_id])+'</p>'+
                                 '</div>'+
                             '</div>';
                             subprices_div.find('#rooms').show();
@@ -940,7 +1020,9 @@ var total_travelers={{$travelers}};
                                         room_now_persons = room_persons;
                                     }
                                     total_room_persons -= room_now_persons;
-                                    rooms_total -= (parseFloat(rooms[room_id]) * parseInt(room_now_persons));
+                                    if(room_persons===0){
+                                        rooms_total -= (parseFloat(rooms[room_id]));
+                                    }
                                     $('#room_subtotal' + room_id).remove();
                                 }
                             }
@@ -991,10 +1073,11 @@ var total_travelers={{$travelers}};
 
             var subtotal=total;
             $('#subtotal').html('$'+subtotal.toFixed(2));
-            var processing={{(float)PROCESSING_FEE}};
+            var processing=processing_fee(total);
 
             total+=processing;
             $('.finaltotal').html('$'+total.toFixed(2))
+            $('#processing_fee').html('$'+processing.toFixed(2))
             // console.log('total:'+total);
             var Deposit={{(float)DEPOSIT_AMOUNT_PERCENT/100}};
             var totalinstallment_={{(int)TOTAL_INSTALLMENTS}};
@@ -1003,6 +1086,10 @@ var total_travelers={{$travelers}};
             var installment=(total-Deposit)/totalinstallment_;
             // console.log(payment_type+'$'+Deposit+' Deposit + $'+installment+' for '+totalinstallment_+' Months');
             $('#install').html('$'+Deposit.toFixed(2)+' Deposit + $'+installment.toFixed(2)+' for '+totalinstallment_+' Months')
+        }
+        function processing_fee(total){
+            const fee={{(float)PROCESSING_FEE}};
+            return total*(fee/100);
         }
     </script>
 @endsection
