@@ -47,6 +47,7 @@ class CheckoutController extends Controller
               "range" => "required",
             'payment_type'=>'required',
             'room_persons' => 'required|array',
+            'room_for_traveler' => 'required|array',
             'room_persons.*' => 'sometimes|integer',
             'costume'=>'array',
             'costume_option'=>'array',
@@ -69,31 +70,48 @@ class CheckoutController extends Controller
             'terms.*'=>'required',
             'payment_method'=>'required|string',
         ]);
+//        dd($rq;)
 //dd($rq->input(),$rqv);
         $data['trip']=$trip=Event::find($rq->trip_id);
         if(!isset($trip->id)){
             redirect()->back()->with($rq->input());
         }
-
+        $total_traveler=$rq->travelers;
+        $range=$date_range=TripDateRange::find($rq->range);
         $rooms=[];
+        $rooms_prices=[];
         $room_one_id=$room_total=0;
-        foreach ($rq->room_persons as $room_id => $room_person){
-            if($room_person>0){
-                $rooms_traveler[$room_id]=$room_person;
-                if($room_id>0){
-                    $rooms[$room_id]=HotelRoom::find($room_id);
-                    $room_one_id=$room_id;
-                    $room_total+=(float)$rooms[$room_id]->room_price;
-                }
+        foreach ($rq->room_for_traveler as $traveler => $room_id){
+            $rooms[$room_id]=$room=HotelRoom::find($room_id);
+            $room_one_id=$room_id;
+            if($room_id==3){
+                $room_price=get_room_price($trip,$room->id,$total_traveler,$date_range->range_start,$date_range->range_end,'no_accommodation');
+            }else{
+                $room_price = get_room_price($trip, $room->id, $total_traveler, $date_range->range_start, $date_range->range_end, '');
             }
+            $rooms[$room_id]->room_price=$tt=$rooms_prices[$room_id]=$room_price>0?$room_price:$rooms[$room_id]->room_price;
+            $room_total+=$tt;
         }
+
+//        foreach ($rq->room_persons as $room_id => $room_person){
+//            if($room_person>0){
+//                $rooms_traveler[$room_id]=$room_person;
+//                if($room_id>0){
+//                    $rooms[$room_id]=HotelRoom::find($room_id);
+//                    $room_one_id=$room_id;
+//                    $room_total+=(float)$rooms[$room_id]->room_price;
+//                }
+//            }
+//        }
+
         $room='';
         if(count($rooms)==1){
             $room=$rooms[$room_one_id];
         }
-        $range=TripDateRange::find($rq->range);
-        $total_traveler=$rq->travelers;
-        $subtotal=$range->range_price*$total_traveler;
+        $range_range_start=date(config('panel.date_format'),strtotime($range->range_start));
+        $range_range_end=date(config('panel.date_format'),strtotime($range->range_end));
+
+        $subtotal=0;
 //        $range_=explode('%',$rq->range);
 //        $range=explode(' > ',Arr::first($range_));
 //        foreach ($range as $r => $rValue) {
@@ -126,8 +144,8 @@ class CheckoutController extends Controller
             'booking_details'=>$booking_details,
             'booking_event_id'=>$trip->id,
             'booking_by_user_id'=>Auth::id(),
-            'booking_from'=>$range->range_start,
-            'booking_to'=>$range->range_end,
+            'booking_from'=>$range_range_start,
+            'booking_to'=>$range_range_end,
             'order_payment_type'=>$rq->payment_type,
             'range_id'=>$rq->range,
             "billing_name"=> Auth::user()->name,
@@ -141,8 +159,7 @@ class CheckoutController extends Controller
         if($room!=''){
             $booking->update([
                 'room_id'=>$room->id,
-                'room_price'=>$room->room_price,
-
+                'room_price'=>$rooms_prices[$room->id],
             ]);
         }
         if(count($rooms)>0){
@@ -150,9 +167,9 @@ class CheckoutController extends Controller
                 BookingRoom::create([
                     'room_id'=>$room->id,
                     'booking_for_id'=>$booking->id,
-                    'room_booking_rate'=>$room->room_price,
-                    'booking_from'=>$range->range_start,
-                    'booking_to'=>$range->range_end,
+                    'room_booking_rate'=>$rooms_prices[$room->id],
+                    'booking_from'=>$range_range_start,
+                    'booking_to'=>$range_range_end,
                 ]);
             }
         }
@@ -177,6 +194,7 @@ class CheckoutController extends Controller
                 'gender'=>$rq->gender[$t],
                 'shirt_size'=>$rq->shirt_size[$t],
                 'notes'=>$rq->notes[$t],
+                'room_id'=>$rq->room_for_traveler[$t],
             ]);
             $tID=$Traveler->id;
             if(isset($rq->costume)&&count($rq->costume)>0&&$rq->costume[$t]!=0){

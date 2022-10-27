@@ -11,6 +11,7 @@ use App\Models\Newsletter;
 use App\Models\User;
 use App\Notifications\ContactEmailNotification;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\Auth;
@@ -39,8 +40,31 @@ class HomeController extends Controller
     public function index()
     {
         $data['page_name']='home';
-        $data['featured_trips']=Event::where('event_start','>',date('Y-m-d'))
-            ->orderBy('event_start','asc')->limit(3)->get();
+        $data['featured_trips']=$events=Event::where('event_end','>',date('Y-m-d'))
+            ->orderBy('event_start','asc')->limit(10)->get();
+        $ratings_=$avg_ratings=$range=[];
+        foreach ($events as $event){
+            $event_range=$event->date_ranges()->orderBy('range_end', 'desc')->first();
+            $ratings_=[];
+            foreach ($event->bookingEventEventBookings as $books){
+                foreach ($books->booking_reviews as $rev){
+                    $ratings_[]=$rev->ratings;
+                }
+            }
+            $avg_ratings[$event->id]=0;
+            $ratings_ = array_filter($ratings_);
+            if(count($ratings_)>0) {
+                $avg_ratings[$event->id] = array_sum($ratings_)/count($ratings_);
+            }
+            if($event_range){
+                $range[$event->id]=date('M d',strtotime($event_range->range_start)).'- '.date('d',strtotime($event_range->range_end));
+            }else{
+                $range[$event->id]=date('M d',strtotime($event->event_start)).'- '.date('d',strtotime($event->event_end));
+            }
+        }
+        $data['avg_ratings']=$avg_ratings;
+        $data['ranges']=$range;
+
         return view('front.home.index',$data);
     }
     public function contact(Request $request){

@@ -35,6 +35,7 @@ class Traveler extends Model
         'shirt_size',
         'notes',
         'costume_id',
+        'room_id',
         'created_at',
         'updated_at',
         'deleted_at',

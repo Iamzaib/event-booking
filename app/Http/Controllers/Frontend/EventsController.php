@@ -145,8 +145,26 @@ class EventsController extends Controller
         $data['low_deposit']=($range_low_price*((float)DEPOSIT_AMOUNT_PERCENT/100));
         $installment=$range_low_price-$data['low_deposit'];
         $data['low_installment']=($installment/(int)TOTAL_INSTALLMENTS);
+        $room_prices=[];
+
+        foreach ($trip->date_ranges as $date_range){
+            foreach ($trip->hotels as $hotel){
+                foreach ($hotel->rooms as $room){
 
 
+                    if($hotel->id==2) {
+                        $room_prices[$date_range->id][$room->id]=get_room_price($trip,$room->id,$data['travelers'],$date_range->range_start,$date_range->range_end,'no_accommodation');
+                    }else {
+                        if (room_capacity_to_traveler($room->room_capacity, $data['travelers'])){
+                            $room_prices[$date_range->id][$room->id] = get_room_price($trip, $room->id, $data['travelers'], $date_range->range_start, $date_range->range_end, '');
+                        }
+                    }
+
+                }
+            }
+        }
+
+        $data['room_prices']=$room_prices;
         $data['total_event_tickets']=count($trip->tickets);
         $data['range'][1]['date']=date('d-M-Y',strtotime($trip->event_start)).' > '.date('d-M-Y',strtotime($trip->event_end));
         $data['range'][1]['duration']=count($dates);
@@ -179,7 +197,6 @@ class EventsController extends Controller
                 $reviews[]=$rev;
                 $ratings_[]=$rev->ratings;
             }
-
         }
 //        dd($reviews);
         $total_reviews=count($reviews);

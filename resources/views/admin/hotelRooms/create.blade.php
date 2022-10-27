@@ -43,26 +43,26 @@
                 @endif
                 <span class="help-block">{{ trans('cruds.hotelRoom.fields.details_helper') }}</span>
             </div>
-            <div class="form-group">
-                <label class="required" for="room_price">{{ trans('cruds.hotelRoom.fields.room_price') }}</label>
-                <input class="form-control {{ $errors->has('room_price') ? 'is-invalid' : '' }}" type="number" name="room_price" id="room_price" value="{{ old('room_price', '') }}" step="0.01" required>
-                @if($errors->has('room_price'))
-                    <div class="invalid-feedback">
-                        {{ $errors->first('room_price') }}
-                    </div>
-                @endif
-                <span class="help-block">{{ trans('cruds.hotelRoom.fields.room_price_helper') }}</span>
-            </div>
-            <div class="form-group">
-                <label class="required" for="room_price">{{ trans('cruds.hotelRoom.fields.discount_price') }}</label>
-                <input class="form-control {{ $errors->has('discount_price') ? 'is-invalid' : '' }}" type="number" name="discount_price" id="discount_price" value="{{ old('discount_price', '') }}" step="0.01" required>
-                @if($errors->has('discount_price'))
-                    <div class="invalid-feedback">
-                        {{ $errors->first('discount_price') }}
-                    </div>
-                @endif
-                <span class="help-block">{{ trans('cruds.hotelRoom.fields.discount_price_helper') }}</span>
-            </div>
+{{--            <div class="form-group">--}}
+{{--                <label class="required" for="room_price">{{ trans('cruds.hotelRoom.fields.room_price') }}</label>--}}
+{{--                <input class="form-control {{ $errors->has('room_price') ? 'is-invalid' : '' }}" type="number" name="room_price" id="room_price" value="{{ old('room_price', '') }}" step="0.01" required>--}}
+{{--                @if($errors->has('room_price'))--}}
+{{--                    <div class="invalid-feedback">--}}
+{{--                        {{ $errors->first('room_price') }}--}}
+{{--                    </div>--}}
+{{--                @endif--}}
+{{--                <span class="help-block">{{ trans('cruds.hotelRoom.fields.room_price_helper') }}</span>--}}
+{{--            </div>--}}
+{{--            <div class="form-group">--}}
+{{--                <label class="required" for="room_price">{{ trans('cruds.hotelRoom.fields.discount_price') }}</label>--}}
+{{--                <input class="form-control {{ $errors->has('discount_price') ? 'is-invalid' : '' }}" type="number" name="discount_price" id="discount_price" value="{{ old('discount_price', '') }}" step="0.01" required>--}}
+{{--                @if($errors->has('discount_price'))--}}
+{{--                    <div class="invalid-feedback">--}}
+{{--                        {{ $errors->first('discount_price') }}--}}
+{{--                    </div>--}}
+{{--                @endif--}}
+{{--                <span class="help-block">{{ trans('cruds.hotelRoom.fields.discount_price_helper') }}</span>--}}
+{{--            </div>--}}
             <div class="form-group">
                 <label for="room_images">{{ trans('cruds.hotelRoom.fields.room_images') }}</label>
                 <div class="needsclick dropzone {{ $errors->has('room_images') ? 'is-invalid' : '' }}" id="room_images-dropzone">
@@ -84,6 +84,7 @@
                 @endif
                 <span class="help-block">{{ trans('cruds.hotelRoom.fields.room_capacity_helper') }}</span>
             </div>
+
             <div class="form-group">
                 <label class="required" for="room_quantity">{{ trans('cruds.hotelRoom.fields.room_quantity') }}</label>
                 <input class="form-control {{ $errors->has('room_quantity') ? 'is-invalid' : '' }}" type="number" name="room_quantity" id="room_quantity" value="{{ old('room_quantity', '0') }}" step="1" required>

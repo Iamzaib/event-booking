@@ -19,7 +19,19 @@
     <style>
         @font-face {
             font-family: CircularStd;
-            src: url({{asset('assets/fonts/circular-std/CircularStd-Black.woff2')}});
+            src: url({{asset('assets/fonts/circular-std/CircularStd-Book.woff2')}});
+        }
+		@font-face {
+            font-family: ClashDisplay;
+            src: url({{asset('assets/fonts/FontsFree-Net-ClashDisplay-Variable.ttf')}});
+        }
+		@font-face {
+            font-family: ClashDisplay-Semibold;
+            src: url({{asset('assets/fonts/ClashDisplay-Semibold.ttf')}});
+        }
+		@font-face {
+            font-family: ClashDisplay-Medium;
+            src: url({{asset('assets/fonts/ClashDisplay-Medium.ttf')}});
         }
         body{
             font-family: CircularStd, sans-serif !important;
@@ -35,7 +47,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
 
     <style type="text/css">
 
@@ -239,9 +251,9 @@
         <div class="container">
             <div id="logo">
                 <a href="{{route('home')}}}">
-                    <img src="{{ asset('assets/front/img/home-page-logo.svg')}}" width="250" height="36" alt="" class="logo_normal imgindexdesk" />
+                    <img src="{{ asset('assets/front/img/home-page-logo.svg')}}" width="160" height="auto" alt="" class="logo_normal imgindexdesk" />
                     <img src="{{ asset('assets/front/img/mbllogo.svg')}}" width="60" height="36" alt="" class="logo_normal imgindexmbl" />
-                    <img src="{{ asset('assets/front/img/home-page-logo.svg')}}" width="250" height="36" alt="" class="logo_sticky" />
+                    <img src="{{ asset('assets/front/img/home-page-logo.svg')}}" width="160" height="auto" alt="" class="logo_sticky" />
                 </a>
             </div>
 
@@ -395,11 +407,13 @@
     </header>
     <!-- /header -->
     @if(isset($page_type)&&$page_type=='trip')
+	<div class="trip_image_top">
         @if($trip->featured_image)
             <img src="{{ $trip->featured_image->getUrl() }}" class="tourdetailshead1">
         @else
             <img src="{{asset('assets/front/img/tourdetailsbg1.png')}}" class="tourdetailshead1" />
         @endif
+	</div>
     @endif
 
 
@@ -415,7 +429,7 @@
             <div class="row d-flex">
                 <div class="col-12 col-lg-6 justify-content-lg-start justify-content-center">
                     <h2 class="h2sss">
-                        Get a proposal
+                        Subcribe for discounts and latest<br> news
                     </h2>
                     <p class="csdkontent">
                         If you want to learn more about how we can help grow your business, click below to schedule a free
@@ -447,7 +461,7 @@
             <div class="row">
                 <div class="col-lg-6 col-md-8 p-r-5">
                     <div class="footerwidtho">
-                        <p><img src="{{ asset('assets/front/img/home-page-logo.svg')}}" width="250" height="36" alt="" style="margin-left: -16px;" /></p>
+                        <p><img src="{{ asset('assets/front/img/home-page-logo.svg')}}" width="160" height="auto" alt="" style="margin-left: -16px;" /></p>
                         <p>
                             Suspendisse ridiculus eu, morbi nibh odio duis. Imperdiet consectetur augue nam iaculis hendrerit nullam
                             purus facilisis et. Sit egestas vel massa nec, volutpat sit ac tortor neque.

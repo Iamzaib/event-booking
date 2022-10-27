@@ -116,6 +116,10 @@ class Event extends Model implements HasMedia
     {
         return $this->belongsToMany(Hotel::class);
     }
+    public function room_pricing()
+    {
+        return $this->hasMany(RoomPricingRange::class);
+    }
 
     public function itinerary()
     {

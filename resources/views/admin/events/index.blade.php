@@ -89,6 +89,11 @@
                                         {{ trans('global.view') }}
                                     </a>
                                 @endcan
+                                    @can('event_edit')
+                                    <a class="btn btn-xs btn-info" href="{{ route('admin.events.room_pricing', $event->id) }}">
+                                        Room Pricing
+                                    </a>
+                                @endcan
 
                                 @can('event_edit')
                                     <a class="btn btn-xs btn-info" href="{{ route('admin.events.edit', $event->id) }}">

@@ -122,7 +122,7 @@
                                     @foreach($trip->date_ranges as $date_range)
                                     <div class="col-md-6">
                                         <div class="choosepaymemyrad">
-                                            <input type="radio" id="range{{$date_range->id}}" class="date_range"  name="range" data-range="{{date('d-M-Y',strtotime($date_range->range_start)).' > '.date('d-M-Y',strtotime($date_range->range_end))}}%{{$date_range->range_price}}" {{old('range','')==($date_range->id)?'checked':'' }} value="{{$date_range->id}}">
+                                            <input type="radio" id="range{{$date_range->id}}" class="date_range" {{$loop->index===1?'checked':''}} name="range" data-range="{{date('d-M-Y',strtotime($date_range->range_start)).' > '.date('d-M-Y',strtotime($date_range->range_end))}}%{{$date_range->range_price}}" {{old('range','')==($date_range->id)?'checked':'' }} value="{{$date_range->id}}">
                                             <label for="range{{$date_range->id}}">
                                                 <div class="boxchlabl border0 ">
 													<div class="bottom_text_custom_trip">
@@ -212,6 +212,8 @@
 {{--                                                    <hr style="margin:5px;background-color:#ced4da">--}}
 {{--                                                </div>--}}
                                                 @foreach($hotel->rooms as $room)
+                                                    @if (room_capacity_to_traveler($room->room_capacity, $travelers))
+
                                                     <div class="row mt-3 pl-3 pr-3"  style="    padding: 0 1rem;    border-bottom: 1px solid #ced4da;    margin: 0.1rem;">
                                                         <div class="col-6">
                                                             <h6><b>{{$room->room_title}}</b></h6>
@@ -229,6 +231,7 @@
                                                         </div>
                                                         {!! !$loop->last?'<hr style="margin:5px;background-color:#ced4da">':''!!}
                                                     </div>
+                                                        @endif
                                                 @endforeach
                                             </div>
                                         </div>
@@ -352,17 +355,7 @@
                                                 <h3>Deposit + Monthly Installments</h3>
                                                 <h3><b id="install">{{display_currency($low_deposit)}} Deposit + {{display_currency($low_installment)}} for {{TOTAL_INSTALLMENTS}} Months</b></h3>
                                             </div>
-                                            <div>
-                                                <ul class="bullets2 bbbhssgdu">
-                                                    <li>
-                                                        Pay Deposit and balance in remaining months
-                                                    </li>
-                                                    <li>Get rewards points</li>
-                                                    <li>
-                                                        Pay for your iPhone with low monthly
-                                                    </li>
-                                                </ul>
-                                            </div>
+
                                         </label>
                                     </div>
                                 </div>
@@ -376,19 +369,6 @@
                                             <div class="boxchlabl">
                                                 <h3>Pay in full</h3>
                                                 <h3><b class="finaltotal">{{display_currency($low_total+(float)PROCESSING_FEE)}}</b></h3>
-                                            </div>
-                                            <div>
-                                                <ul class="bullets2 bbbhssgdu">
-                                                    <li>
-                                                        Pay for your package in full
-                                                    </li>
-                                                    <li>
-                                                        Get 2X rewards points
-                                                    </li>
-                                                    <li>
-                                                        Pay for your iPhone with low monthly
-                                                    </li>
-                                                </ul>
                                             </div>
                                         </label>
                                     </div>
@@ -598,7 +578,8 @@
 {{--                                    </div>--}}
 {{--                                    <div>--}}
 {{--                                        <p  style="color: #039855 !important;">-$10.96</p>--}}
-{{--                                    </div>--}}{{--   <div class="priceflex1">--}}
+{{--                                    </div>--}}
+{{--                                   <div class="priceflex1">--}}
 {{--                                    <div>--}}
 {{--                                        <p>Trip Saving</p>--}}
 {{--                                    </div>--}}
@@ -607,31 +588,40 @@
 {{--                                    </div>--}}
 {{--                                </div>--}}
                                 @for($tr=1;$tr<=$travelers;$tr++)
+                                    <input type="hidden" name="room_for_traveler[{{$tr}}]" id="room_for_traveler{{$tr}}" value="">
                                 <div id="trvler_{{$tr}}">
-                                    <h6 onclick="$('#tr_details{{$tr}}').toggle();$(this).find('i').toggleClass('fa-angle-up');" class="text-black">Traveler {{$tr}} <i class="fa  fa-angle-down"></i></h6>
+                                    <h6 onclick="$('#tr_details{{$tr}}').toggle();$(this).find('i').toggleClass('fa-angle-up');" class="text-black mb-1">Traveler {{$tr}} <i class="fa  fa-angle-down"></i>   <span id="trvlertotal{{$tr}}" class="float-end">$0</span></h6>
 
-                                    <div id="tr_details{{$tr}}" style="display: none">
-                                        <div id="trip_cost{{$tr}}" class="trip-cost">
-                                            <h6 class="text-black" style="display: none">Trip Cost</h6>
+                                    <div id="tr_details{{$tr}}" class="mb-2" style="display: none">
+                                        <div id="trip_cost{{$tr}}" class="trip-cost1">
+{{--                                            <h6 class="text-black" >Trip Cost</h6>--}}
+                                            <div class="priceflex1">
+                                                <div>
+                                                    <p>Trip Cost</p>
+                                                </div>
+                                                <div>
+                                                    <p id="trvlertotal_{{$tr}}" class="float-end">$0</p>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div id="costume{{$tr}}">
-                                            <h6 class="text-black" style="display: none">Costume(s)</h6>
-                                        </div>
-                                        <div id="tickets{{$tr}}">
-                                            <h6 class="text-black" style="display: none">Ticket(s)</h6>
-                                        </div>
+{{--                                        <div id="costume{{$tr}}">--}}
+{{--                                            <h6 class="text-black" style="display: none">Costume(s)</h6>--}}
+{{--                                        </div>--}}
+{{--                                        <div id="tickets{{$tr}}">--}}
+{{--                                            <h6 class="text-black" style="display: none">Ticket(s)</h6>--}}
+{{--                                        </div>--}}
                                     </div>
                                 </div>
                                 @endfor
-                                <div id="rooms">
-                                    <span style="font-size: 17px;font-weight: bolder">Room(s)</span>
+{{--                                <div id="rooms">--}}
+{{--                                    <span style="font-size: 17px;font-weight: bolder">Room(s)</span>--}}
 
-                                </div>
+{{--                                </div>--}}
 
-                                <div id="addons">
-                                    <span style="font-size: 17px;font-weight: bolder">Addon(s)</span>
+{{--                                <div id="addons">--}}
+{{--                                    <span style="font-size: 17px;font-weight: bolder">Addon(s)</span>--}}
 
-                                </div>
+{{--                                </div>--}}
 
 
 
@@ -683,6 +673,17 @@
 
         </div>
     </div>
+    <div id="room_toast">
+        <div class="toast align-items-center text-white bg-danger border-0 room_toast" role="alert" aria-live="assertive" data-bs-autohide="false" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    Rooms/Accomodations are not selectd for all Travelers
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
 @endsection
 @section('scripts')
     <script src="https://js.stripe.com/v3/"></script>
@@ -746,11 +747,19 @@
         var addons_titles=[],costumes_titles=[],rooms_titles=[],tickets_titles=[];
         var addons_added=[],costumes_added=[],rooms_added=[],tickets_added=[];
         var costume_total=0,addons_total=0,rooms_total=0,tickets_total=0,total=0,total_room_persons=0,duration_total= {{$low_total}};
-        var date_ranges=[];
+        var date_ranges=[],room_range_pricing=[],date_range_id=0,room_price_one=[];
         @foreach($trip->date_ranges as $d_range)
         date_ranges[{{$d_range->id}}]={{$d_range->range_price}};
         @endforeach
 var total_travelers={{$travelers}};
+var travelers_total=[],costume_trvlr=[],ticket_trvlr=[],room_trvlr=[];
+for(var tr=1;tr<=total_travelers;tr++){
+    travelers_total[tr]=0;
+    room_trvlr[tr]=0;
+    room_price_one[tr]=0;
+    costume_trvlr[tr]=0;
+    ticket_trvlr[tr]=0;
+}
         @foreach($trip->addons as $addon)
             addons[{{$addon->id}}]='{{$addon->addon_price}}';
             addons_titles[{{$addon->id}}]='{{$addon->addon_title}}';
@@ -773,9 +782,23 @@ var total_travelers={{$travelers}};
                     room_previous[{{$room->id}}]='';
                 @endforeach
             @endforeach
-
+                    @foreach($room_prices as $date_range_id => $room_price)
+                        @foreach($room_price as $room_id => $price)
+                            if(typeof room_range_pricing[{{$date_range_id}}] === 'undefined') {
+                                room_range_pricing[{{$date_range_id}}]=[];
+                            }
+                            room_range_pricing[{{$date_range_id}}][{{$room_id}}]={{$price}};
+                        @endforeach
+                    @endforeach
+// console.info(room_range_pricing);
         $(function (){
-                    $('.payment_type').trigger('change');
+
+            $('.payment_type').trigger('change');
+            $('.date_range').each(function (){
+                if ($(this).is(':checked')){
+                    date_range_id=$(this).val();
+                }
+            });
             var subprices_div=$('#subprices');
                     subprices_div.find('#costume').hide();
                     subprices_div.find('#rooms').hide();
@@ -819,7 +842,7 @@ var total_travelers={{$travelers}};
 
             });
             $('.date_range').change(function () {
-                var val=$(this).val();
+                var val=date_range_id=$(this).val();
                 $('.trip-cost').find('.starting__').remove();
                 var starting__ = '<div class="priceflex1 starting__" >' +
                     '<div>' +
@@ -835,7 +858,7 @@ var total_travelers={{$travelers}};
                 // console.log(duration_total);
                 $('.starting').html('$'+duration_total.toFixed(2));
                 // $('#starting_top').html('$'+duration_total.toFixed(2));
-                calculate_total();
+                //calculate_total();
             });
                     @if(count($trip->costumes)>0)
             $('.costume').change(function () {
@@ -861,6 +884,7 @@ var total_travelers={{$travelers}};
                         if (id_found === false) {
                             costumes_added[trvlr].push(costume_id);
                             costume_total += parseFloat(costumes[costume_id]);
+                            costume_trvlr[trvlr]=parseFloat(costumes[costume_id]);
                             var costume_this = '<div class="priceflex1" id="costume_subtotal' + trvlr + costume_id + '">' +
                                 '<div>' +
                                 '<p>' + costumes_titles[costume_id] + ' Traveler(' + trvlr + ')</p>' +
@@ -877,10 +901,12 @@ var total_travelers={{$travelers}};
                                 if (costumes_added[trvlr][i] === costume_id) {
                                     costumes_added[trvlr].splice(costumes_added[trvlr].indexOf(costume_id), 1);
                                     costume_total -= parseFloat(costumes[costume_id]);
+                                    costume_trvlr[trvlr]=0;
                                     $('#costume_subtotal' + trvlr + costume_id).remove();
                                 }
                             }
                             if (costumes_added[trvlr].length <= 0) {
+                                costume_trvlr[trvlr]=0;
                                 $('#costume'+trvlr).hide();
                             }
                         }
@@ -946,6 +972,8 @@ var total_travelers={{$travelers}};
                         if(id_found===false){
                             tickets_added[trvlr].push(ticket_id);
                             tickets_total+=parseFloat(tickets[ticket_id]);
+                            ticket_trvlr[trvlr]=parseFloat(tickets[ticket_id]);
+
                             var ticket_this='<div class="priceflex1" id="ticket_subtotal'+trvlr+ticket_id+'">'+
                                 '<div>'+
                                 '<p>'+tickets_titles[ticket_id]+' Traveler('+trvlr+')</p>'+
@@ -962,6 +990,7 @@ var total_travelers={{$travelers}};
                                     tickets_added[trvlr].splice(tickets_added[trvlr].indexOf(ticket_id),1);
                                     tickets_total-=parseFloat(tickets[ticket_id]);
                                     $('#ticket_subtotal'+trvlr+ticket_id).remove();
+                                    ticket_trvlr[trvlr]=0;
                                 }
                             }
                             if(tickets_added[trvlr].length<=0){
@@ -976,11 +1005,57 @@ var total_travelers={{$travelers}};
                 // var trvlr=$(this).data('traveler');
                 //if($(this).val()!==0){
 
-                    var room_persons=$(this).val();
+                    var room_persons=parseInt($(this).val());
                     var room_id = $(this).data('id');
                     let id_found = false;
+                    if(room_persons===0){
+                        if(room_previous[room_id]>0){
+                            rooms_total -= (parseInt(room_previous[room_id])*parseFloat(room_range_pricing[date_range_id][room_id]));
 
-                    // console.log('persons:'+room_persons+'-id:'+room_id);
+                            total_room_persons-=room_previous[room_id];
+                            total_room_persons+=room_persons;
+                            for(let tr=1;tr<=total_travelers;tr++){
+                                if(room_trvlr[tr]==room_id){
+                                    room_price_one[tr]=0;
+                                    room_trvlr[tr]=0;
+                                    $('#room_for_traveler'+tr).val('');
+                                }
+                            }
+                            room_previous[room_id]=0;
+
+                        }
+                    }else{
+                        if(room_previous[room_id]>0){
+                            rooms_total -= (parseInt(room_previous[room_id])*parseFloat(room_range_pricing[date_range_id][room_id]));
+                            total_room_persons-=room_previous[room_id];
+                            for(let tr=1;tr<=total_travelers;tr++){
+                                if(room_trvlr[tr]==room_id){
+                                    room_price_one[tr]=0;
+                                    room_trvlr[tr]=0;
+                                }
+                            }
+                            room_previous[room_id]=room_persons;
+                            rooms_total += (room_persons*parseFloat(room_range_pricing[date_range_id][room_id]));
+                            total_room_persons+=room_persons;
+                        }else{
+                            room_previous[room_id]=room_persons;
+                            rooms_total += (room_persons*parseFloat(room_range_pricing[date_range_id][room_id]));
+                            total_room_persons+=room_persons;
+                        }
+                        var rm=room_persons;
+                        for(let tr=1;tr<=total_travelers;tr++){
+                            if(room_trvlr[tr]===0){
+                                if(rm>0){
+                                    room_price_one[tr]=parseFloat(room_range_pricing[date_range_id][room_id]);
+                                    room_trvlr[tr]=room_id;
+                                    $('#room_for_traveler'+tr).val(room_id);
+                                    rm--;
+                                }
+                            }
+                        }
+                    }//
+                        calculate_total();
+                   /* //
                     //     if(room_id>0){
                         for (var v = 0; v < rooms_added.length; v++) {
                             if (rooms_added[v] === room_id) {
@@ -988,14 +1063,14 @@ var total_travelers={{$travelers}};
                             }
                         }
                         var room_now_persons=0;
-                        if (id_found === false||parseInt(room_persons)!==0) {
+                        if (id_found === false) {
                             if(id_found===false){
                                 rooms_added.push(room_id);
                             }else{
                                 $('#room_subtotal'+room_id).remove();
                             }
-                            // console.log(rooms_added+' added')
-                            rooms_total += (parseFloat(rooms[room_id]));
+                            console.log(parseFloat(room_range_pricing[date_range_id][room_id]));
+                            rooms_total += (parseInt(room_persons)*parseFloat(room_range_pricing[date_range_id][room_id]));
                             var room_this='<div class="priceflex1" id="room_subtotal'+room_id+'">'+
                                 '<div>'+
                                     '<p>'+rooms_titles[room_id]+' for '+room_persons+ '</p>'+
@@ -1012,17 +1087,19 @@ var total_travelers={{$travelers}};
                         } else {
                             for (var i = 0; i < rooms_added.length; i++) {
                                 if (rooms_added[i] === room_id) {
-                                    // console.log(rooms_added);
-                                    rooms_added.splice(rooms_added.indexOf(room_id), 1);
+                                    console.log(rooms_added);
+
                                     if (parseInt(room_persons) === 0) {
                                         room_now_persons = room_previous[room_id];
+                                        rooms_added.splice(rooms_added.indexOf(room_id), 1);
                                     } else {
                                         room_now_persons = room_persons;
                                     }
                                     total_room_persons -= room_now_persons;
-                                    if(room_persons===0){
-                                        rooms_total -= (parseFloat(rooms[room_id]));
-                                    }
+                                    // if(room_persons===0){
+                                    console.log(parseFloat(room_range_pricing[date_range_id][room_id]));
+                                        rooms_total -= (parseInt(room_now_persons)*parseFloat(room_range_pricing[date_range_id][room_id]));
+                                    // }
                                     $('#room_subtotal' + room_id).remove();
                                 }
                             }
@@ -1040,7 +1117,7 @@ var total_travelers={{$travelers}};
                     room_previous[room_id]=room_persons;
                     calculate_total();
                // }
-
+*/
                         $(".room").each(function() {
                             var allowed=total_travelers-total_room_persons;
                             // console.log('total room persons left:'+allowed);
@@ -1065,11 +1142,46 @@ var total_travelers={{$travelers}};
 
         function calculate_total(){
             total=0;
-            total+=duration_total;
-            total+=rooms_total;
-            total+=tickets_total;
-            total+=costume_total;
-            total+=addons_total;
+            if(rooms_total>0){
+                total+=rooms_total;
+            }else{
+                no_room_toast();
+                total+=duration_total;
+            }
+            console.log(room_price_one);
+            for(var tr=1;tr<=total_travelers;tr++){
+                var ttl=0;
+                if(room_trvlr[tr]>0){
+                    ttl+=parseFloat(room_range_pricing[date_range_id][room_trvlr[tr]]);
+                }
+                console.log(room_trvlr);
+                if(costume_trvlr[tr]>0){
+                    ttl+=parseFloat(costume_trvlr[tr]);
+                }
+                if(ticket_trvlr[tr]>0){
+                    ttl+=parseFloat(ticket_trvlr[tr]);
+                }
+
+                // console.log(tr+' ti:'+ticket_trvlr[tr]);
+                console.log(ttl+' total:'+ticket_trvlr[tr]);
+                // console.log(tr+' cu:'+costume_trvlr[tr]);
+                var t=parseFloat(ttl);
+                console.log(t);
+                travelers_total[tr]=ttl;
+                $('#trvlertotal'+tr).html('$'+t.toFixed(2));
+                $('#trvlertotal_'+tr).html('$'+t.toFixed(2));
+            }
+
+            if(tickets_total>0){
+                total+=tickets_total;
+            }if(costume_total>0){
+                total+=costume_total;
+            }if(addons_total>0){
+                total+=addons_total;
+            }
+
+            // total+=costume_total;
+            // total+=addons_total;
 
             var subtotal=total;
             $('#subtotal').html('$'+subtotal.toFixed(2));
@@ -1090,6 +1202,29 @@ var total_travelers={{$travelers}};
         function processing_fee(total){
             const fee={{(float)PROCESSING_FEE}};
             return total*(fee/100);
+        }
+        function no_room_toast(){
+            var room_toast=$('#room_toast').html();
+            if($('.toast-container').find('.room_toast').length === 0){
+                $('.toast-container').append(room_toast);
+            }
+            var toastElList = [].slice.call(document.querySelectorAll('.room_toast'))
+            var toastList = toastElList.map(function(toastEl) {
+                // Creates an array of toasts (it only initializes them)
+                return new bootstrap.Toast(toastEl,options) // No need for options; use the default options
+            });
+
+            toastList.forEach(toast => toast.show());
+        }
+        function trleft(){
+           var trleft_=total_travelers;
+            for(var tr=1;tr<=total_travelers;tr++){
+                if(room_trvlr[tr]===0)
+                {
+                    trleft_-=1;
+                }
+            }
+            return trleft_;
         }
     </script>
 @endsection

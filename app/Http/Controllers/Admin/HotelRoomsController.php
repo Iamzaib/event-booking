@@ -7,6 +7,7 @@ use App\Http\Controllers\Traits\MediaUploadingTrait;
 use App\Http\Requests\MassDestroyHotelRoomRequest;
 use App\Http\Requests\StoreHotelRoomRequest;
 use App\Http\Requests\UpdateHotelRoomRequest;
+use App\Models\Event;
 use App\Models\Hotel;
 use App\Models\HotelRoom;
 use Gate;
@@ -113,4 +114,5 @@ class HotelRoomsController extends Controller
 
         return response()->json(['id' => $media->id, 'url' => $media->getUrl()], Response::HTTP_CREATED);
     }
+
 }

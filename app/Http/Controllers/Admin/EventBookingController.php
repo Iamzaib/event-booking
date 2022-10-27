@@ -87,7 +87,26 @@ class EventBookingController extends Controller
         $data['low_deposit']=($range_low_price*((float)DEPOSIT_AMOUNT_PERCENT/100));
         $installment=$range_low_price-$data['low_deposit'];
         $data['low_installment']=($installment/(int)TOTAL_INSTALLMENTS);
+        $room_prices=[];
 
+        foreach ($trip->date_ranges as $date_range){
+            foreach ($trip->hotels as $hotel){
+                foreach ($hotel->rooms as $room){
+
+
+                    if($hotel->id==2) {
+                        $room_prices[$date_range->id][$room->id]=get_room_price($trip,$room->id,$data['travelers'],$date_range->range_start,$date_range->range_end,'no_accommodation');
+                    }else {
+                        if (room_capacity_to_traveler($room->room_capacity, $data['travelers'])){
+                            $room_prices[$date_range->id][$room->id] = get_room_price($trip, $room->id, $data['travelers'], $date_range->range_start, $date_range->range_end, '');
+                        }
+                    }
+
+                }
+            }
+        }
+
+        $data['room_prices']=$room_prices;
 
         $data['total_event_tickets']=count($trip->tickets);
         $data['range'][1]['date']=date('d-M-Y',strtotime($trip->event_start)).' > '.date('d-M-Y',strtotime($trip->event_end));
@@ -107,6 +126,7 @@ class EventBookingController extends Controller
             "range" => "required",
             'payment_type'=>'required',
             'room_persons' => 'required|array',
+            'room_for_traveler' => 'required|array',
             'room_persons.*' => 'sometimes|integer',
             'costume'=>'array',
             'costume_option'=>'array',
@@ -134,25 +154,40 @@ class EventBookingController extends Controller
         if(!isset($trip->id)){
             redirect()->back()->with($rq->input());
         }
-
+        $total_traveler=$rq->travelers;
+        $range=$date_range=TripDateRange::find($rq->range);
         $rooms=[];
+        $rooms_prices=[];
         $room_one_id=$room_total=0;
-        foreach ($rq->room_persons as $room_id => $room_person){
-            if($room_person>0){
-                $rooms_traveler[$room_id]=$room_person;
-                if($room_id>0){
-                    $rooms[$room_id]=HotelRoom::find($room_id);
-                    $room_one_id=$room_id;
-                    $room_total+=(float)$rooms[$room_id]->room_price*$room_person;
+        foreach ($rq->room_for_traveler as $traveler => $room_id){
+            $rooms[$room_id]=$room=HotelRoom::find($room_id);
+            if($room_id==3){
+                $room_price=get_room_price($trip,$room->id,$total_traveler,$date_range->range_start,$date_range->range_end,'no_accommodation');
+            }else{
+                $room_price = get_room_price($trip, $room->id, $total_traveler, $date_range->range_start, $date_range->range_end, '');
                 }
+            $rooms[$room_id]->room_price=$tt=$rooms_prices[$room_id]=$room_price>0?$room_price:$rooms[$room_id]->room_price;
+            $room_total+=$tt;
             }
-        }
+
+//        foreach ($rq->room_persons as $room_id => $room_person){
+//            if($room_person>0){
+//                $rooms_traveler[$room_id]=$room_person;
+//                if($room_id>0){
+//                    $rooms[$room_id]=HotelRoom::find($room_id);
+//                    $room_one_id=$room_id;
+//                    $room_total+=(float)$rooms[$room_id]->room_price;
+//                }
+//            }
+//        }
+
         $room='';
         if(count($rooms)==1){
             $room=$rooms[$room_one_id];
         }
-        $total_traveler=$rq->travelers;
-//        $subtotal=($trip->daily_price*$trip->duration)*$total_traveler;
+
+
+        $subtotal=0;
 //        $range_=explode('%',$rq->range);
 //        $range=explode(' > ',Arr::first($range_));
 //        for ($r=0, $rMax = count($range); $r< $rMax; $r++){
@@ -160,12 +195,10 @@ class EventBookingController extends Controller
 //        }
 ////        var_dump($range);exit;
 //        $duration=Arr::last($range_);
+//
 //        if($trip->duration>2) {
 //            $subtotal=($trip->daily_price * $duration) * $total_traveler;
 //        }
-        $range=TripDateRange::find($rq->range);
-        $total_traveler=$rq->travelers;
-        $subtotal=$range->range_price*$total_traveler;
 
 
 
@@ -202,7 +235,7 @@ class EventBookingController extends Controller
         if($room!=''){
             $booking->update([
                 'room_id'=>$room->id,
-                'room_price'=>$room->room_price,
+                'room_price'=>$rooms_prices[$room->id],
             ]);
         }
         if(count($rooms)>0){
@@ -210,7 +243,7 @@ class EventBookingController extends Controller
                 BookingRoom::create([
                     'room_id'=>$room->id,
                     'booking_for_id'=>$booking->id,
-                    'room_booking_rate'=>$room->room_price,
+                    'room_booking_rate'=>$rooms_prices[$room->id],
                     'booking_from'=>$range->range_start,
                     'booking_to'=>$range->range_end,
                 ]);
@@ -237,6 +270,7 @@ class EventBookingController extends Controller
                 'gender'=>$rq->gender[$t],
                 'shirt_size'=>$rq->shirt_size[$t],
                 'notes'=>$rq->notes[$t],
+                'room_id'=>$rq->room_for_traveler[$t],
             ]);
             $tID=$Traveler->id;
             if(isset($rq->costume)&&count($rq->costume)>0&&$rq->costume[$t]!=0){

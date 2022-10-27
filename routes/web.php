@@ -290,6 +290,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // Events
     Route::delete('events/destroy', 'EventsController@massDestroy')->name('events.massDestroy');
     Route::post('events/media', 'EventsController@storeMedia')->name('events.storeMedia');
+    Route::get('events/room-pricing/{trip}', 'EventsController@event_room_pricing')->name('events.room_pricing');
+    Route::post('events/room-pricing/{trip}/update', 'EventsController@event_room_pricing')->name('events.room_pricing_update');
     Route::post('events/ckmedia', 'EventsController@storeCKEditorImages')->name('events.storeCKEditorImages');
     Route::resource('events', 'EventsController');
 
@@ -327,6 +329,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::delete('hotel-rooms/destroy', 'HotelRoomsController@massDestroy')->name('hotel-rooms.massDestroy');
     Route::post('hotel-rooms/media', 'HotelRoomsController@storeMedia')->name('hotel-rooms.storeMedia');
     Route::post('hotel-rooms/ckmedia', 'HotelRoomsController@storeCKEditorImages')->name('hotel-rooms.storeCKEditorImages');
+
     Route::resource('hotel-rooms', 'HotelRoomsController');
 
     // Amenities

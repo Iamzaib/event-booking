@@ -51,4 +51,40 @@ function processing_fee($total){
     }
     return 0;
 }
+function room_capacity_to_traveler($capacity,$travelers){
+    if($capacity==$travelers){
+        return true;
+    }
+    if($capacity==2 && ($travelers==2||$travelers==1)){
+        return true;
+    }
+    if($travelers>2 && $capacity>2){
+        return true;
+    }
+    if($capacity<$travelers || ($capacity>2&&$travelers<=2)){
+       return false;
+    }
+    return false;
+}
+function get_room_price($trip,$room_id,$traveler,$start,$end,$type=''){
+    $start=date('Y-m-d',strtotime($start));
+    $end=date('Y-m-d',strtotime($end));
+    $prices_ranges=$trip->room_pricing()->where('end_date','>=', $end)->get();
+    $prices=[];
+    $no_acc_prices=[];
+    if(count($prices_ranges)>0){
+        foreach ($prices_ranges as $range){
+            if($type!=='no_accommodation'){
+                $p=$range->room_pricing()->where(['room_id'=>$room_id,'for_travelers'=>$traveler])->first();
+                $prices[]=$p->price;
+            }else{
+                $no_acc_prices[]=$range->no_accommodation;
+            }
+        }
+    }
+    if($type=='no_accommodation'){
+        return max($no_acc_prices);
+    }
+    return max($prices);
+}
 

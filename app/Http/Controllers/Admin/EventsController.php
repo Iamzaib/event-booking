@@ -16,6 +16,8 @@ use App\Models\EventFaq;
 use App\Models\Hotel;
 use App\Models\Itinerary;
 use App\Models\PackageAmenity;
+use App\Models\RoomPricing;
+use App\Models\RoomPricingRange;
 use App\Models\State;
 use App\Models\TripDateRange;
 use Gate;
@@ -191,6 +193,23 @@ class EventsController extends Controller
 
         return view('admin.events.show', compact('event'));
     }
+    public function room_pricing(Event $event)
+    {
+        abort_if(Gate::denies('event_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(!isset($event->id), Response::HTTP_NOT_FOUND, '404 Forbidden');
+
+        $event->load('country', 'state', 'city', 'hotels', 'addons', 'amenities_includeds', 'bookingEventEventBookings');
+        $rooms=[];
+        foreach ($event->hotels as $hotel){
+            foreach ($hotel->rooms as $room){
+                $rooms[]=$room;
+            }
+        }
+        if(count($rooms)<=0){
+            return redirect()->back()->with('error_msg','Trip has No Hotel Rooms');
+        }
+        return view('admin.events.roomPricing', compact('event','rooms'));
+    }
 
     public function destroy(Event $event)
     {
@@ -225,5 +244,79 @@ class EventsController extends Controller
         $event->amenities_includeds()->sync($request->input('amenities_includeds', []));
         $event->amenities_excludeds()->sync($request->input('amenities_excludeds', []));
         $event->costumes()->sync($request->input('costumes', []));
+    }
+
+    public function event_room_pricing(Request $request,Event $trip){
+        $rooms=[];
+        foreach ($trip->hotels as $hotel){
+            if($hotel->id==2) {
+                continue;
+            }
+            foreach ($hotel->rooms as $room){
+                $rooms[]=$room;
+            }
+        }
+
+        if(isset($request->action)&&$request->action=='update'){
+
+            if(isset($request->range_id)&&is_array($request->range_id)){
+                foreach ($request->range_id as $index => $value){
+                    $room_pricing_range= RoomPricingRange::where('id',$request->range_id[$index])->update([
+//                        'event_id'=>$trip->id,
+                        'start_date'=>$request->room_range_start[$index],
+                        'end_date'=>$request->room_range_end[$index],
+                        'no_accommodation'=>$request->no_accommodation_room_price[$index],
+                    ]);
+                    foreach ($rooms as $room){
+                        $room_id=$room->id;
+                        $room_p=$request->input('room_price_'.$room_id);
+                        foreach ($room_p as $traveler => $prices){
+                            foreach ($prices as $id => $price){
+                                RoomPricing::where('id',$id)->update([
+//                                    'room_pricing_range_id'=>$room_pricing_range->id,
+//                                    'room_id'=>$room_id,
+                                    'price'=>$price,
+                                    'for_travelers'=>$traveler,
+                                ]);
+                            }
+
+                        }
+
+                    }
+                }
+            }else{
+                foreach ($request->room_range_start as $index => $value){
+                    $room_pricing_range= RoomPricingRange::create([
+                        'event_id'=>$trip->id,
+                        'start_date'=>date(config('panel.date_format'),strtotime($request->room_range_start[$index])),
+                        'end_date'=>date(config('panel.date_format'),strtotime($request->room_range_end[$index])),
+                        'no_accommodation'=>$request->no_accommodation_room_price[$index],
+                    ]);
+                    foreach ($rooms as $room){
+                        $room_id=$room->id;
+                        $room_p=$request->input('room_price_'.$room_id);
+                        foreach ($room_p as $traveler => $price){
+                            RoomPricing::create([
+                                'room_pricing_range_id'=>$room_pricing_range->id,
+                                'room_id'=>$room_id,
+                                'price'=>$price[$index],
+                                'for_travelers'=>$traveler,
+                            ]);
+                        }
+
+                    }
+                }
+//                dd($request->all());
+            }
+
+            return back();
+        }
+        if(isset($request->view_price)){
+            get_room_price($trip,1,1,$trip->event_start,$trip->event_end);
+        }
+
+        $data['rooms']=$rooms;
+        $data['trip']=$trip;
+        return view('admin.events.roomPricing',$data);
     }
 }
