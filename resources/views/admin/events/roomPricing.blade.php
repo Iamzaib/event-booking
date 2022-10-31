@@ -86,8 +86,10 @@
                                                     </div>
                                                 </div>
                                                 <div class="row">
-{{--                                                    @for($rc=($room->room_capacity>2?3:1);$rc<=$room->room_capacity;$rc++)--}}
-                                                    @foreach($pricing_range->room_pricing()->where('room_id',$room->id)->get() as $this_room_pricing)
+                                                    @for($rc=($room->room_capacity>3?3:1);$rc<=$room->room_capacity;$rc++)
+
+                                                    @php $this_room_pricing=$pricing_range->room_pricing()->where(['room_id'=>$room->id,'for_travelers'=>$rc])->first()// as $this_room_pricing @endphp
+                                                    @if(isset($this_room_pricing->id))
                                                         <input type="hidden" name="room_price_id[]" value="{{$this_room_pricing->id}}">
                                                         <div class="col-3 mt-2">
                                                             Price Per Person For {{$this_room_pricing->for_travelers}} Traveler(s)
@@ -95,7 +97,16 @@
                                                         <div class="col-3 mt-2">
                                                             <input type="number" step="0.01" name="room_price_{{$room->id}}[{{$this_room_pricing->for_travelers}}][{{$this_room_pricing->id}}]" value="{{$this_room_pricing->price}}" id="" class="form-control" required>
                                                         </div>
-                                                    @endforeach
+                                                        @else
+                                                            <div class="col-3 mt-2">
+                                                                Price Per Person For {{$rc}} Traveler(s)
+                                                            </div>
+                                                            <div class="col-3 mt-2">
+                                                                <input type="number" step="0.01" name="room_price_{{$room->id}}[{{$rc}}][]" id="" class="form-control" required>
+                                                            </div>
+                                                        @endif
+{{--                                                    @endforeach--}}
+                                                    @endfor
                                                 </div>
                                                @if(!$loop->last)
                                                    <hr>
@@ -158,7 +169,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    @for($rc=($room->room_capacity>2?3:1);$rc<=$room->room_capacity;$rc++)
+                                                    @for($rc=($room->room_capacity>3?3:1);$rc<=$room->room_capacity;$rc++)
 
                                                         <div class="col-3 mt-2">
                                                             Price Per Person For {{$rc}} Traveler(s)

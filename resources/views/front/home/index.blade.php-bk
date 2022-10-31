@@ -3,49 +3,7 @@
 @section('styles')
     <link rel="stylesheet" src="https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.theme.min.css">
     <link rel="stylesheet" src="https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.carousel.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" integrity="sha512-yHknP1/AwR+yx26cB1y0cjvQUMvEa2PFzt1c9LlS4pRQ5NOTZFWbhBig+X9G9eYW/8m0/4OXNx8pxJ6z57x0dw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" integrity="sha512-17EgCFERpgZKcm0j0fEq1YCJuyAWdz9KUtv1EjVuaOz8pDnh/0nZxmU6BBXwaaxqoi9PQXnRWqlcDB027hgv9A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
-        .slick-list {
-            max-width: 100%;
-            margin: 0 auto;
-            /*padding: 30px 0;*/
-        }
-        /*.slick-list .slick-slide {*/
-        /*    font-size: 30px;*/
-        /*    text-align: center;*/
-        /*    padding: 40px 20px;*/
-        /*    line-height: 2;*/
-        /*    font-weight: 700;*/
-        /*}*/
-        .slick-list .slick-slide:nth-child(even) {
-            /*background-color: #ddd;*/
-        }
-        .slick-list .slick-slide:nth-child(odd) {
-            /*background-color: #ccc;*/
-        }
-        .slick-arrow {
-            z-index: 1;
-            width: 40px;
-            height: 40px;
-        }
-
-        .slick-arrow:before {
-            font-size: 30px;
-        }
-        .slick-next {
-            right: 0;
-        }
-        .slick-prev {
-            left: 0;
-        }
-
-        .btn-wrap {
-            text-align: center;
-            width: 100%;
-        }
-
-        /*slick End*/
         .slider-item {
             border: 1px solid #E1E1E1;
             border-radius: 5px;
@@ -131,68 +89,7 @@
         .review {
             margin-bottom: 5px;
             padding-top: 5px;
-        }
-		.carousel-control-next, .carousel-control-prev {
-    position: inherit;
-    top: 0;
-    bottom: 0;
-    z-index: 1;
-    display: inline-block;
-    align-items: center;
-    justify-content: center;
-    width: 5%;
-    padding: 0;
-    color: #fff;
-    text-align: center;
-    background: 0 0;
-    border: 0;
-    opacity: .5;
-    transition: opacity .15s ease;
-}
-.carousal_button_left_right {
-    text-align: right;
-	margin-bottom: 20px;
-}
-		.carousel-dark .carousel-indicators [data-bs-target] {
-    background-color: #000;
-    border-radius: 50px;
-    width: 15px;
-    height: 10px;
-    border: 0px;
-    /* margin-top: 20px; */
-}
-
-		.carousel-control-next-icon {
-    background-image: url(assets/front/img/right_arrow.png);
-}
-		.carousel-control-next-icon, .carousel-control-prev-icon {
-    display: inline-block;
-    width: 2rem;
-    height: 2rem;
-    background-repeat: no-repeat;
-    background-position: 50%;
-    background-size: auto;
-}
-		.carousel-control-prev-icon{
-			background-image: url(assets/front/img/left_arrow.png);
-}
-.carousel-dark .carousel-control-next-icon, .carousel-dark .carousel-control-prev-icon {
-    filter: inherit;
-}
-		.carousel-control-next, .carousel-control-prev {
-
-    opacity: inherit;
-    transition: inherit;
-}
-		.carousel-dark .carousel-indicators [data-bs-target] {
-    background-color: #700ede;
-    border-radius: 50px;
-    width: 15px;
-    height: 10px;
-    border: 0px;
-    /* margin-top: 20px; */
-}
-</style>
+        }</style>
 @endsection
 @section('content')
     <section class="hero_single version_2">
@@ -269,228 +166,76 @@
         <br>
         <br>
     </div>--}}
-  @if(isset(request()->old_slider))
-    <div class="container  container-custom margin_80_0">
+    <div class="container">
         <div class="row">
             <div class="col-md-6 col-sm-6 col-xs-12">
                 <h2>Upcoming carnival packages</h2>
             </div>
             <div class="col-md-6 col-sm-6 col-xs-6 hidden-xs">
                 <div class="controls pull-right">
-                    <a class="left  prev-btn" href="#carousel-example" ><i class="bi bi-arrow-left display-5"></i>&nbsp;&nbsp;</a>
-                    <a class="right  next-btn" href="#carousel-example" >&nbsp;&nbsp;<i class="bi bi-arrow-right display-5"></i></a>
+                    <a class="left  " href="#carousel-example" data-slide="prev"><i class="bi bi-arrow-left display-5"></i>&nbsp;&nbsp;</a><a
+                        class="right  " href="#carousel-example" data-slide="next">&nbsp;&nbsp;<i class="bi bi-arrow-right display-5"></i></a>
                 </div>
             </div>
         </div>
-        <div class="slick-list row">
-            @foreach($featured_trips as $featured_trip)
-                <div class="col-xl-4 col-lg-4 col-md-4 ">
-                    <div class="box_grid">
+        <div id="carousel-example" class="carousel slide hidden-xs" data-ride="carousel" data-type="multi">
+            <div class="carousel-inner">
+                <div class="item active">
+                    <div class="row">
 
-                        <figure>
-                            <a href="{{route('frontend.trip_view',['trip_title'=>$featured_trip->event_title,'event'=>$featured_trip->id])}}"><img src="{{ $featured_trip->featured_image?$featured_trip->featured_image->getUrl():asset('assets/front/img/tour_1.jpg')}}" class="img-fluid" alt="" width="800"
-                                                                                                                                                   height="533"></a>
-                            <div class="tourdivf1">
-                                {{--                                <div>--}}
-                                {{--                                    <small><img src="{{ asset('assets/front/img/clock.png')}}" /> 25:26:31</small>--}}
-                                {{--                                </div>--}}
-
-                                <div>
-                                    <img class="favoriteicoimg {{favorite_check($featured_trip->id,auth()->id())?'favourite-filter':''}} favourite" data-id="{{$featured_trip->id}}" src="{{ asset('assets/front/img/heart2.svg')}}" />
-                                </div>
-                            </div>
-                        </figure>
-
-                        <div class="">
-                            <a href="{{route('frontend.trip_view',['trip_title'=>$featured_trip->event_title,'event'=>$featured_trip->id])}}" class="titltxt">{{$featured_trip->event_title}}</a>
-                            <div class="one_star_home"><img src="{{ asset('assets/front/img/stars.svg')}}">&nbsp;&nbsp;{{number_format($avg_ratings[$featured_trip->id],1)}}</div>
-                            <div class="tourdivf2">
-                                <div>
-                                <!--                                    <img src="{{ asset('assets/front/img/location.svg')}}" />-->
-                                    <span>{{$featured_trip->city->city_name}}, {{$featured_trip->country->name}}</span>
-                                </div>
-                                <div>
-                                <!--                                    <img src="{{ asset('assets/front/img/calendar.svg')}}" />-->
-                                    <span>{{$ranges[$featured_trip->id]}} </span>
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-                </div>
-            @endforeach
                 @foreach($featured_trips as $featured_trip)
-                <div class="col-xl-4 col-lg-4 col-md-4 ">
-                    <div class="box_grid">
 
-                        <figure>
-                            <a href="{{route('frontend.trip_view',['trip_title'=>$featured_trip->event_title,'event'=>$featured_trip->id])}}"><img src="{{ $featured_trip->featured_image?$featured_trip->featured_image->getUrl():asset('assets/front/img/tour_1.jpg')}}" class="img-fluid" alt="" width="800"
-                                                                                                                                                   height="533"></a>
-                            <div class="tourdivf1">
-                                {{--                                <div>--}}
-                                {{--                                    <small><img src="{{ asset('assets/front/img/clock.png')}}" /> 25:26:31</small>--}}
-                                {{--                                </div>--}}
+                    <div class="col-xl-4 col-lg-4 col-md-4 ">
+                        <div class="box_grid">
 
-                                <div>
-                                    <img class="favoriteicoimg {{favorite_check($featured_trip->id,auth()->id())?'favourite-filter':''}} favourite" data-id="{{$featured_trip->id}}" src="{{ asset('assets/front/img/heart2.svg')}}" />
+                            <figure>
+                                <a href="{{route('frontend.trip_view',['trip_title'=>$featured_trip->event_title,'event'=>$featured_trip->id])}}"><img src="{{ $featured_trip->featured_image?$featured_trip->featured_image->getUrl():asset('assets/front/img/tour_1.jpg')}}" class="img-fluid" alt="" width="800"
+                                                                                                                                                       height="533"></a>
+                                <div class="tourdivf1">
+                                    {{--                                <div>--}}
+                                    {{--                                    <small><img src="{{ asset('assets/front/img/clock.png')}}" /> 25:26:31</small>--}}
+                                    {{--                                </div>--}}
+
+                                    <div>
+                                        <img class="favoriteicoimg {{favorite_check($featured_trip->id,auth()->id())?'favourite-filter':''}} favourite" data-id="{{$featured_trip->id}}" src="{{ asset('assets/front/img/heart2.svg')}}" />
+                                    </div>
                                 </div>
-                            </div>
-                        </figure>
+                            </figure>
 
-                        <div class="">
-                            <a href="{{route('frontend.trip_view',['trip_title'=>$featured_trip->event_title,'event'=>$featured_trip->id])}}" class="titltxt">{{$featured_trip->event_title}}</a>
-                            <div class="one_star_home"><img src="{{ asset('assets/front/img/stars.svg')}}">&nbsp;&nbsp;{{number_format($avg_ratings[$featured_trip->id],1)}}</div>
-                            <div class="tourdivf2">
-                                <div>
-                                <!--                                    <img src="{{ asset('assets/front/img/location.svg')}}" />-->
-                                    <span>{{$featured_trip->city->city_name}}, {{$featured_trip->country->name}}</span>
-                                </div>
-                                <div>
-                                <!--                                    <img src="{{ asset('assets/front/img/calendar.svg')}}" />-->
-                                    <span>{{$ranges[$featured_trip->id]}} </span>
-                                </div>
+                            <div class="">
+                                <a href="{{route('frontend.trip_view',['trip_title'=>$featured_trip->event_title,'event'=>$featured_trip->id])}}" class="titltxt">{{$featured_trip->event_title}}</a>
+                                <div class="one_star_home"><img src="{{ asset('assets/front/img/stars.svg')}}">&nbsp;&nbsp;{{number_format($avg_ratings[$featured_trip->id],1)}}</div>
+                                <div class="tourdivf2">
+                                    <div>
+                                    <!--                                    <img src="{{ asset('assets/front/img/location.svg')}}" />-->
+                                        <span>{{$featured_trip->city->city_name}}, {{$featured_trip->country->name}}</span>
+                                    </div>
+                                    <div>
+                                    <!--                                    <img src="{{ asset('assets/front/img/calendar.svg')}}" />-->
+                                        <span>{{$ranges[$featured_trip->id]}} </span>
+                                    </div>
 
-                            </div>
-
-                        </div>
-
-                    </div>
-                </div>
-            @endforeach
-                @foreach($featured_trips as $featured_trip)
-                <div class="col-xl-4 col-lg-4 col-md-4 ">
-                    <div class="box_grid">
-
-                        <figure>
-                            <a href="{{route('frontend.trip_view',['trip_title'=>$featured_trip->event_title,'event'=>$featured_trip->id])}}"><img src="{{ $featured_trip->featured_image?$featured_trip->featured_image->getUrl():asset('assets/front/img/tour_1.jpg')}}" class="img-fluid" alt="" width="800"
-                                                                                                                                                   height="533"></a>
-                            <div class="tourdivf1">
-                                {{--                                <div>--}}
-                                {{--                                    <small><img src="{{ asset('assets/front/img/clock.png')}}" /> 25:26:31</small>--}}
-                                {{--                                </div>--}}
-
-                                <div>
-                                    <img class="favoriteicoimg {{favorite_check($featured_trip->id,auth()->id())?'favourite-filter':''}} favourite" data-id="{{$featured_trip->id}}" src="{{ asset('assets/front/img/heart2.svg')}}" />
-                                </div>
-                            </div>
-                        </figure>
-
-                        <div class="">
-                            <a href="{{route('frontend.trip_view',['trip_title'=>$featured_trip->event_title,'event'=>$featured_trip->id])}}" class="titltxt">{{$featured_trip->event_title}}</a>
-                            <div class="one_star_home"><img src="{{ asset('assets/front/img/stars.svg')}}">&nbsp;&nbsp;{{number_format($avg_ratings[$featured_trip->id],1)}}</div>
-                            <div class="tourdivf2">
-                                <div>
-                                <!--                                    <img src="{{ asset('assets/front/img/location.svg')}}" />-->
-                                    <span>{{$featured_trip->city->city_name}}, {{$featured_trip->country->name}}</span>
-                                </div>
-                                <div>
-                                <!--                                    <img src="{{ asset('assets/front/img/calendar.svg')}}" />-->
-                                    <span>{{$ranges[$featured_trip->id]}} </span>
                                 </div>
 
                             </div>
 
                         </div>
-
+                    </div>
+                            @if($loop->remaining>0&&($loop->index+1)%3==0)
                     </div>
                 </div>
-            @endforeach
+                                <div class="item">
+                                    <div class="row">
+                                @endif
+                @endforeach
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-  @else
-    <!-- /container -->
-<div class="container container-custom margin_80_0">
-<div class="row">
-	<div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel" data-bs-interval="false">
-        <div class="row">
-            <div class="col-md-6 col-sm-6 col-xs-12">
-                <h2>Upcoming carnival packages</h2>
-            </div>
-
-            <div class="col-md-6 col-sm-6 col-xs-12">
-                <div class="carousal_button_left_right">
-                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-  <div class="carousel-inner">
-    <div class="carousel-item active" data-bs-interval="10000">
-      <div class="row">
-          @foreach($featured_trips as $featured_trip)
-
-              <div class="col-xl-4 col-lg-4 col-md-4 ">
-                  <div class="box_grid">
-
-                      <figure>
-                          <a href="{{route('frontend.trip_view',['trip_title'=>$featured_trip->event_title,'event'=>$featured_trip->id])}}"><img src="{{ $featured_trip->featured_image?$featured_trip->featured_image->getUrl():asset('assets/front/img/tour_1.jpg')}}" class="img-fluid" alt="" width="800"
-                                                                                                                                                 height="533"></a>
-                          <div class="tourdivf1">
-                              {{--                                <div>--}}
-                              {{--                                    <small><img src="{{ asset('assets/front/img/clock.png')}}" /> 25:26:31</small>--}}
-                              {{--                                </div>--}}
-
-                              <div>
-                                  <img class="favoriteicoimg {{favorite_check($featured_trip->id,auth()->id())?'favourite-filter':''}} favourite" data-id="{{$featured_trip->id}}" src="{{ asset('assets/front/img/heart2.svg')}}" />
-                              </div>
-                          </div>
-                      </figure>
-
-                      <div class="">
-                          <a href="{{route('frontend.trip_view',['trip_title'=>$featured_trip->event_title,'event'=>$featured_trip->id])}}" class="titltxt">{{$featured_trip->event_title}}</a>
-                          <div class="one_star_home"><img src="{{ asset('assets/front/img/stars.svg')}}">&nbsp;&nbsp;{{number_format($avg_ratings[$featured_trip->id],1)}}</div>
-                          <div class="tourdivf2">
-                              <div>
-                              <!--                                    <img src="{{ asset('assets/front/img/location.svg')}}" />-->
-                                  <span>{{$featured_trip->city->city_name}}, {{$featured_trip->country->name}}</span>
-                              </div>
-                              <div>
-                              <!--                                    <img src="{{ asset('assets/front/img/calendar.svg')}}" />-->
-                                  <span>{{$ranges[$featured_trip->id]}} </span>
-                              </div>
-
-                          </div>
-
-                      </div>
-
-                  </div>
-              </div>
-
-              @if($loop->remaining>0&&($loop->index+1)%3==0)
-      </div>
-    </div>
-      <div class="carousel-item">
-          <div class="row">
-              @endif
-              @endforeach
-          </div>
-      </div>
-  </div>
-        <div class="carousel-indicators">
-            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="{{$slide=0}}" class="active" aria-current="true" aria-label="Slide 1"></button>
-            @foreach($featured_trips as $featured_trip)
-                @if($loop->remaining>0&&($loop->index+1)%3==0)
-                    <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="{{$slide++}}" aria-label="Slide {{$slide++}}"></button>
-                @endif
-            @endforeach
-{{--                <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 3"></button>--}}
-        </div>
-</div>
-	</div>
-</div>
-
-@endif
-
     @endif
+    <!-- /container -->
+
     <div class="container">
         <div class="cardtripsmain">
             <h1>Trips made easier for everyone, everywhere</h1>
@@ -785,64 +530,6 @@ around." - Arielle
 @endsection
 @section('scripts')
     @parent
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js" integrity="sha512-XtmMtDEcNz2j7ekrtHvOVR4iwwaD6o/FUJe6+Zq+HgcCsk3kj4uSQQR8weQ2QVj1o0Pk6PwYLohm206ZzNfubg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.carousel.js"></script>
-    <script>
-        $(document).ready(function () {
-            $(".slick-list").slick({
-                dots: true,
-                slidesToShow: 3,
-                slidesToScroll: 1,
-                arrows: false,
-                infinite: false,
-                autoplay: false,
-                responsive: [
-                    {
-                        breakpoint: 1024,
-                        settings: {
-                            slidesToShow: 3,
-                            slidesToScroll: 1,
-                            infinite: true,
-                            dots: true
-                        }
-                    },
-                    {
-                        breakpoint: 600,
-                        settings: {
-                            slidesToShow: 2,
-                            slidesToScroll: 1
-                        }
-                    },
-                    {
-                        breakpoint: 480,
-                        settings: {
-                            slidesToShow: 1,
-                            slidesToScroll: 1
-                        }
-                    }
-                ]
-            });
-            $(".prev-btn").click(function () {
-                $(".slick-list").slick("slickPrev");
-            });
 
-            $(".next-btn").click(function () {
-                $(".slick-list").slick("slickNext");
-            });
-            $(".prev-btn").addClass("slick-disabled");
-            $(".slick-list").on("afterChange", function () {
-                if ($(".slick-prev").hasClass("slick-disabled")) {
-                    $(".prev-btn").addClass("slick-disabled");
-                } else {
-                    $(".prev-btn").removeClass("slick-disabled");
-                }
-                if ($(".slick-next").hasClass("slick-disabled")) {
-                    $(".next-btn").addClass("slick-disabled");
-                } else {
-                    $(".next-btn").removeClass("slick-disabled");
-                }
-            });
-        });
-
-    </script>
 @endsection

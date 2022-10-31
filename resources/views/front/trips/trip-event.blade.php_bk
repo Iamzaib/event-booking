@@ -70,38 +70,6 @@
         .show{
             display: block;
         }
-		.modal-header {
-    display: inline-block;
-			text-align: center;
-}
-		.modal-body {
-    position: relative;
-    flex: 1 1 auto;
-    padding: 1rem 4rem;
-			text-align: center;
-}
-		.modal-body .follow_us img{
-			filter: invert(75%) sepia(63%) saturate(6234%) hue-rotate(246deg) brightness(87%) contrast(156%);
-			    margin: 12px;
-    width: 25px;
-		}
-		.modal-body p{
-			color: #545455;
-    font-size: 18px;
-			font-family: CircularStd, sans-serif !important;
-		}
-		.modal-title{
-			color: black;
-			font-family: CircularStd, sans-serif !important;
-			font-weight: 600;
-		}
-		a.full-width.whitebtnmain.trip_page_reserve_btn{
-    border-radius: 10px;
-
-    font-size: 13px;
-    font-weight: 500;
-    padding: 9px 36px;
-		}
     </style>
 @endsection
 @section('content')
@@ -131,14 +99,9 @@
                             <h4>{{$trip->event_title}}</h4>
                         </div>
                         <div class="btsgar">
-
-								<button data-toggle="modal" data-target="#myModal">Share</button>
-								<button>Favorite</button>
-<!--
-							<div class="grid-sort-icon docfil">
+                            <div class="grid-sort-icon docfil">
                                 <img src="{{asset('assets/front/img/heart2.svg')}}" class="favourite {{favorite_check($trip->id,auth()->id())?'favourite-filter':''}}" data-id="{{$trip->id}}">
                             </div>
--->
 {{--                            <div class="grid-sort-icon docfil">--}}
 {{--                                <img src="{{asset('assets/front/img/export.svg')}}">--}}
 {{--                            </div>--}}
@@ -149,15 +112,15 @@
                 <div class="col-lg-9">
                     <div class="newseclocatimain mb-3" style="background: none;padding: 12px 0px;">
                         <div class="inclusb">
-<!--                            <img src="{{asset('assets/front/img/locationsp.svg')}}" />-->
+                            <img src="{{asset('assets/front/img/locationsp.svg')}}" />
                             <p>{{$trip->city->city_name}}, {{$trip->country->name}}</p>
                         </div>
                         <div class="inclusb">
-<!--                            <img src="{{asset('assets/front/img/calendar.svg')}}" />-->
+                            <img src="{{asset('assets/front/img/calendar.svg')}}" />
                             <p>{{$trip->duration}} Days</p>
                         </div>
                         <div class="inclusb">
-<!--                            <img src="{{asset('assets/front/img/age.svg')}}" />-->
+                            <img src="{{asset('assets/front/img/age.svg')}}" />
                             <p>Age {{$trip->age}}</p>
                         </div>
                     </div>
@@ -217,7 +180,6 @@
 
                     </section>
                     <section id="rooms" class="nbfdj">
-						<h4>Rooms</h4>
 {{--                        <div class="priceflex1">--}}
 {{--                            <div>--}}
 {{--                                <h3 class="texthead22 marbot0 martop0">Choose a room</h3>--}}
@@ -237,15 +199,13 @@
 {{--                        </div>--}}
 
                         <div class="roomsdetails">
-
-                            @php $total_sliders=0; @endphp
                             @foreach($trip->hotels as $hotel)
                                 @if($hotel->id==2) @continue @endif
                                     @foreach($hotel->rooms as $room)
 
 
                                     @if ($loop->last)
-                                         @php $total_sliders+=$loop->count; @endphp
+                                         @php $total_sliders=$loop->count; @endphp
                                     @endif
                                         @if ($loop->first)
                                          @php $first_room=$room->id; @endphp
@@ -283,12 +243,11 @@
                                                     <img src="{{asset('assets/front/img/stars.svg')}}" />
                                                     <img src="{{asset('assets/front/img/stars.svg')}}" />
                                                     <img src="{{asset('assets/front/img/stars.svg')}}" />
-<!--                                                    <img src="{{asset('assets/front/img/stars.svg')}}" />-->
+                                                    <img src="{{asset('assets/front/img/star-nfill.svg')}}" />
                                                 </div>
                                             </div>
                                             <h3>{{$room->room_title}}</h3>
-<!--                                            <h6> {{$room->details}}</h6>-->
-											<button>More details &nbsp;></button>
+                                            <h6> {{$room->details}}</h6>
                                             <div class="cb1sbt5">
 {{--                                                <h1 class="arwsqft"><a href="#">Price details</a> <img src="{{asset('assets/front/img/arrow-square-down.svg')}}">--}}
 {{--                                                </h1>--}}
@@ -316,10 +275,8 @@
                             @foreach($trip->itinerary as $itinerary)
                                 @if($itinerary->title!='')
                             <li>
-<!--
                                 <time class="cbp_tmtime" datetime="{{$itinerary->time}}"><span>{{$itinerary->duration}}</span><span>{{$itinerary->time}}</span>
                                 </time>
--->
                                 <div class="cbp_tmicon">
                                     <img src="{{asset('assets/front/img/clock.svg')}}" />
                                 </div>
@@ -352,7 +309,7 @@
                             <div class="">
                                 @foreach($trip->faqs as $faq)
                                     <details class="faq-card">
-                                        <summary>{{$faq->question}} <span class="faq-open-icon"><i class="fa fa-plus"></i></span>
+                                        <summary>{{$faq->question}} <span class="faq-open-icon"><i class="fa fa-angle-up"></i></span>
                                         </summary>
                                         <span class="faq-card-spoiler">{{$faq->answer}}</span>
                                     </details>
@@ -452,7 +409,7 @@
                             Vero consequat cotidieque ad eam. Ea duis errem qui, impedit blandit sed eu. Ius diam vivendo ne. Vero
                             consequat cotidieque
                         </p>
-                        <a href="{{route('frontend.custom_trip',['trip_title'=>str_replace(' ','-',$trip->event_title),'trip'=>$trip->id])}}" class="full-width whitebtnmain trip_page_reserve_btn">Reserve</a>
+                        <a href="{{route('frontend.custom_trip',['trip_title'=>str_replace(' ','-',$trip->event_title),'trip'=>$trip->id])}}" class="full-width whitebtnmain">Reserve</a>
                     </div>
 
                     <div class="pricebox2">
@@ -461,45 +418,28 @@
                             Vero consequat cotidieque ad eam. Ea duis errem qui, impedit blandit sed eu. Ius diam vivendo ne. Vero
                             consequat cotidieque ad eam.
                         </p>
-                        <a href="tel:{{AGENT_NUMBER}}" class="outlinebtn2">Speak to Carnival Utopia Agent</a>
+                        <a href="tel:{{AGENT_NUMBER}}" class="outlinebtn2">Speak To Agent</a>
 
                     </div>
                     <div class="pricebox2">
                         <h2>Contact Information.</h2>
                         <div class="mt-4">
                             <p>
-                                <a href="mailto:{{INFO_EMAIL}}">
-<!--									<img src="{{asset('assets/front/img/sms.svg')}}" alt=""> -->
-
-									Email
-<!--									{{INFO_EMAIL}}-->
-								</a>
+                                <a href="mailto:{{INFO_EMAIL}}"><img src="{{asset('assets/front/img/sms.svg')}}" alt="">  {{INFO_EMAIL}}</a>
                             </p>
                             <p>
-                                <a href="tel:{{AGENT_NUMBER}}">
-<!--									<img src="{{asset('assets/front/img/call-calling.svg')}}" alt="">-->
-									Whatsapp</a>
-                            </p>
-							<p>
-                                <a href="tel:{{AGENT_NUMBER}}">
-<!--									<img src="{{asset('assets/front/img/call-calling.svg')}}" alt="">-->
-									iMessage</a>
+                                <a href="tel:{{AGENT_NUMBER}}"><img src="{{asset('assets/front/img/call-calling.svg')}}" alt="">  Speak to Agent</a>
                             </p>
                         </div>
 
 
 
                     </div>
-                    <div class="pricebox2" id="why_choose_us">
-                        <h2>Why Choose Us</h2>
+                    <div class="pricebox2">
+                        <h2>Why Book with Carnival Utopia.</h2>
                         <p>
-                            <ul>
-								<li>Value for money</li>
-								<li>24/7 Personal Concierge</li>
-								<li>Booking is easy as a few clicks.</li>
-								<li>Worry free experience</li>
-
-						</ul>
+                            Vero consequat cotidieque ad eam. Ea duis errem qui, impedit blandit sed eu. Ius diam vivendo ne. Vero
+                            consequat cotidieque ad eam.
                         </p>
 
 
@@ -508,57 +448,6 @@
             </div>
             <!-- /row -->
         </div>
-			<div class="container">
-  <!-- Trigger the modal with a button -->
-<!--  <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>-->
-
-  <!-- Modal -->
-  <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog">
-
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-<!--          <button type="button" class="close" data-dismiss="modal">&times;</button>-->
-          <h4 class="modal-title">Share it with your friends</h4>
-        </div>
-        <div class="modal-body">
-          <p>Id quis arcu eget urna nulla. Condimentum facilisis cras integer interdum faucibus iaculis. Nunc mauris </p>
-			<div class="follow_us">
-                            <ul>
-{{--                                <li>--}}
-{{--                                    <a href="#0">--}}
-{{--                                        <img src="{{url('/')}}/assets/front/img/instagram.svg">--}}
-{{--                                    </a>--}}
-{{--                                </li>--}}
-                                <li>
-                                    <a href="whatsapp://send?text={{$trip->event_title.' at '.env('APP_NAME')}} link:{{request()->url()}}" data-action="share/whatsapp/share"> <img src="{{url('/')}}/assets/front/img/whatsapp.svg"></a>
-                                </li>
-                                <li>
-                                    <a href="https://www.facebook.com/sharer/sharer.php?u={{request()->url()}}"> <img src="{{url('/')}}/assets/front/img/facebook.svg"></a>
-                                </li>
-                                <li>
-                                    <a href="http://twitter.com/share?text={{$trip->event_title.' at '.env('APP_NAME')}}&url={{request()->url()}}"> <img src="{{url('/')}}/assets/front/img/ph_twitter-logo.svg"></a>
-                                </li>
-                            </ul>
-                        </div>
-			<div  class="newsletter-form" >
-                        <input type="hidden" name="_token" value="jzlcZuv09RZHGLyjfgN2AB9WIzV9CHRTdXJb3T9O">
-            <div class="input-field">
-                <input class="input" type="text" name="text" id="trip_url" placeholder="{{request()->url()}}" aria-label="Enter an email address" value="{{urldecode(request()->url())}}"><button class="btn_1  btngrad" onclick="navigator.clipboard.writeText(document.getElementById('trip_url').value)" aria-label="Subscribe" readonly>
-                                Copy
-                            </button></div>
-                    </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-</div>
         <!-- /container -->
     </div>
     <!-- /bg_color_1 -->

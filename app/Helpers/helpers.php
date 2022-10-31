@@ -57,8 +57,10 @@ function room_capacity_to_traveler($capacity,$travelers){
     }
     if($capacity==2 && ($travelers==2||$travelers==1)){
         return true;
+    }if($capacity==3 && ($travelers==2||$travelers==3||$travelers==1)){
+        return true;
     }
-    if($travelers>2 && $capacity>2){
+    if($travelers>3 && $capacity>3){
         return true;
     }
     if($capacity<$travelers || ($capacity>2&&$travelers<=2)){
@@ -76,7 +78,18 @@ function get_room_price($trip,$room_id,$traveler,$start,$end,$type=''){
         foreach ($prices_ranges as $range){
             if($type!=='no_accommodation'){
                 $p=$range->room_pricing()->where(['room_id'=>$room_id,'for_travelers'=>$traveler])->first();
-                $prices[]=$p->price;
+                if(isset($p->price)){
+                    $prices[]=$p->price;
+                }else{
+                    for ($tr=$traveler;$tr>0;$tr--){
+                        $p=$range->room_pricing()->where(['room_id'=>$room_id,'for_travelers'=>$tr])->first();
+                        if(isset($p->price)){
+                            $prices[]=$p->price;
+                            break;
+                        }
+                    }
+                }
+
             }else{
                 $no_acc_prices[]=$range->no_accommodation;
             }
