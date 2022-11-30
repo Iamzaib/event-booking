@@ -15,8 +15,8 @@
     </div>
 
     <div class="card-body">
-        <div class="table-responsive">
-            <table class=" table table-bordered table-striped table-hover datatable datatable-Payment">
+        <div class="table-responsive overflow-visible print">
+            <table class="table table-sm table-hover table-wrap card-table" id="data-table">
                 <thead>
                     <tr>
                         <th width="10">
@@ -31,9 +31,9 @@
                         <th>
                             {{ trans('cruds.payment.fields.payment_user') }}
                         </th>
-                        <th>
-                            {{ trans('cruds.payment.fields.payment_booking') }}
-                        </th>
+{{--                        <th>--}}
+{{--                            {{ trans('cruds.payment.fields.payment_booking') }}--}}
+{{--                        </th>--}}
                         <th>
                             {{ trans('cruds.payment.fields.amount_total') }}
                         </th>
@@ -66,9 +66,9 @@
                             <td>
                                 {{ $payment->payment_user->name ?? '' }}
                             </td>
-                            <td>
-                                {{ $payment->payment_booking->booking_total ?? '' }}
-                            </td>
+{{--                            <td>--}}
+{{--                                {{ $payment->payment_booking->booking_event->event_title ?? '' }}--}}
+{{--                            </td>--}}
                             <td>
                                 {{ $payment->amount_total ?? '' }}
                             </td>
@@ -155,12 +155,9 @@
     order: [[ 1, 'desc' ]],
     pageLength: 100,
   });
-  let table = $('.datatable-Payment:not(.ajaxTable)').DataTable({ buttons: dtButtons })
-  $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e){
-      $($.fn.dataTable.tables(true)).DataTable()
-          .columns.adjust();
-  });
-  
+  let table = $('.datatable-Payment:not(.ajaxTable)');
+
+
 })
 
 </script>

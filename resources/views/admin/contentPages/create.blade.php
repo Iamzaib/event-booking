@@ -101,7 +101,18 @@
 
 @section('scripts')
 <script>
-    $(document).ready(function () {
+    var storeCKEditorImages_url='{{ route('admin.content-pages.storeCKEditorImages') }}';
+    var dropzone_field='featured_image-dropzone',
+        photo_upload_route='{{ route('admin.content-pages.storeMedia') }}',
+        field_name='featured_image',
+        Maxfiles=1,
+        dropzone=true,
+        crud_id='{{ $contentPage->id ?? 0 }}';
+    @if(isset($contentPage) && $contentPage->featured_image)
+    var image_exists=true;
+    var image_src={!! json_encode($contentPage->featured_image) !!}
+    @endif
+ /*   $(document).ready(function () {
   function SimpleUploadAdapter(editor) {
     editor.plugins.get('FileRepository').createUploadAdapter = function(loader) {
       return {
@@ -162,9 +173,7 @@
     );
   }
 });
-</script>
 
-<script>
     Dropzone.options.featuredImageDropzone = {
     url: '{{ route('admin.content-pages.storeMedia') }}',
     maxFilesize: 2, // MB
@@ -217,6 +226,6 @@
         return _results
     }
 }
-
+*/
 </script>
 @endsection

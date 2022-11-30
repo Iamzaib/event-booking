@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -26,7 +27,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+//    protected $redirectTo = RouteServiceProvider::HOME;
 
     /**
      * Create a new controller instance.
@@ -36,12 +37,23 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    public function redirectTo()
+//    public function redirectTo()
+//    {
+//
+//        if (auth()->user()->is_admin) {
+//            return '/admin';
+//        }
+//
+//        return '/home';
+//    }
+    protected function authenticated(Request $request, $user)
     {
-        if (auth()->user()->is_admin) {
-            return '/admin';
+        if(session('redirect_to_checkout')!=''){
+               return redirect()->route('frontend.checkout_info',['payment_info'=>session('redirect_to_checkout')]);
         }
-
-        return '/home';
+        if ($user->is_admin) {
+           return redirect()->intended(route('admin.home'));
+        }
+        return redirect()->intended(route('frontend.account.index'));
     }
 }

@@ -15,8 +15,8 @@
     </div>
 
     <div class="card-body">
-        <div class="table-responsive">
-            <table class=" table table-bordered table-striped table-hover datatable datatable-FaqCategory">
+        <div class="table-responsive overflow-visible print">
+            <table class="table table-sm table-hover table-wrap card-table" id="data-table">
                 <thead>
                     <tr>
                         <th width="10">
@@ -119,12 +119,9 @@
     order: [[ 1, 'desc' ]],
     pageLength: 100,
   });
-  let table = $('.datatable-FaqCategory:not(.ajaxTable)').DataTable({ buttons: dtButtons })
-  $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e){
-      $($.fn.dataTable.tables(true)).DataTable()
-          .columns.adjust();
-  });
-  
+  let table = $('.datatable-FaqCategory:not(.ajaxTable)');
+
+
 })
 
 </script>

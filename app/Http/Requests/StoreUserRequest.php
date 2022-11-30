@@ -43,7 +43,7 @@ class StoreUserRequest extends FormRequest
                 'nullable',
             ],
             'city_id' => [
-                'required',
+                'nullable',
                 'integer',
             ],
             'state_id' => [

@@ -13,13 +13,27 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ContentTagController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         abort_if(Gate::denies('content_tag_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $contentTags = ContentTag::all();
-
-        return view('admin.contentTags.index', compact('contentTags'));
+        //$contentTags = ContentTag::all();
+        $per_page=$request->per_page??10;
+        $sort_r=explode('-',$request->sort);
+        $sort=isset($sort_r[0])&&$sort_r[0]!=''?$sort_r[0]:'id';
+        $sort_type=isset($sort_r[1])&&$sort_r[1]!=''?$sort_r[1]:'desc';
+        $contentTags = ContentTag::when($request->search, function ($query, $search) {
+            $query->where('name', 'LIKE', "%{$search}%");
+            $query->orWhere('slug', 'LIKE', "%{$search}%");
+        })->paginate($per_page,'*','page',($request->page?$request->page:1));
+        if($request->sorting){
+            if($sort_type=='desc'){
+                $sort_type='asc';
+            }else{
+                $sort_type='desc';
+            }
+        }
+        return view('admin.contentTags.index', compact('contentTags','sort','per_page','sort_type'));
     }
 
     public function create()

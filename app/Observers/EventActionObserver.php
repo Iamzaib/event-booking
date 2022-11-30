@@ -12,13 +12,13 @@ class EventActionObserver
     {
         $data  = ['action' => 'created', 'model_name' => 'Event'];
         $users = \App\Models\User::whereHas('roles', function ($q) { return $q->where('title', 'Admin'); })->get();
-        Notification::send($users, new DataChangeEmailNotification($data));
+        //Notification::send($users, new DataChangeEmailNotification($data));
     }
 
     public function updated(Event $model)
     {
         $data  = ['action' => 'updated', 'model_name' => 'Event'];
         $users = \App\Models\User::whereHas('roles', function ($q) { return $q->where('title', 'Admin'); })->get();
-        Notification::send($users, new DataChangeEmailNotification($data));
+        //Notification::send($users, new DataChangeEmailNotification($data));
     }
 }

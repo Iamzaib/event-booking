@@ -13,7 +13,6 @@ class UpdateUserRequest extends FormRequest
     {
         return Gate::allows('user_edit');
     }
-
     public function rules()
     {
         return [
@@ -43,7 +42,7 @@ class UpdateUserRequest extends FormRequest
                 'nullable',
             ],
             'city_id' => [
-                'required',
+                'nullable',
                 'integer',
             ],
             'state_id' => [

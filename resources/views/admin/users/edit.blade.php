@@ -3,7 +3,7 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('global.edit') }} {{ trans('cruds.user.title_singular') }}
+        {{ trans('global.edit') }}  {{ trans('cruds.user.title_singular') }}
     </div>
 
     <div class="card-body">
@@ -98,7 +98,7 @@
             </div>
             <div class="form-group">
                 <label class="required" for="city_id">{{ trans('cruds.user.fields.city') }}</label>
-                <select class="form-control select2 {{ $errors->has('city') ? 'is-invalid' : '' }}" name="city_id" id="city_id" required>
+                <select class="form-control select2 {{ $errors->has('city') ? 'is-invalid' : '' }}" name="city_id" id="city_id" >
                     @foreach($cities as $id => $entry)
                         <option value="{{ $id }}" {{ (old('city_id') ? old('city_id') : $user->city->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
                     @endforeach
@@ -156,7 +156,9 @@
                 </div>
                 <select class="form-control select2 {{ $errors->has('roles') ? 'is-invalid' : '' }}" name="roles[]" id="roles" multiple required>
                     @foreach($roles as $id => $role)
+                        @if($role!='Admin')
                         <option value="{{ $id }}" {{ (in_array($id, old('roles', [])) || $user->roles->contains($id)) ? 'selected' : '' }}>{{ $role }}</option>
+                        @endif
                     @endforeach
                 </select>
                 @if($errors->has('roles'))
@@ -181,6 +183,59 @@
 
 @section('scripts')
 <script>
+    $("#profileimage-dropzone").dropzone({
+        url: '{{ route('admin.users.storeMedia') }}',
+        maxFilesize: 2, // MB
+        acceptedFiles: '.jpeg,.jpg,.png,.gif',
+        maxFiles: 1,
+        addRemoveLinks: true,
+        headers: {
+            'X-CSRF-TOKEN': "{{ csrf_token() }}"
+        },
+        params: {
+            size: 2,
+            width: 4096,
+            height: 4096
+        },
+        success: function (file, response) {
+            $('form').find('input[name="profileimage"]').remove()
+            $('form').append('<input type="hidden" name="profileimage" value="' + response.name + '">')
+        },
+        removedfile: function (file) {
+            file.previewElement.remove()
+            if (file.status !== 'error') {
+                $('form').find('input[name="profileimage"]').remove()
+                this.options.maxFiles = this.options.maxFiles + 1
+            }
+        },
+        init: function () {
+            @if(isset($user) && $user->profileimage)
+            var file = {!! json_encode($user->profileimage) !!}
+                this.options.addedfile.call(this, file)
+            this.options.thumbnail.call(this, file, file.preview ?? file.preview_url)
+            file.previewElement.classList.add('dz-complete')
+            $('form').append('<input type="hidden" name="profileimage" value="' + file.file_name + '">')
+            this.options.maxFiles = this.options.maxFiles - 1
+            @endif
+            console.debug(this.options);
+        },
+        error: function (file, response) {
+            if ($.type(response) === 'string') {
+                var message = response //dropzone sends it's own error messages in string
+            } else {
+                var message = response.errors.file
+            }
+            file.previewElement.classList.add('dz-error')
+            _ref = file.previewElement.querySelectorAll('[data-dz-errormessage]')
+            _results = []
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                node = _ref[_i]
+                _results.push(node.textContent = message)
+            }
+
+            return _results
+        }
+    });
     Dropzone.options.profileimageDropzone = {
     url: '{{ route('admin.users.storeMedia') }}',
     maxFilesize: 2, // MB

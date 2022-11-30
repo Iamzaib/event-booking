@@ -16,6 +16,13 @@ class Setting extends Model
         'true-false' => 'Enable/Disable',
         'text'       => 'Text',
     ];
+    public const SETTING_GROUPS=[
+        'Checkout'=>'Checkout Settings',
+        'Payments'=>'Payment Settings',
+        'Web'=>'Website Settings',
+        'Trip'=>'Trip Page Settings',
+        'Social'=>'Social Media Links Settings'
+    ];
 
     public $table = 'settings';
 
@@ -31,6 +38,7 @@ class Setting extends Model
         'setting_value',
         'details',
         'setting_type',
+        'setting_group',
         'created_at',
         'updated_at',
         'deleted_at',

@@ -3,13 +3,13 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('global.show') }} {{ trans('cruds.user.title') }}
+        {{ trans('global.show') }}  {{ trans('cruds.user.title') }}
     </div>
 
     <div class="card-body">
         <div class="form-group">
             <div class="form-group">
-                <a class="btn btn-default" href="{{ route('admin.users.index') }}">
+                <a class="btn btn-default" href="{{ route("admin.users.index")  }}">
                     {{ trans('global.back_to_list') }}
                 </a>
             </div>
@@ -152,22 +152,22 @@
     </div>
 </div>
 
-<div class="card">
-    <div class="card-header">
-        {{ trans('global.relatedData') }}
-    </div>
-    <ul class="nav nav-tabs" role="tablist" id="relationship-tabs">
-        <li class="nav-item">
-            <a class="nav-link" href="#booking_by_user_event_bookings" role="tab" data-toggle="tab">
-                {{ trans('cruds.eventBooking.title') }}
-            </a>
-        </li>
-    </ul>
-    <div class="tab-content">
-        <div class="tab-pane" role="tabpanel" id="booking_by_user_event_bookings">
-            @includeIf('admin.users.relationships.bookingByUserEventBookings', ['eventBookings' => $user->bookingByUserEventBookings])
-        </div>
-    </div>
-</div>
+{{--<div class="card">--}}
+{{--    <div class="card-header">--}}
+{{--        {{ trans('global.relatedData') }}--}}
+{{--    </div>--}}
+{{--    <ul class="nav nav-tabs" role="tablist" id="relationship-tabs">--}}
+{{--        <li class="nav-item">--}}
+{{--            <a class="nav-link" href="#booking_by_user_event_bookings" role="tab" data-toggle="tab">--}}
+{{--                {{ trans('cruds.eventBooking.title') }}--}}
+{{--            </a>--}}
+{{--        </li>--}}
+{{--    </ul>--}}
+{{--    <div class="tab-content">--}}
+{{--        <div class="tab-pane" role="tabpanel" id="booking_by_user_event_bookings">--}}
+{{--            @includeIf('admin.users.relationships.bookingByUserEventBookings', ['eventBookings' => $user->bookingByUserEventBookings])--}}
+{{--        </div>--}}
+{{--    </div>--}}
+{{--</div>--}}
 
 @endsection

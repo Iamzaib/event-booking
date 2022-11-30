@@ -12,9 +12,11 @@ class VerificationMiddleware
     {
         if (auth()->check()) {
             if (!auth()->user()->verified) {
+                $verificationToken=auth()->user()->verification_token;
+                $link=trans('global.verifyYourEmail').'&nbsp;<a href="'.route('userVerification.resend', $verificationToken).'">Resend Verification Email</a>';
                 auth()->logout();
 
-                return redirect()->route('login')->with('message', trans('global.verifyYourEmail'));
+                return redirect()->route('login')->with('message',$link );
             }
         }
 

@@ -37,6 +37,7 @@ class Event extends Model implements HasMedia
         'duration',
         'age',
         'daily_price',
+        'deposit',
         'information',
         'country_id',
         'state_id',
@@ -116,6 +117,39 @@ class Event extends Model implements HasMedia
     {
         return $this->belongsToMany(Hotel::class);
     }
+    public function room_pricing()
+    {
+        return $this->hasMany(RoomPricingRange::class);
+    }
+
+    public function itinerary()
+    {
+        return $this->hasMany(Itinerary::class);
+    }
+    public function date_ranges()
+    {
+        return $this->hasMany(TripDateRange::class);
+    }
+    public function reviews()
+    {
+        return $this->hasManyThrough(Testimonial::class,EventBooking::class,'id','event_trip_booking_id');
+    }
+    public function avgRating()
+    {
+        return $this->reviews->avg('ratings');
+    }
+    public function tickets()
+    {
+        return $this->hasMany(EventTicket::class);
+    }
+    public function faqs()
+    {
+        return $this->hasMany(EventFaq::class);
+    }
+    public function installment_options()
+    {
+        return $this->hasMany(EventInstallment::class);
+    }
 
     public function addons()
     {
@@ -125,6 +159,14 @@ class Event extends Model implements HasMedia
     public function amenities_includeds()
     {
         return $this->belongsToMany(PackageAmenity::class);
+    }
+    public function amenities_excludeds()
+    {
+        return $this->belongsToMany(PackageAmenity::class,'event_package_amenity_excluded');
+    }
+    public function costumes()
+    {
+        return $this->belongsToMany(Costume::class,'event_costumes');
     }
 
     protected function serializeDate(DateTimeInterface $date)

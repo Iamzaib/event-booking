@@ -30,6 +30,14 @@ class Payment extends Model
         'payment_user_id',
         'payment_booking_id',
         'amount_total',
+        'starting_total',
+        'savings',
+        'coupon_amount',
+        'coupon_code',
+        'processing_fee',
+        'subtotal',
+        'installment',
+        'total_installments',
         'amount_paid',
         'amount_balance',
         'payment_method',
@@ -42,6 +50,15 @@ class Payment extends Model
     public function payment_event()
     {
         return $this->belongsTo(Event::class, 'payment_event_id');
+    }
+
+    public function installments()
+    {
+        return $this->hasMany(InstallmentPayments::class);
+    }
+    public function invoices()
+    {
+        return $this->hasMany(Invoices::class);
     }
 
     public function payment_user()

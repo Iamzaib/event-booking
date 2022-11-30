@@ -15,8 +15,8 @@
     </div>
 
     <div class="card-body">
-        <div class="table-responsive">
-            <table class=" table table-bordered table-striped table-hover datatable datatable-Event">
+        <div class="table-responsive overflow-visible print">
+            <table class="table table-sm table-hover table-wrap card-table" id="data-table">
                 <thead>
                     <tr>
                         <th width="10">
@@ -31,14 +31,17 @@
                         <th>
                             {{ trans('cruds.event.fields.daily_price') }}
                         </th>
-                        <th>
-                            {{ trans('cruds.event.fields.featured_image') }}
-                        </th>
+{{--                        <th>--}}
+{{--                            {{ trans('cruds.event.fields.featured_image') }}--}}
+{{--                        </th>--}}
                         <th>
                             {{ trans('cruds.event.fields.event_start') }}
                         </th>
                         <th>
                             {{ trans('cruds.event.fields.event_end') }}
+                        </th>
+                        <th>
+                            Booking
                         </th>
                         <th>
                             &nbsp;
@@ -60,13 +63,13 @@
                             <td>
                                 {{ $event->daily_price ?? '' }}
                             </td>
-                            <td>
-                                @if($event->featured_image)
-                                    <a href="{{ $event->featured_image->getUrl() }}" target="_blank" style="display: inline-block">
-                                        <img src="{{ $event->featured_image->getUrl('thumb') }}">
-                                    </a>
-                                @endif
-                            </td>
+{{--                            <td>--}}
+{{--                                @if($event->featured_image)--}}
+{{--                                    <a href="{{ $event->featured_image->getUrl() }}" target="_blank" style="display: inline-block">--}}
+{{--                                        <img src="{{ $event->featured_image->getUrl('thumb') }}">--}}
+{{--                                    </a>--}}
+{{--                                @endif--}}
+{{--                            </td>--}}
                             <td>
                                 {{ $event->event_start ?? '' }}
                             </td>
@@ -75,8 +78,25 @@
                             </td>
                             <td>
                                 @can('event_show')
+                                    <a class="btn btn-xs btn-success" href="{{ route('admin.event-bookings.create_booking', ['trip'=>$event->id]) }}">
+                                        Book this Event/Trip
+                                    </a>
+                                @endcan
+                            </td>
+                            <td>
+                                @can('event_show')
                                     <a class="btn btn-xs btn-primary" href="{{ route('admin.events.show', $event->id) }}">
                                         {{ trans('global.view') }}
+                                    </a>
+                                @endcan
+                                    @can('event_edit')
+                                    <a class="btn btn-xs btn-info" href="{{ route('admin.events.room_pricing', $event->id) }}">
+                                        Room Pricing
+                                    </a>
+                                @endcan
+                                    @can('event_edit')
+                                    <a class="btn btn-xs btn-info" href="{{ route('admin.events.installment_pricing', $event->id) }}">
+                                        Installments
                                     </a>
                                 @endcan
 
@@ -147,12 +167,9 @@
     order: [[ 1, 'desc' ]],
     pageLength: 50,
   });
-  let table = $('.datatable-Event:not(.ajaxTable)').DataTable({ buttons: dtButtons })
-  $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e){
-      $($.fn.dataTable.tables(true)).DataTable()
-          .columns.adjust();
-  });
-  
+  let table = $('.datatable-Event:not(.ajaxTable)');
+
+
 })
 
 </script>

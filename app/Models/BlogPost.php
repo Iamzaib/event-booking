@@ -32,6 +32,7 @@ class BlogPost extends Model implements HasMedia
         'title',
         'page_text',
         'excerpt',
+        'user_id',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -51,6 +52,11 @@ class BlogPost extends Model implements HasMedia
     public function tags()
     {
         return $this->belongsToMany(BlogTag::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class,'user_id');
     }
 
     public function getFeaturedImageAttribute()

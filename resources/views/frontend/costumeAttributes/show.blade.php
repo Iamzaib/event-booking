@@ -34,14 +34,6 @@
                                         {{ $costumeAttribute->title }}
                                     </td>
                                 </tr>
-                                <tr>
-                                    <th>
-                                        {{ trans('cruds.costumeAttribute.fields.values') }}
-                                    </th>
-                                    <td>
-                                        {{ $costumeAttribute->values }}
-                                    </td>
-                                </tr>
                             </tbody>
                         </table>
                         <div class="form-group">

@@ -27,7 +27,9 @@ class CostumeAttribute extends Model
         'updated_at',
         'deleted_at',
     ];
-
+    public function costumes(){
+        $this->belongsToMany(Costume::class,'costume_costume_attribute');
+    }
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->format('Y-m-d H:i:s');
