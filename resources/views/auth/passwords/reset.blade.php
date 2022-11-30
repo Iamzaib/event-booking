@@ -1,6 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.front')
 @section('content')
-<div class="row justify-content-center">
+<div class="row justify-content-center margin_80_0">
     <div class="col-md-6">
         <div class="card mx-4">
             <div class="card-body p-4">
@@ -37,7 +37,7 @@
 
                     <div class="row">
                         <div class="col-12">
-                            <button type="submit" class="btn btn-primary btn-block btn-flat">
+                            <button type="submit" class="btn_1  btngrad btnfull">
                                 {{ trans('global.reset_password') }}
                             </button>
                         </div>

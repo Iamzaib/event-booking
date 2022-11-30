@@ -82,24 +82,6 @@
                                         {{ $traveler->notes }}
                                     </td>
                                 </tr>
-                                <tr>
-                                    <th>
-                                        {{ trans('cruds.traveler.fields.costume') }}
-                                    </th>
-                                    <td>
-                                        {{ $traveler->costume->costume_title ?? '' }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        {{ trans('cruds.traveler.fields.tickets') }}
-                                    </th>
-                                    <td>
-                                        @foreach($traveler->tickets as $key => $tickets)
-                                            <span class="label label-info">{{ $tickets->ticket_title }}</span>
-                                        @endforeach
-                                    </td>
-                                </tr>
                             </tbody>
                         </table>
                         <div class="form-group">

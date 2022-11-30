@@ -93,38 +93,6 @@
                             <span class="help-block">{{ trans('cruds.traveler.fields.notes_helper') }}</span>
                         </div>
                         <div class="form-group">
-                            <label for="costume_id">{{ trans('cruds.traveler.fields.costume') }}</label>
-                            <select class="form-control select2" name="costume_id" id="costume_id">
-                                @foreach($costumes as $id => $entry)
-                                    <option value="{{ $id }}" {{ (old('costume_id') ? old('costume_id') : $traveler->costume->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
-                                @endforeach
-                            </select>
-                            @if($errors->has('costume'))
-                                <div class="invalid-feedback">
-                                    {{ $errors->first('costume') }}
-                                </div>
-                            @endif
-                            <span class="help-block">{{ trans('cruds.traveler.fields.costume_helper') }}</span>
-                        </div>
-                        <div class="form-group">
-                            <label for="tickets">{{ trans('cruds.traveler.fields.tickets') }}</label>
-                            <div style="padding-bottom: 4px">
-                                <span class="btn btn-info btn-xs select-all" style="border-radius: 0">{{ trans('global.select_all') }}</span>
-                                <span class="btn btn-info btn-xs deselect-all" style="border-radius: 0">{{ trans('global.deselect_all') }}</span>
-                            </div>
-                            <select class="form-control select2" name="tickets[]" id="tickets" multiple>
-                                @foreach($tickets as $id => $ticket)
-                                    <option value="{{ $id }}" {{ (in_array($id, old('tickets', [])) || $traveler->tickets->contains($id)) ? 'selected' : '' }}>{{ $ticket }}</option>
-                                @endforeach
-                            </select>
-                            @if($errors->has('tickets'))
-                                <div class="invalid-feedback">
-                                    {{ $errors->first('tickets') }}
-                                </div>
-                            @endif
-                            <span class="help-block">{{ trans('cruds.traveler.fields.tickets_helper') }}</span>
-                        </div>
-                        <div class="form-group">
                             <button class="btn btn-danger" type="submit">
                                 {{ trans('global.save') }}
                             </button>

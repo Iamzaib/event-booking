@@ -21,6 +21,40 @@
                 <span class="help-block">{{ trans('cruds.event.fields.event_title_helper') }}</span>
             </div>
             <div class="form-group">
+                <label for="">Trip Duration Ranges</label>
+                <div id="Datarange">
+                    <table class="table" id="daterange_fields">
+                        <tr>
+                            <th>Title</th>
+                            <th>Start Date</th>
+                            <th>End date</th>
+                            <th>Fixed Price For all These days</th>
+                            <th><span class="btn btn-info" onclick="add_new_daterange()">Add New Range</span></th>
+                        </tr>
+                        @foreach($event->date_ranges as $d_range)
+                        <tr>
+                            <td>
+                                <input type="text" value="{{$d_range->range_title}}" name="range_title[]" id="" class="form-control" >
+                            </td>
+                            <td>
+                                <input type="date" value="{{date('Y-m-d',strtotime($d_range->range_start))}}" name="range_start[]" id="" class="form-control" >
+                            </td>
+                            <td>
+                                <input type="date" value="{{date('Y-m-d',strtotime($d_range->range_end))}}" name="range_end[]" id="" class="form-control" >
+                            </td>
+                            <td>
+                                <input type="number" value="{{$d_range->range_price}}" step="0.01" name="range_price[]" id="" class="form-control" >
+                                <input type="hidden" name="range_id[]" value="{{$d_range->id}}">
+                            </td>
+                                                        <td>
+                                                            <span class="btn btn-danger" onclick="remove_new_Itinerary(this)">Remove This</span>
+                                                        </td>
+                        </tr>
+                        @endforeach
+                    </table>
+                </div>
+            </div>
+            <div class="form-group">
                 <label for="overview">{{ trans('cruds.event.fields.overview') }}</label>
                 <textarea class="form-control ckeditor {{ $errors->has('overview') ? 'is-invalid' : '' }}" name="overview" id="overview">{!! old('overview', $event->overview) !!}</textarea>
                 @if($errors->has('overview'))
@@ -198,6 +232,136 @@
                 <span class="help-block">{{ trans('cruds.event.fields.amenities_included_helper') }}</span>
             </div>
             <div class="form-group">
+                <label for="amenities_excludeds">{{ trans('cruds.event.fields.amenities_excluded') }}</label>
+                <div style="padding-bottom: 4px">
+                    <span class="btn btn-info btn-xs select-all" style="border-radius: 0">{{ trans('global.select_all') }}</span>
+                    <span class="btn btn-info btn-xs deselect-all" style="border-radius: 0">{{ trans('global.deselect_all') }}</span>
+                </div>
+                <select class="form-control select2 {{ $errors->has('amenities_excludeds') ? 'is-invalid' : '' }}" name="amenities_excludeds[]" id="amenities_excludeds" multiple>
+                    @foreach($amenities_includeds as $id => $amenities_included)
+                        <option value="{{ $id }}" {{ (in_array($id, old('amenities_excludeds', []))|| $event->amenities_excludeds->contains($id)) ? 'selected' : '' }}>{{ $amenities_included }}</option>
+                    @endforeach
+                </select>
+                @if($errors->has('amenities_excludeds'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('amenities_excludeds') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.event.fields.amenities_excluded_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <label for="costumes">{{ trans('cruds.event.fields.costumes') }}</label>
+                <div style="padding-bottom: 4px">
+                    <span class="btn btn-info btn-xs select-all" style="border-radius: 0">{{ trans('global.select_all') }}</span>
+                    <span class="btn btn-info btn-xs deselect-all" style="border-radius: 0">{{ trans('global.deselect_all') }}</span>
+                </div>
+                <select class="form-control select2 {{ $errors->has('costumes') ? 'is-invalid' : '' }}" name="costumes[]" id="costumes" multiple>
+                    @foreach($costumes as $id => $costume)
+                        <option value="{{ $id }}" {{ (in_array($id, old('costumes', []))||$event->costumes->contains($id)) ? 'selected' : '' }}>{{ $costume }}</option>
+                    @endforeach
+                </select>
+                @if($errors->has('costumes'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('costumes') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.event.fields.costumes_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <label for="">Itinerary</label>
+                <div id="Itinerary">
+                    <table class="table" id="Itinerary_fields">
+                        <tr>
+                            <th>Number</th>
+                            <th>Title</th>
+                            <th>Details</th>
+                            <th>Date/Time</th>
+                            <th>Duration</th>
+                            <th><span class="btn btn-info" onclick="add_new_Itinerary()">Add New</span></th>
+                        </tr>
+                        @foreach($event->itinerary as $itinerary)
+                        <tr>
+                            <td>
+                                <input type="text" name="number[]" id="" value="{{$itinerary->number}}" class="form-control">
+                            </td>
+                            <td>
+                                <input type="text" name="title[]" id="" value="{{$itinerary->title}}" class="form-control">
+                            </td>
+                            <td>
+                                <input type="text" name="details[]" id="" value="{{$itinerary->detail}}" class="form-control">
+                            </td>
+                            <td>
+                                <input type="time" name="datetime[]" id="" value="{{$itinerary->time}}" class="form-control ">
+                            </td>
+                            <td>
+                                <input type="text" name="durations[]" id="" value="{{$itinerary->duration}}" class="form-control">
+                            </td>
+                            <td>
+                                <span class="btn btn-danger" onclick="remove_new_Itinerary(this)">Remove This</span>
+                            </td>
+                        </tr>
+                        @endforeach
+                        <tr>
+                            <td>
+                                <input type="text" name="number[]" id="" class="form-control">
+                            </td>
+                            <td>
+                                <input type="text" name="title[]" id="" class="form-control">
+                            </td>
+                            <td>
+                                <input type="text" name="details[]" id="" class="form-control">
+                            </td>
+                            <td>
+                                <input type="time" name="datetime[]" id="" class="form-control ">
+                            </td>
+                            <td>
+                                <input type="text" name="durations[]" id="" class="form-control">
+                            </td>
+                            <td>
+                                <span class="btn btn-danger" onclick="remove_new_Itinerary(this)">Remove This</span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="">FAQs</label>
+                <div id="faqs">
+                    <table class="table" id="faq_fields">
+                        <tr>
+                            <th>Question</th>
+                            <th>Answer</th>
+
+                            <th><span class="btn btn-info" onclick="add_new_faq()">Add New Faq</span></th>
+                        </tr>
+                        @foreach($event->faqs as $faq)
+                        <tr>
+                            <td>
+                                <input type="text" name="faq_question[]" id="" value="{{$faq->question}}" class="form-control">
+                            </td>
+                            <td>
+                                <textarea name="faq_answer[]" class="form-control" cols="30" rows="3">{{$faq->answer}}</textarea>
+                            </td>
+                            <td>
+                                <span class="btn btn-danger" onclick="remove_new_Itinerary(this)">Remove This</span>
+                            </td>
+                        </tr>
+                        @endforeach
+                            <tr>
+                            <td>
+                                <input type="text" name="faq_question[]" id="" class="form-control">
+                            </td>
+                            <td>
+                                <textarea name="faq_answer[]" class="form-control" cols="30" rows="3"></textarea>
+                            </td>
+                            <td>
+                                <span class="btn btn-danger" onclick="remove_new_Itinerary(this)">Remove This</span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="form-group">
                 <button class="btn btn-danger" type="submit">
                     {{ trans('global.save') }}
                 </button>
@@ -206,128 +370,71 @@
     </div>
 </div>
 
-
+<table class="d-none" id="new_date_range_">
+    <tr>
+        <td>
+            <input type="text" name="range_title[]" id="" class="form-control">
+        </td>
+        <td>
+            <input type="date" name="range_start[]" id="" class="form-control">
+        </td>
+        <td>
+            <input type="date" name="range_end[]" id="" class="form-control">
+        </td>
+        <td>
+            <input type="number" step="0.01" name="range_price[]" id="" class="form-control">
+        </td>
+        <td>
+            <span class="btn btn-danger" onclick="remove_new_Itinerary(this)">Remove This</span>
+        </td>
+    </tr>
+</table>
 
 @endsection
 
 @section('scripts')
-<script>
-    $(document).ready(function () {
-  function SimpleUploadAdapter(editor) {
-    editor.plugins.get('FileRepository').createUploadAdapter = function(loader) {
-      return {
-        upload: function() {
-          return loader.file
-            .then(function (file) {
-              return new Promise(function(resolve, reject) {
-                // Init request
-                var xhr = new XMLHttpRequest();
-                xhr.open('POST', '{{ route('admin.events.storeCKEditorImages') }}', true);
-                xhr.setRequestHeader('x-csrf-token', window._token);
-                xhr.setRequestHeader('Accept', 'application/json');
-                xhr.responseType = 'json';
-
-                // Init listeners
-                var genericErrorText = `Couldn't upload file: ${ file.name }.`;
-                xhr.addEventListener('error', function() { reject(genericErrorText) });
-                xhr.addEventListener('abort', function() { reject() });
-                xhr.addEventListener('load', function() {
-                  var response = xhr.response;
-
-                  if (!response || xhr.status !== 201) {
-                    return reject(response && response.message ? `${genericErrorText}\n${xhr.status} ${response.message}` : `${genericErrorText}\n ${xhr.status} ${xhr.statusText}`);
-                  }
-
-                  $('form').append('<input type="hidden" name="ck-media[]" value="' + response.id + '">');
-
-                  resolve({ default: response.url });
-                });
-
-                if (xhr.upload) {
-                  xhr.upload.addEventListener('progress', function(e) {
-                    if (e.lengthComputable) {
-                      loader.uploadTotal = e.total;
-                      loader.uploaded = e.loaded;
-                    }
-                  });
-                }
-
-                // Send request
-                var data = new FormData();
-                data.append('upload', file);
-                data.append('crud_id', '{{ $event->id ?? 0 }}');
-                xhr.send(data);
-              });
-            })
-        }
-      };
-    }
-  }
-
-  var allEditors = document.querySelectorAll('.ckeditor');
-  for (var i = 0; i < allEditors.length; ++i) {
-    ClassicEditor.create(
-      allEditors[i], {
-        extraPlugins: [SimpleUploadAdapter]
-      }
-    );
-  }
-});
-</script>
 
 <script>
-    Dropzone.options.featuredImageDropzone = {
-    url: '{{ route('admin.events.storeMedia') }}',
-    maxFilesize: 2, // MB
-    acceptedFiles: '.jpeg,.jpg,.png,.gif',
-    maxFiles: 1,
-    addRemoveLinks: true,
-    headers: {
-      'X-CSRF-TOKEN': "{{ csrf_token() }}"
-    },
-    params: {
-      size: 2,
-      width: 4096,
-      height: 4096
-    },
-    success: function (file, response) {
-      $('form').find('input[name="featured_image"]').remove()
-      $('form').append('<input type="hidden" name="featured_image" value="' + response.name + '">')
-    },
-    removedfile: function (file) {
-      file.previewElement.remove()
-      if (file.status !== 'error') {
-        $('form').find('input[name="featured_image"]').remove()
-        this.options.maxFiles = this.options.maxFiles + 1
-      }
-    },
-    init: function () {
-@if(isset($event) && $event->featured_image)
-      var file = {!! json_encode($event->featured_image) !!}
-          this.options.addedfile.call(this, file)
-      this.options.thumbnail.call(this, file, file.preview ?? file.preview_url)
-      file.previewElement.classList.add('dz-complete')
-      $('form').append('<input type="hidden" name="featured_image" value="' + file.file_name + '">')
-      this.options.maxFiles = this.options.maxFiles - 1
-@endif
-    },
-    error: function (file, response) {
-        if ($.type(response) === 'string') {
-            var message = response //dropzone sends it's own error messages in string
-        } else {
-            var message = response.errors.file
-        }
-        file.previewElement.classList.add('dz-error')
-        _ref = file.previewElement.querySelectorAll('[data-dz-errormessage]')
-        _results = []
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            node = _ref[_i]
-            _results.push(node.textContent = message)
-        }
-
-        return _results
+    var storeCKEditorImages_url='{{ route('admin.events.storeCKEditorImages') }}';
+    var dropzone_field='featured_image-dropzone',photo_upload_route='{{ route('admin.events.storeMedia') }}',field_name='featured_image',Maxfiles=1,dropzone=true,
+        crud_id='{{ $event->id ?? 0 }}';
+    @if(isset($event) && $event->featured_image)
+    var image_exists=true;
+    var image_src={!! json_encode($event->featured_image) !!}
+    @endif
+    var new_date_range=$('#new_date_range_ tbody').html();
+    var new_Itinerary=' <tr><td> <input type="text" name="number[]" id="" class="form-control">        </td>' +
+        ' <td>        <input type="text" name="title[]" id="" class="form-control">    </td>' +
+        ' <td>' +
+        '<input type="text" name="details[]" id="" class="form-control">' +
+        '</td>' +
+        '<td>' +
+        '<input type="time" name="datetime[]" id="" class="form-control" >' +
+        '</td>' +
+        ' <td>' +
+        '<input type="text" name="durations[]" id="" class="form-control">' +
+        '</td>' +
+        '<td>' +
+        '<span class="btn btn-danger" onclick="remove_new_Itinerary(this)">Remove This</span>' +
+        '</td>' +
+        '</tr>';
+    function add_new_Itinerary(){
+        $('#Itinerary_fields tbody').append(new_Itinerary);
     }
-}
-
+    var new_FAQ=' <tr><td> <input type="text" name="faq_question[]" id="" class="form-control">        </td>' +
+        ' <td>        <textarea name="faq_answer[]" class="form-control" cols="30" rows="3"></textarea>    </td>' +
+        '<td>' +
+        '<span class="btn btn-danger" onclick="remove_new_Itinerary(this)">Remove This</span>' +
+        '</td>' +
+        '</tr>';
+    function add_new_faq(){
+        $('#faq_fields tbody').append(new_FAQ);
+    }
+    function add_new_daterange(){
+        $('#daterange_fields tbody').append(new_date_range);
+    }
+    function remove_new_Itinerary(btn){
+        $(btn).parent().parent().remove();
+    }
 </script>
 @endsection

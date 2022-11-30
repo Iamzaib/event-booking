@@ -16,6 +16,7 @@ use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Laravel\Cashier\Billable;
 
 class User extends Authenticatable implements HasMedia
 {
@@ -23,6 +24,7 @@ class User extends Authenticatable implements HasMedia
     use Notifiable;
     use InteractsWithMedia;
     use HasFactory;
+    use Billable;
 
     public const GENDER_RADIO = [
         'male'   => 'Male',
@@ -42,6 +44,7 @@ class User extends Authenticatable implements HasMedia
 
     protected $dates = [
         'email_verified_at',
+        'dob',
         'verified_at',
         'created_at',
         'updated_at',
@@ -54,6 +57,7 @@ class User extends Authenticatable implements HasMedia
         'email',
         'phone',
         'gender',
+        'dob',
         'address',
         'address_2',
         'city_id',
@@ -186,6 +190,18 @@ class User extends Authenticatable implements HasMedia
         return $this->belongsToMany(Role::class);
     }
 
+    public function favourite_trips()
+    {
+        return $this->belongsToMany(Event::class,'event_favorites');
+    }
+    public function payments()
+    {
+        return $this->hasMany(Payment::class,'payment_user_id');
+    }
+    public function reviews()
+    {
+        return $this->hasMany(Testimonial::class);
+    }
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->format('Y-m-d H:i:s');

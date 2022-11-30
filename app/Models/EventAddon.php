@@ -34,6 +34,10 @@ class EventAddon extends Model
         'updated_at',
         'deleted_at',
     ];
+    public function booking_event_addons()
+    {
+        return $this->belongsToMany(EventBooking::class, 'event_booking_addons','addon_id','event_booking_id')->withPivot('addon_price');
+    }
 
     protected function serializeDate(DateTimeInterface $date)
     {

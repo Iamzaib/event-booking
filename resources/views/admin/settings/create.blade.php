@@ -65,6 +65,21 @@
                 <span class="help-block">{{ trans('cruds.setting.fields.setting_type_helper') }}</span>
             </div>
             <div class="form-group">
+                <label>Setting Group</label>
+                <select class="form-control {{ $errors->has('setting_group') ? 'is-invalid' : '' }}" name="setting_group" id="setting_group" required>
+                    <option value disabled {{ old('setting_group', null) === null ? 'selected' : '' }}>Select Setting Group</option>
+                    @foreach(App\Models\Setting::SETTING_GROUPS as $key => $label)
+                        <option value="{{ $key }}" {{ old('setting_group', '') === (string) $key ? 'selected' : '' }}>{{ $label }}</option>
+                    @endforeach
+                </select>
+                @if($errors->has('setting_group'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('setting_group') }}
+                    </div>
+                @endif
+{{--                <span class="help-block">{{ trans('cruds.setting.fields.setting_type_helper') }}</span>--}}
+            </div>
+            <div class="form-group">
                 <button class="btn btn-danger" type="submit">
                     {{ trans('global.save') }}
                 </button>

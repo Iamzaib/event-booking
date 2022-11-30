@@ -52,14 +52,6 @@
                                 </tr>
                                 <tr>
                                     <th>
-                                        {{ trans('cruds.event.fields.age') }}
-                                    </th>
-                                    <td>
-                                        {{ $event->age }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
                                         {{ trans('cruds.event.fields.daily_price') }}
                                     </th>
                                     <td>
@@ -124,36 +116,6 @@
                                     </th>
                                     <td>
                                         {{ $event->event_end }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        {{ trans('cruds.event.fields.hotels') }}
-                                    </th>
-                                    <td>
-                                        @foreach($event->hotels as $key => $hotels)
-                                            <span class="label label-info">{{ $hotels->hotel_name }}</span>
-                                        @endforeach
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        {{ trans('cruds.event.fields.addons') }}
-                                    </th>
-                                    <td>
-                                        @foreach($event->addons as $key => $addons)
-                                            <span class="label label-info">{{ $addons->addon_title }}</span>
-                                        @endforeach
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        {{ trans('cruds.event.fields.amenities_included') }}
-                                    </th>
-                                    <td>
-                                        @foreach($event->amenities_includeds as $key => $amenities_included)
-                                            <span class="label label-info">{{ $amenities_included->title }}</span>
-                                        @endforeach
                                     </td>
                                 </tr>
                             </tbody>

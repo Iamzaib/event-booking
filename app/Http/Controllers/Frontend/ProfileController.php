@@ -42,6 +42,6 @@ class ProfileController extends Controller
     {
         auth()->user()->update($request->validated());
 
-        return redirect()->route('frontend.profile.index')->with('message', __('global.change_password_success'));
+        return redirect()->route('frontend.account.index')->with('message', __('global.change_password_success'));
     }
 }

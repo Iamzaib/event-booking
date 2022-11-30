@@ -44,16 +44,6 @@
                             <span class="help-block">{{ trans('cruds.event.fields.duration_helper') }}</span>
                         </div>
                         <div class="form-group">
-                            <label for="age">{{ trans('cruds.event.fields.age') }}</label>
-                            <input class="form-control" type="text" name="age" id="age" value="{{ old('age', '') }}">
-                            @if($errors->has('age'))
-                                <div class="invalid-feedback">
-                                    {{ $errors->first('age') }}
-                                </div>
-                            @endif
-                            <span class="help-block">{{ trans('cruds.event.fields.age_helper') }}</span>
-                        </div>
-                        <div class="form-group">
                             <label class="required" for="daily_price">{{ trans('cruds.event.fields.daily_price') }}</label>
                             <input class="form-control" type="number" name="daily_price" id="daily_price" value="{{ old('daily_price', '') }}" step="0.01" required>
                             @if($errors->has('daily_price'))
@@ -145,60 +135,6 @@
                                 </div>
                             @endif
                             <span class="help-block">{{ trans('cruds.event.fields.event_end_helper') }}</span>
-                        </div>
-                        <div class="form-group">
-                            <label for="hotels">{{ trans('cruds.event.fields.hotels') }}</label>
-                            <div style="padding-bottom: 4px">
-                                <span class="btn btn-info btn-xs select-all" style="border-radius: 0">{{ trans('global.select_all') }}</span>
-                                <span class="btn btn-info btn-xs deselect-all" style="border-radius: 0">{{ trans('global.deselect_all') }}</span>
-                            </div>
-                            <select class="form-control select2" name="hotels[]" id="hotels" multiple>
-                                @foreach($hotels as $id => $hotel)
-                                    <option value="{{ $id }}" {{ in_array($id, old('hotels', [])) ? 'selected' : '' }}>{{ $hotel }}</option>
-                                @endforeach
-                            </select>
-                            @if($errors->has('hotels'))
-                                <div class="invalid-feedback">
-                                    {{ $errors->first('hotels') }}
-                                </div>
-                            @endif
-                            <span class="help-block">{{ trans('cruds.event.fields.hotels_helper') }}</span>
-                        </div>
-                        <div class="form-group">
-                            <label for="addons">{{ trans('cruds.event.fields.addons') }}</label>
-                            <div style="padding-bottom: 4px">
-                                <span class="btn btn-info btn-xs select-all" style="border-radius: 0">{{ trans('global.select_all') }}</span>
-                                <span class="btn btn-info btn-xs deselect-all" style="border-radius: 0">{{ trans('global.deselect_all') }}</span>
-                            </div>
-                            <select class="form-control select2" name="addons[]" id="addons" multiple>
-                                @foreach($addons as $id => $addon)
-                                    <option value="{{ $id }}" {{ in_array($id, old('addons', [])) ? 'selected' : '' }}>{{ $addon }}</option>
-                                @endforeach
-                            </select>
-                            @if($errors->has('addons'))
-                                <div class="invalid-feedback">
-                                    {{ $errors->first('addons') }}
-                                </div>
-                            @endif
-                            <span class="help-block">{{ trans('cruds.event.fields.addons_helper') }}</span>
-                        </div>
-                        <div class="form-group">
-                            <label for="amenities_includeds">{{ trans('cruds.event.fields.amenities_included') }}</label>
-                            <div style="padding-bottom: 4px">
-                                <span class="btn btn-info btn-xs select-all" style="border-radius: 0">{{ trans('global.select_all') }}</span>
-                                <span class="btn btn-info btn-xs deselect-all" style="border-radius: 0">{{ trans('global.deselect_all') }}</span>
-                            </div>
-                            <select class="form-control select2" name="amenities_includeds[]" id="amenities_includeds" multiple>
-                                @foreach($amenities_includeds as $id => $amenities_included)
-                                    <option value="{{ $id }}" {{ in_array($id, old('amenities_includeds', [])) ? 'selected' : '' }}>{{ $amenities_included }}</option>
-                                @endforeach
-                            </select>
-                            @if($errors->has('amenities_includeds'))
-                                <div class="invalid-feedback">
-                                    {{ $errors->first('amenities_includeds') }}
-                                </div>
-                            @endif
-                            <span class="help-block">{{ trans('cruds.event.fields.amenities_included_helper') }}</span>
                         </div>
                         <div class="form-group">
                             <button class="btn btn-danger" type="submit">

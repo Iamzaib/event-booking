@@ -49,14 +49,6 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.event.fields.age') }}
-                        </th>
-                        <td>
-                            {{ $event->age }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
                             {{ trans('cruds.event.fields.daily_price') }}
                         </th>
                         <td>
@@ -133,26 +125,6 @@
                             @endforeach
                         </td>
                     </tr>
-                    <tr>
-                        <th>
-                            {{ trans('cruds.event.fields.addons') }}
-                        </th>
-                        <td>
-                            @foreach($event->addons as $key => $addons)
-                                <span class="label label-info">{{ $addons->addon_title }}</span>
-                            @endforeach
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            {{ trans('cruds.event.fields.amenities_included') }}
-                        </th>
-                        <td>
-                            @foreach($event->amenities_includeds as $key => $amenities_included)
-                                <span class="label label-info">{{ $amenities_included->title }}</span>
-                            @endforeach
-                        </td>
-                    </tr>
                 </tbody>
             </table>
             <div class="form-group">
@@ -164,22 +136,22 @@
     </div>
 </div>
 
-<div class="card">
-    <div class="card-header">
-        {{ trans('global.relatedData') }}
-    </div>
-    <ul class="nav nav-tabs" role="tablist" id="relationship-tabs">
-        <li class="nav-item">
-            <a class="nav-link" href="#booking_event_event_bookings" role="tab" data-toggle="tab">
-                {{ trans('cruds.eventBooking.title') }}
-            </a>
-        </li>
-    </ul>
-    <div class="tab-content">
-        <div class="tab-pane" role="tabpanel" id="booking_event_event_bookings">
-            @includeIf('admin.events.relationships.bookingEventEventBookings', ['eventBookings' => $event->bookingEventEventBookings])
-        </div>
-    </div>
-</div>
+{{--<div class="card">--}}
+{{--    <div class="card-header">--}}
+{{--        {{ trans('global.relatedData') }}--}}
+{{--    </div>--}}
+{{--    <ul class="nav nav-tabs" role="tablist" id="relationship-tabs">--}}
+{{--        <li class="nav-item">--}}
+{{--            <a class="nav-link" href="#booking_event_event_bookings" role="tab" data-toggle="tab">--}}
+{{--                {{ trans('cruds.eventBooking.title') }}--}}
+{{--            </a>--}}
+{{--        </li>--}}
+{{--    </ul>--}}
+{{--    <div class="tab-content">--}}
+{{--        <div class="tab-pane" role="tabpanel" id="booking_event_event_bookings">--}}
+{{--            @includeIf('admin.events.relationships.bookingEventEventBookings', ['eventBookings' => $event->bookingEventEventBookings])--}}
+{{--        </div>--}}
+{{--    </div>--}}
+{{--</div>--}}
 
 @endsection

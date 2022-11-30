@@ -8,10 +8,13 @@ use App\Http\Requests\StorePaymentRequest;
 use App\Http\Requests\UpdatePaymentRequest;
 use App\Models\Event;
 use App\Models\EventBooking;
+use App\Models\Invoices;
 use App\Models\Payment;
 use App\Models\User;
 use Gate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Symfony\Component\HttpFoundation\Response;
 
 class PaymentsController extends Controller
@@ -24,7 +27,46 @@ class PaymentsController extends Controller
 
         return view('frontend.payments.index', compact('payments'));
     }
+    public function trip_balance_payment(Payment $payment,Request $request){
+        $paymentMethod=$request->payment_method;
+        $amount_to_paid=(float)$request->pay_amount;
+        $paid=(float)$payment->amount_paid+$amount_to_paid;
+        $balance=(float)$payment->amount_balance-$amount_to_paid;
+        $user=Auth::user();
+        try {
+            $paymentMethod = $user->findPaymentMethod($paymentMethod);
+        }catch (\Exception $exception){
+            $user->addPaymentMethod($paymentMethod);
+        }
 
+        try {
+            $user->createOrGetStripeCustomer();
+            $stripe_payment= $user->charge(($amount_to_paid*100), $paymentMethod);
+        } catch (\Exception $exception) {
+            //   return back()->with('error', );
+//            echo $exception->getMessage();
+            Session::flash('error',$exception->getMessage());
+            return redirect()->back()->with('error',$exception->getMessage());
+            exit;
+        }
+        $payment->update([
+            'amount_paid'=>$paid,
+            'amount_balance'=>$balance,
+        ]);
+        Invoices::create([
+            'payment_id'=>$payment->id,
+            'amount_total'=>$payment->amount_total,
+            'amount_paid'=>$paid,
+            'payment_done'=>$amount_to_paid,
+            'payment_method'=>'CC',
+            'payment_details'=>json_encode($stripe_payment),
+            'deposit'=>$payment->deposit,
+            'installment'=>$payment->installment,
+            'total_installments'=>$payment->total_installments,
+            'amount_balance'=>$balance,
+        ]);
+        return redirect()->route('frontend.account.index',['tab'=>'payment'])->with('message','Payment Successful');
+    }
     public function create()
     {
         abort_if(Gate::denies('payment_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
@@ -69,11 +111,24 @@ class PaymentsController extends Controller
 
     public function show(Payment $payment)
     {
-        abort_if(Gate::denies('payment_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+//        abort_if(Gate::denies('payment_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $payment->load('payment_event', 'payment_user', 'payment_booking');
-
-        return view('frontend.payments.show', compact('payment'));
+        $data['payment']=$payment;
+        $data['booking']=$payment->payment_booking;
+//dd($data);
+        return view('front.account.invoice', $data);
+    }
+    public function invoice(Invoices $invoice)
+    {
+//        abort_if(Gate::denies('payment_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        $payment=$invoice->payment;
+        $payment->load('payment_event', 'payment_user', 'payment_booking');
+        $data['payment']=$payment;
+        $data['invoice']=$invoice;
+        $data['booking']=$payment->payment_booking;
+//dd($data);
+        return view('front.account.invoice', $data);
     }
 
     public function destroy(Payment $payment)
