@@ -107,7 +107,7 @@ position: relative;
     <div class="checkutpagemain">
         <div class="container contch">
             <div class="checkout1box custrip1">
-                <h1 class="arwsqft"><img src="{{asset('assets/front/img/left-arrow.svg')}}" /><a href="{{route('frontend.trip_view',['trip_title'=>str_replace(' ','-',$trip->event_title),'event'=>$trip->id])}}">Go back</a></h1>
+                <h1 class="arwsqft"><img src="{{asset('assets/front/img/left-ico.svg')}}" /><a href="{{route('frontend.trip_view',['trip_title'=>str_replace(' ','-',$trip->event_title),'event'=>$trip->id])}}">Go back</a></h1>
                 <h2>Create your trip.</h2>
                 @if(isset($error))
                     {{$error}}
@@ -431,10 +431,10 @@ position: relative;
                                             <div class="boxchlabl">
                                                 <h3>Deposit + Monthly Installments</h3>
 												<p>Pay a deposit now. The remaining balance will be due as shown. You will receive an email with a link to pay when a payment is due.</p>
-												<h6><span>$500</span> — Deposit due at booking</h6>
-												<h6><span>$1,250</span> — 1st payment due December 9th</h6>
-												<h6><span>$1,250</span> —  2nd payment due February 10th</h6>
-												<h6><span>$1,250</span> —  Final payment due May 12th</h6>
+												<h6><span id="deposit_view">{{display_currency($installments['deposit'])}}</span> — Deposit due at booking</h6>
+                                                @foreach($installments['installment'] as $num => $instalment)
+												<h6 id="installment_{{$num}}">{!! $instalment['text'] !!}</h6>
+                                                @endforeach
 <!--                                                <h3><b id="install">{{display_currency($low_deposit)}} Deposit + {{display_currency($low_installment)}} for {{TOTAL_INSTALLMENTS}} Months</b></h3>-->
                                             </div>
 
@@ -598,13 +598,14 @@ position: relative;
                                                             @endforeach
 
                                                         @endif
-                                                            <div class="row" style="padding-top: 20px; padding-bottom: 10px;"><div class="col-12 col-md-6"><h3 class="textheadcusttrip">  <img src="{{asset('assets/front/img/plus-ico.svg')}}" style="position: relative; top: -2px;" /> Add new Card</h3></div></div>
+                                                            <div class="row" style="padding-top: 20px; padding-bottom: 10px;"><div class="col-12 col-md-6"><h3 class="textheadcusttrip addcardfn">  <img src="{{asset('assets/front/img/plus-ico.svg')}}" style="position: relative; top: -2px;" /> Add new Card</h3></div></div>
                                                         <!-- <div id="card-element" class="mt-3 mb-3"></div> -->
                                                         <div id="card-errors" role="alert"></div>
                                                         <input type="hidden" name="payment_method" class="payment-method">
 
 
-                                                        <div class="form-group row mblwidthcol">
+                                                       <div class="showaddnewcard">
+                                                       <div class="form-group row mblwidthcol">
                                                             <div class="col-12 mb-3">
                                                                 <label for="" class="form-label">Card Number</label>
                                                                 <div id="card-number" class="form-control">
@@ -633,6 +634,8 @@ position: relative;
                                                                 </select>
                                                             </div>
                                                         </div>
+</div>
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -804,16 +807,25 @@ position: relative;
         <div class="toast align-items-center text-white bg-danger border-0 room_toast" role="alert" aria-live="assertive" data-bs-autohide="false" aria-atomic="true">
             <div class="d-flex">
                 <div class="toast-body">
-                    Rooms/Accomodations are not selectd for all Travelers
+                    Rooms/Accomodations are not selected for all Travelers
                 </div>
                 <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
     </div>
     </div>
 
+
+
 @endsection
 @section('scripts')
+<script>
+    $('.addcardfn').click(function(){
+    $(".showaddnewcard").css("display", "block");
+    $(".addcardfn").css("display", "none");
+});
+        </script>
     <script src="https://js.stripe.com/v3/"></script>
+
     <script>
         let stripe = Stripe("{{ env('STRIPE_KEY') }}")
         let elements = stripe.elements()
@@ -944,35 +956,38 @@ for(var tr=1;tr<=total_travelers;tr++){
             $('.payment_type').change(function () {
             var payment_type=$(this).val();
                 var total=$('.finaltotal').html().replace('$','');
-                var Deposit={{(float)DEPOSIT_AMOUNT_PERCENT/100}};
-                var totalinstallment_={{(int)TOTAL_INSTALLMENTS}};
+                var Deposit={{$installments['deposit']}};
+                var totalinstallment_={{(int)$installments['total']}};
 
-                Deposit=parseFloat(total)*Deposit;
-                var installment=(parseFloat(total)-Deposit)/totalinstallment_;
-                console.log(payment_type+'$'+Deposit+' Deposit + $'+installment+' for '+totalinstallment_+' Months');
+                // Deposit=parseFloat(total)*Deposit;
+                var installment= {{(float)$installments['lowest']}};
+
+               // console.log(payment_type+'$'+Deposit+' Deposit + $'+installment+' for '+totalinstallment_+' Months');
                 $('#install').html('$'+Deposit.toFixed(2)+' Deposit + $'+installment.toFixed(2)+' for '+totalinstallment_+' Months')
-                if(payment_type==='Installment'){console.log(payment_type+'$'+Deposit+' Deposit + $'+installment+' for '+totalinstallment_+' Months');
+                if(payment_type==='Installment'){//console.log(payment_type+'$'+Deposit+' Deposit + $'+installment+' for '+totalinstallment_+' Months');
+                    $('#deposit-total').remove();
+                    $('#installment-total').remove();
                     var Installment_this = '<div class="priceflex1" id="deposit-total">' +
                         '<div>' +
                         '<p>Deposit </p>' +
                         '</div>' +
                         '<div>' +
-                        '<p style="">$' + (parseFloat(Deposit)).toFixed(2) + '</p>' +
+                        '<p style="" id="deposit_value_only">$' + (parseFloat(Deposit)).toFixed(2) + '</p>' +
                         '</div>' +
                         '</div>'+'<div class="priceflex1" id="installment-total">' +
                         '<div>' +
-                        '<p> Installments/Month For (' + totalinstallment_ + ' Months)</p>' +
+                        '<p> Installment starting from </p>' +
                         '</div>' +
                         '<div>' +
-                        '<p style="">$' + (installment.toFixed(2)) + '</p>' +
+                        '<p style="" id="installment_starting">$' + (installment.toFixed(2)) + '</p>' +
                         '</div>' +
                         '</div>';
                     $('#Installment').show();
                     $('#Installment').append(Installment_this);
                 }else{
                     $('#Installment').hide();
-                    $('#deposit-total').remove();
-                    $('#installment-total').remove();
+                    // $('#deposit-total').remove();
+                    // $('#installment-total').remove();
                     calculate_total();
                 }
 
@@ -1362,12 +1377,18 @@ for(var tr=1;tr<=total_travelers;tr++){
             $('.finaltotal').html('$'+total.toFixed(2))
             $('#processing_fee').html('$'+processing.toFixed(2))
             // console.log('total:'+total);
-            var Deposit={{(float)DEPOSIT_AMOUNT_PERCENT/100}};
-            var totalinstallment_={{(int)TOTAL_INSTALLMENTS}};
+            {{--var Deposit={{(float)DEPOSIT_AMOUNT_PERCENT/100}};--}}
+            {{--var totalinstallment_={{(int)TOTAL_INSTALLMENTS}};--}}
 
-            Deposit=total*Deposit;
-            var installment=(total-Deposit)/totalinstallment_;
+            {{--Deposit=total*Deposit;--}}
+            {{--var installment=(total-Deposit)/totalinstallment_;--}}
+            var Deposit={{$installments['deposit']}};
+            var totalinstallment_={{(int)$installments['total']}};
+
+            // Deposit=parseFloat(total)*Deposit;
+            var installment= {{(float)$installments['lowest']}};
             // console.log(payment_type+'$'+Deposit+' Deposit + $'+installment+' for '+totalinstallment_+' Months');
+            get_installments();
             $('#install').html('$'+Deposit.toFixed(2)+' Deposit + $'+installment.toFixed(2)+' for '+totalinstallment_+' Months')
         }
         function processing_fee(total){
@@ -1397,5 +1418,22 @@ for(var tr=1;tr<=total_travelers;tr++){
             }
             return trleft_;
         }
+        function get_installments(){
+            var url_='{{route('frontend.get_installments',['trip'=>$trip->id,'amount'=>'0amount'])}}'.replace('0amount',total);
+            $.get(url_,function (data){
+                console.log(data);
+                $('#deposit_view').html('$'+data.deposit);
+                @foreach($installments['installment'] as $num => $instalment)
+                    {{--console.log(data.installment{{$num}}.ajax_text);--}}
+                   $('#installment_{{$num}}').html(data.installment{{$num}}.ajax_text);
+
+                @endforeach
+                $('#deposit_value_only').html('$'+data.deposit);
+                $('#installment_starting').html('$'+data.lowest);
+            });
+        }
+    </script>
+    <script>
+
     </script>
 @endsection

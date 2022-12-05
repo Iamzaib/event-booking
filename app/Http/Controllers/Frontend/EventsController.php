@@ -12,6 +12,7 @@ use App\Models\Costume;
 use App\Models\Country;
 use App\Models\Event;
 use App\Models\EventAddon;
+use App\Models\EventInstallment;
 use App\Models\Hotel;
 use App\Models\HotelRoom;
 use App\Models\State;
@@ -200,11 +201,12 @@ class EventsController extends Controller
             }
         }
 //dd($room_prices);
+        $installments=$this->calulate_installments($trip,$range_low_price);
         $data['low_total']=$range_low_price;
-        $data['low_deposit']=$range_low_price>0?($range_low_price*((float)DEPOSIT_AMOUNT_PERCENT/100)):0;
+        $data['low_deposit']=$installments['deposit'];
         $installment=$range_low_price-$data['low_deposit'];
         $data['low_installment']=$range_low_price>0?($installment/(int)TOTAL_INSTALLMENTS):0;
-
+        $data['installments']=$installments;
         $data['room_prices']=$room_prices;
         $data['total_event_tickets']=count($trip->tickets);
         $data['range'][1]['date']=date('d-M-Y',strtotime($trip->event_start)).' > '.date('d-M-Y',strtotime($trip->event_end));
@@ -287,6 +289,40 @@ $data['avg_ratings']=0;
         return view('front.trips.trip-event', $data);
     }
 
+    public function calulate_installments(Event $trip,$amount){
+        $installments=[];
+        $total_amount=$amount;
+        $installments['amount']=$amount;
+        $installments['deposit']=$deposit=round(($amount*((float)$trip->deposit/100)),2);
+        $total_amount-=$deposit;
+        $t_insallments=EventInstallment::where('event_id',$trip->id)->get();
+        $installments['total']=count($t_insallments);
+        $all_text='';
+        $installment_low=[];
+        foreach ($t_insallments as $installment){
+            $installments['installment'][$installment->installment_no]['amount']=$payment=round(($total_amount*((float)$installment->installment/100)),2);
+            $installment_low[]=$payment;
+            $text='<span>'.display_currency($payment).'</span> — '.ordinal($installment->installment_no).' payment due '.date("F jS",strtotime($installment->due_date));
+            $all_text.='<h6>'.$text.'</h6>';
+            $installments['installment'][$installment->installment_no]['text']=$text;
+            $installments['installment'.$installment->installment_no]['ajax_text']=$text;
+        }
+        $installments['all']=$all_text;
+        $installments['lowest']=round(min($installment_low),2);
+        return $installments;
+    }
+    public function get_installments(Request $request,Event $trip,$amount){
+        $data='';
+        try {
+            $data=$this->calulate_installments($trip,$amount);
+        }catch (\Exception $e){
+            $data=$e;
+        }
+            if($request->ajax()){
+                return \response()->json($data);
+            }
+            return $data;
+    }
     public function destroy(Event $event)
     {
         abort_if(Gate::denies('event_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');

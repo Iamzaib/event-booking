@@ -15,6 +15,7 @@ use App\Models\Country;
 use App\Models\Event;
 use App\Models\EventAddon;
 use App\Models\EventBooking;
+use App\Models\EventInstallment;
 use App\Models\EventTicket;
 use App\Models\Hotel;
 use App\Models\HotelRoom;
@@ -258,9 +259,20 @@ class CheckoutController extends Controller
         $booking->update([
             'booking_total'=>$total,
         ]);
-        $deposit=($total*((float)DEPOSIT_AMOUNT_PERCENT/100));
-        $installment=$total-$deposit;
-        $installment_1=($installment/(int)TOTAL_INSTALLMENTS);
+
+
+//        $deposit=($total*((float)DEPOSIT_AMOUNT_PERCENT/100));
+//        $installment=$total-$deposit;
+//        $installment_1=($installment/(int)TOTAL_INSTALLMENTS);
+        if($rq->payment_type=='Installment'){
+            $installment_data=$this->calulate_installments($trip,$total);
+            $deposit=$installment_data['deposit'];
+            $installment=$total-$deposit;
+            $installment_1=$installment_data['lowest'];
+            $installment_1= $installment_data['installment'][1]['amount'] ?? $installment_1;
+            $total_installment=$installment_data['total'];
+
+        }
         $paymentMethod = $rq->payment_method;
         $user=Auth::user();
         $amount_to_paid=$total;
@@ -298,7 +310,7 @@ class CheckoutController extends Controller
             'subtotal'=>$subtotal,
             'deposit'=>($rq->payment_type=='Installment'?$deposit:0),
             'installment'=>($rq->payment_type=='Installment'?$installment_1:0),
-            'total_installments'=>($rq->payment_type=='Installment'?(int)TOTAL_INSTALLMENTS:0),
+            'total_installments'=>($rq->payment_type=='Installment'?(int)$total_installment:0),
             'amount_balance'=>($rq->payment_type=='Installment'?($installment):0),
         ]);
         Invoices::create([
@@ -310,7 +322,7 @@ class CheckoutController extends Controller
             'payment_details'=>json_encode($payment),
             'deposit'=>($rq->payment_type=='Installment'?$deposit:0),
             'installment'=>($rq->payment_type=='Installment'?$installment_1:0),
-            'total_installments'=>($rq->payment_type=='Installment'?(int)TOTAL_INSTALLMENTS:0),
+            'total_installments'=>($rq->payment_type=='Installment'?(int)$total_installment:0),
             'amount_balance'=>($rq->payment_type=='Installment'?($installment):0),
         ]);
         $booking->update([
@@ -318,15 +330,15 @@ class CheckoutController extends Controller
                 'status'=>'active'
             ]);
         if($rq->payment_type=='Installment'){
-            for ($p=1;$p<=TOTAL_INSTALLMENTS;$p++){
+            foreach ($installment_data['installment'] as $num => $this_installment){
                 InstallmentPayments::create([
                     'payment_id'=>$paymentUpdate->id,
                     'amount_total'=>$total,
-                    'amount_paid'=>$amount_to_paid,
-                    'amount_balance'=>$installment,
-                    'installment'=>$installment_1,
-                    'total_installments'=>TOTAL_INSTALLMENTS,
-                    'installment_no'=>$p,
+                    'amount_paid'=>$amount_to_paid+$this_installment['amount'],
+                    'amount_balance'=>$installment-$this_installment['amount'],
+                    'installment'=>$this_installment['amount'],
+                    'total_installments'=>$total_installment,
+                    'installment_no'=>$num,
                     'payment_method'=>'',
                     'payment_details'=>'',
                 ]);
@@ -334,6 +346,29 @@ class CheckoutController extends Controller
         }
         return redirect()->route('frontend.account.index',['tab'=>'trips']);
 
+    }
+    public function calulate_installments(Event $trip,$amount){
+        $installments=[];
+        $total_amount=$amount;
+        $installments['amount']=$amount;
+        $installments['deposit']=$deposit=round(($amount*((float)$trip->deposit/100)),2);
+        $total_amount-=$deposit;
+        $t_insallments=EventInstallment::where('event_id',$trip->id)->get();
+        $installments['total']=count($t_insallments);
+        $all_text='';
+        $installment_low=[];
+        foreach ($t_insallments as $installment){
+            $installments['installment'][$installment->installment_no]['amount']=$payment=round(($total_amount*((float)$installment->installment/100)),2);
+            $installments['installment'][$installment->installment_no]['date']=date(config('panel.date_format'),strtotime($installment->due_date));
+            $installment_low[]=$payment;
+            $text='<span>'.display_currency($payment).'</span> — '.ordinal($installment->installment_no).' payment due '.date("F jS",strtotime($installment->due_date));
+            $all_text.='<h6>'.$text.'</h6>';
+            $installments['installment'][$installment->installment_no]['text']=$text;
+            $installments['installment'.$installment->installment_no]['ajax_text']=$text;
+        }
+        $installments['all']=$all_text;
+        $installments['lowest']=round(min($installment_low),2);
+        return $installments;
     }
     public function checkout_review($step,Event $trip,HotelRoom $room){
         if(!isset($trip->id)){
