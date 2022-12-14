@@ -336,7 +336,11 @@ class EventsController extends Controller
             if($trip->deposit!=$request->deposit){
                 $trip->update(['deposit'=>$request->deposit]);
             }
-
+//$delete_not_ids=[];
+//            dd($request->installment_id);
+            if(isset($request->installment_id)&&count($request->installment_id)>0){
+                EventInstallment::where('event_id',$trip->id)->whereNotIn('id', $request->installment_id)->delete();
+            }
             foreach ($request->installment as $in_no => $amount){
                 if(isset($request->installment_id[$in_no])&&$request->installment_id[$in_no]>0){
                     EventInstallment::where('id',(int)$request->installment_id[$in_no])
@@ -349,7 +353,7 @@ class EventsController extends Controller
                         'event_id'=>$trip->id,
                         'installment'=>$amount,
                         'due_date'=>date(config('panel.date_format'),strtotime($request->installment_due[$in_no])),
-                        'installment_no'=>(isset($request->installment_nos)?$request->installment_nos+1:$in_no+1),
+                        'installment_no'=>$request->installment_no[$in_no],
                     ]);
                 }
             }

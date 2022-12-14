@@ -51,29 +51,37 @@
 
                         @if(count($trip->installment_options)>0)
                             @foreach($trip->installment_options()->orderBy('installment_no','asc')->get() as $installment_option)
-                                <input type="hidden" name="installment_id[]" value="{{$installment_option->id}}">
-                                <input type="hidden" name="installment_no[]" value="{{$installment_option->installment_no}}">
+
+{{--                                <input type="hidden" name="installment_no[]" value="{{$installment_option->installment_no}}">--}}
                             @php $no_[]=$installment_option->installment_no; @endphp
                           <div id="Datarange{{$installment_option->installment_no}}"  class=" card p-3">
+                              <input type="hidden" name="installment_id[]" value="{{$installment_option->id}}">
                             <div class="row">
                                 <div class="col-12 mb-3">
                                     <strong>
                                         Installment <span>{{$installment_option->installment_no}}</span>
                                     </strong>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-2">
+                                    Installment No.
+                                </div>
+                                <div class="col-2">
+                                    <input type="number" step="1" name="installment_no[]" id="" value="{{$installment_option->installment_no}}" class="form-control" required>
+                                </div>
+                                <div class="col-1">
                                     Due date
                                 </div>
-                                <div class="col-3">
+                                <div class="col-2">
                                     <input type="date" name="installment_due[]" id="" value="{{date('Y-m-d',strtotime($installment_option->due_date))}}" class="form-control" required>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-2">
                                     Installment (in %)
                                 </div>
                                 <div class="col-3">
                                     <input type="number" step="0.01" name="installment[]" id="" value="{{$installment_option->installment}}" class="form-control" required>
                                 </div>
                             </div>
+                              <div class="row"><div class="col-12"><span class="btn btn-danger" onclick="remove_date_range({{$installment_option->installment_no}})">× Remove this Installment</span></div><div></div></div>
 
                         </div>
                             @endforeach
@@ -86,16 +94,22 @@
                             <div class="row">
                                 <div class="col-12 mb-3">
                                     <strong>
-                                        Installment <span>1</span>
+                                        Installment
                                     </strong>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-2">
+                                    Installment No.
+                                </div>
+                                <div class="col-2">
+                                    <input type="number" step="1" name="installment_no[]" id="" value="" class="form-control" required>
+                                </div>
+                                <div class="col-1">
                                     Due date
                                 </div>
-                                <div class="col-3">
+                                <div class="col-2">
                                     <input type="date" name="installment_due[]" id="" class="form-control" required>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-2">
                                     Installment (in %)
                                 </div>
                                 <div class="col-3">
@@ -127,9 +141,9 @@
                     date_ranges_html=$('#Datarange0').html();
              @endif
 
-        });
+        });//.replace('<span>1</span>','<span>'+(date_ranges_count+1)+'</span>')
         function add_new_daterange(){
-            var dr='<div id="Datarange'+(date_ranges_count)+'" class="card p-3">'+date_ranges_html.replace('<span>1</span>','<span>'+(date_ranges_count+1)+'</span>')
+            var dr='<div id="Datarange'+(date_ranges_count)+'" class="card p-3">'+date_ranges_html
                 +'<div class="row"><div class="col-12"><span class="btn btn-danger" onclick="remove_date_range('+date_ranges_count+')">&times; Remove this Installment</span></div><div>'
                 +'</div>';
             // $('#price-ranges').append(dr);
