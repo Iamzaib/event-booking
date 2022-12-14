@@ -323,64 +323,49 @@
                                                                                                         <span class="badgenewdsgreen mr2">PAID</span>
                                                                                                     </div>
                                                                                                     <div>
-                                                                                                        <h2>Deposit <span>$1200</span></h2>
+                                                                                                        <h2>Deposit <span>{{display_currency($booking->booking_payment->deposit)}}</span></h2>
                                                                                                         <h6> due at booking </h6>
                                                                                                     </div>
                                                                                                 </label>
                                                                                             </div>
                                                                                         </div>
-
+                                                                                        @php
+                                                                                            foreach ($booking->booking_event->installment_options as $installment_option){
+                                                                                                $installment_due_date[$installment_option->installment_no]=$installment_option->due_date;
+                                                                                                 }
+                                                                                            @endphp
+                                                                                            @foreach($booking->booking_payment->installments as $installment)
                                                                                         <div class="mt-2 showcardswithrd ">
-                                                                                            <div class="choosepaymemyrad newpaycrd ">
-                                                                                                <input type="radio" name="paymentmethod12" value="abcd" class="form-check-input payradio " id="payment-method12" checked>
-                                                                                                <label class="labelnewpay1" for="payment-method12">
+                                                                                            <div class="choosepaymemyrad newpaycrd {{$installment->payment_details!=''?'newsucssbg':''}}">
+                                                                                                <input type="radio" name="paymentmethod_installment{{$installment->payment_details!=''?'_paid_'.$installment->installment_no:''}}" value="{{$installment->id}}" class="form-check-input payradio installment" id="payment-method12" {{$installment->payment_details!=''?'checked':''}}>
+                                                                                                <input type="hidden" name="amount[installment][{{$installment->id}}]" id="installment_amount_{{$installment->id}}" value="{{$installment->installment}}">
+                                                                                                <label class="labelnewpay1" for="payment-method{{$installment->payment_details!=''?'-paid-'.$installment->installment_no:''}}">
                                                                                                     <div>
-                                                                                                        <span class="badgenewdstheme mr2">DUE</span>
+                                                                                                        <span class="{{$installment->payment_details!=''?'badgenewdsgreen':'badgenewdstheme'}} mr2">{{$installment->payment_details!=''?'Paid':'Due'}}</span>
                                                                                                     </div>
                                                                                                     <div>
-                                                                                                        <h2>1st Payment <span class="clashfont">$1250</span></h2>
-                                                                                                        <h6> Due on March 30 </h6>
-                                                                                                    </div>
-                                                                                                </label>
-                                                                                            </div>
-                                                                                        </div>
-
-                                                                                        <div class="mt-2 showcardswithrd ophalf">
-                                                                                            <div class="choosepaymemyrad newpaycrd ">
-                                                                                                <input type="radio" name="paymentmethod13" value="abcd" class="form-check-input payradio " id="payment-method13">
-                                                                                                <label class="labelnewpay1" for="payment-method13">
-                                                                                                    <div>
-                                                                                                        <span class="badgenewdslight mr2">DUE</span>
-                                                                                                    </div>
-                                                                                                    <div>
-                                                                                                        <h2>2nd Payment <span class="clashfont">$1250</span></h2>
-                                                                                                        <h6> Due on March 30 </h6>
+                                                                                                        <h2>{{ordinal($installment->installment_no)}} Payment <span class="clashfont">{{display_currency($installment->installment)}}</span></h2>
+                                                                                                        <h6> Due on {{date("F jS",strtotime($installment->due_date))}}</h6>
                                                                                                     </div>
                                                                                                 </label>
                                                                                             </div>
                                                                                         </div>
-
-
-
-
-
-
-
+                                                                                        @endforeach
                                                                                     </div>
 
                                                                                     <div class="newspforh  pb20">
-                                                                                        <div class="row">
-                                                                                            <div class="col-6 input-col-custom-padding-05 amountdivs">
-                                                                                                <input type="radio" name="payment" value="custom"  class="form-check-circle amountradio form-check-input" id="payradio1">
-                                                                                                <label for="payradio1">Enter custom amount</label>
-                                                                                            </div>
-                                                                                            <div class="col-6 input-col-custom-padding-02 amountdiv2">
-                                                                                                <input type="text" step=".01"  name="amount[custom]" max="{{$booking->booking_payment->amount_balance}}" value="{{$booking->booking_payment->amount_balance}}"  class=" form-control " id="amount_custom">
-                                                                                            </div>
-                                                                                        </div>
+{{--                                                                                        <div class="row">--}}
+{{--                                                                                            <div class="col-6 input-col-custom-padding-05 amountdivs">--}}
+{{--                                                                                                <input type="radio" name="payment" value="custom"  class="form-check-circle amountradio form-check-input" id="payradio1">--}}
+{{--                                                                                                <label for="payradio1">Enter custom amount</label>--}}
+{{--                                                                                            </div>--}}
+{{--                                                                                            <div class="col-6 input-col-custom-padding-02 amountdiv2">--}}
+{{--                                                                                                <input type="text" step=".01"  name="amount[custom]" max="{{$booking->booking_payment->amount_balance}}" value="{{$booking->booking_payment->amount_balance}}"  class=" form-control " id="amount_custom">--}}
+{{--                                                                                            </div>--}}
+{{--                                                                                        </div>--}}
                                                                                         <div class="row border-bottom-1">
                                                                                             <div class="col-6 input-col-custom-padding-05 amountdivs">
-                                                                                                <input type="radio" name="payment" value="full" checked class="form-check-circle amountradio form-check-input" id="payradio2">
+                                                                                                <input type="radio" name="payment" value="full" checked class="form-check-circle amountradio full-payment form-check-input" id="payradio2">
                                                                                                 <label for="payradio2">Pay full remaining amounts</label>
                                                                                             </div>
                                                                                             <div class="col-6 input-col-custom-padding-02 amountdiv3">
@@ -399,7 +384,7 @@
 
                                                                                         <div class="mt-2 showcardswithrd">
                                                                                             <div class="choosepaymemyrad newpaycrd">
-                                                                                                <input type="radio" name="paymentmethod" value="{{$paymentmethod->id}}"  class="form-check-input payradio " id="payment-method{{$loop->index}}">
+                                                                                                <input type="radio" name="paymentmethod" value="{{$paymentmethod->id}}"  class="form-check-input payradio paymethod" id="payment-method{{$loop->index}}">
                                                                                                 <label class="labelnewpay1" for="payment-method{{$loop->index}}">
                                                                                                     <div>
                                                                                                         <img src="{{asset('assets/front/img/'.$paymentmethod->card->brand.'.svg')}}" style="width:35px;height: auto;border-radius: 5px" class="imgcdpic">
@@ -526,285 +511,7 @@
 
 
 
-                            <div class="row d-none" >
-                                @if(count($user->bookingByUserEventBookings)>0)
-                                    @foreach($user->bookingByUserEventBookings as $booking)
-                                        @if($booking->status!=''&&$booking->booking_payment)
-                                        <div class="col-md-12 col-sm-12 col-12" >
-                                            <div class="card mb-3 tripsdiv modaltripdetails1show" data-bs-toggle="modal" data-bs-target="#exampleModal{{$booking->id}}">
-                                                <div>
-                                                    <img src="{{ $booking->booking_event->featured_image?$booking->booking_event->featured_image->getUrl():asset('assets/front/img/tour_1.jpg')}}" class="card-img-top" alt="Trip Image" />
-                                                </div>
-                                                <div class="card-body">
-                                                    <div class="tripsinfo1">
-                                                        <h5 class="card-title" >{{$booking->booking_event->event_title}}</h5>
-                                                    </div>
 
-                                                </div>
-                                            </div>
-                                            <!-- Button trigger modal -->
-
-
-                                            <!-- Modal -->
-                                            <div class="modal fade mytripsmodl1" id="exampleModal{{$booking->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content modalmytrips">
-                                                        <div class="modal-header">
-{{--                                                            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>--}}
-                                                           <div class="buttonnewab"> <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div class="card mb-3  " >
-
-                                                                <div class="card-body">
-                                                                    <div class="row">
-                                                                    <div class="col-5 imgcrdbdy">
-                                                                            <img src="{{ $booking->booking_event->featured_image?$booking->booking_event->featured_image->getUrl():asset('assets/front/img/tour_1.jpg')}}" class="card-img-top" alt="Trip Image" />
-                                                                    </div>
-                                                                        <div class="col-7">
-                                                                             <span class="badge
-                                                                @if($booking->status=='cancelled') badgenewdsyellow
-                                                                @elseif($booking->status=='pending-payment') badgenewdsyellow
-                                                                @else badgenewdsgreen @endif">
-                                                                        {{\App\Models\EventBooking::STATUS_SELECT[$booking->status]}}
-                                                                    </span>
-                                                                            <div class="">
-                                                                                <h5 class="headingtpmdl" >{{$booking->booking_event->event_title}}</h5>
-                                                                            </div>
-                                                                            <div id="benefitsdescription">
-                                                                                <div class="benefitsshowmore1 packde1" onclick="$('.benefitstext1').toggle();">
-                                                                                    <span>Show Package Details <i class="fa fa-chevron-down"></i></span>
-                                                                                </div>
-                                                                                <div class="benefitstext1 benefitsshow1-more-height mt-3" style="display:none;">
-                                                                                    <ul class="bullets2 bbbhssgdu">
-                                                                                        <li>{{$booking->booking_event->duration-1}} Nights Hotel Accommodation</li>
-                                                                                        @if(count($booking->booking_event->tickets)>0)<li>{{count($booking->booking_event->tickets)}} Event Tickets</li>@endif
-                                                                                        @foreach($booking->booking_event->amenities_includeds as $amenities_included)
-                                                                                            <li>{{$amenities_included->title}}</li>
-                                                                                        @endforeach
-                                                                                    </ul>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="row mb-3 mt-3 mdltripsfooter">
-                                                                                <div class="col-6"><p>Total: {{display_currency($booking->booking_payment->amount_total)}}</p></div>
-{{--                                                                                <div class="col-2"></div>--}}
-                                                                                <div class="col-6"><p>Balance: {{display_currency($booking->booking_payment->amount_balance)}}</p></div>
-                                                                            </div>
-                                                                            @if($booking->booking_payment->amount_balance>0)
-                                                                            <div class="row">
-                                                                                <div class="col-12">
-                                                                                    <button class="btn_1  btngrad btnfull" data-bs-toggle="modal" data-bs-target="#paymodel{{$booking->id}}">
-                                                                                        Pay Now
-                                                                                    </button>
-                                                                                </div>
-                                                                            </div>
-                                                                                @endif
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-{{--                                                        <div class="modal-footer">--}}
-{{--                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>--}}
-{{--                                                            <button type="button" class="btn btn-primary">Save changes</button>--}}
-{{--                                                        </div>--}}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            @if($booking->booking_payment->amount_balance>0)
-                                                <div class="modal fade paybycrdmdl" id="paymodel{{$booking->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content paybycardmdl">
-                                                            <div class="modal-header">
-                                                               <h5 class="modal-title w-100 text-center" id="exampleModalLabel">Pay By Card</h5>
-
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <div class="card mb-3  " >
-                                                                    <form class="card-form" action="{{route('frontend.trip_balance_payment',['payment'=>$booking->booking_payment->id])}}" method="post">
-                                                                    @csrf
-                                                                        <input type="hidden" name="pay_amount" id="pay_amount">
-                                                                    <div class="card-body">
-                                                                        <h6 class="p-0">Amount</h6>
-                                                                        <div class="">
-                                                                        <div class="container ">
-                                                                         <div class="firstamount">
-
-                                                                         <div class="mt-2 showcardswithrd">
-                                                                    <div class="choosepaymemyrad newpaycrd newsucssbg">
-                                                                        <input type="radio" name="paymentmethod11" value="abcd" class="form-check-input payradio " id="payment-method11" checked>
-                                                                        <label class="labelnewpay1" for="payment-method11">
-                                                                       <div>
-                                                                      <span class="badgenewdsgreen mr2">PAID</span>
-                                                                    </div>
-                                                                       <div>
-                                                                           <h2>Deposit <span>$1200</span></h2>
-                                                                           <h6> due at booking </h6>
-                                                                       </div>
-                                                                       </label>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="mt-2 showcardswithrd ">
-                                                                    <div class="choosepaymemyrad newpaycrd ">
-                                                                        <input type="radio" name="paymentmethod12" value="abcd" class="form-check-input payradio " id="payment-method12" checked>
-                                                                        <label class="labelnewpay1" for="payment-method12">
-                                                                       <div>
-                                                                      <span class="badgenewdstheme mr2">DUE</span>
-                                                                    </div>
-                                                                       <div>
-                                                                           <h2>1st Payment <span class="clashfont">$1250</span></h2>
-                                                                           <h6> Due on March 30 </h6>
-                                                                       </div>
-                                                                       </label>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="mt-2 showcardswithrd ophalf">
-                                                                    <div class="choosepaymemyrad newpaycrd ">
-                                                                        <input type="radio" name="paymentmethod13" value="abcd" class="form-check-input payradio " id="payment-method13">
-                                                                        <label class="labelnewpay1" for="payment-method13">
-                                                                       <div>
-                                                                      <span class="badgenewdslight mr2">DUE</span>
-                                                                    </div>
-                                                                       <div>
-                                                                           <h2>2nd Payment <span class="clashfont">$1250</span></h2>
-                                                                           <h6> Due on March 30 </h6>
-                                                                       </div>
-                                                                       </label>
-                                                                    </div>
-                                                                </div>
-
-
-
-
-
-
-
-                                                                         </div>
-
-                                                                         <div class="newspforh  pb20">
-                                                                         <div class="row">
-                                                                            <div class="col-6 input-col-custom-padding-05 amountdivs">
-                                                                                <input type="radio" name="payment" value="custom"  class="form-check-circle amountradio form-check-input" id="payradio1">
-                                                                                <label for="payradio1">Enter custom amount</label>
-                                                                            </div>
-                                                                            <div class="col-6 input-col-custom-padding-02 amountdiv2">
-                                                                                <input type="text" step=".01"  name="amount[custom]" max="{{$booking->booking_payment->amount_balance}}" value="{{$booking->booking_payment->amount_balance}}"  class=" form-control " id="amount_custom">
-                                                                            </div>
-                                                                        </div>
-                                                                            <div class="row border-bottom-1">
-                                                                            <div class="col-6 input-col-custom-padding-05 amountdivs">
-                                                                                <input type="radio" name="payment" value="full" checked class="form-check-circle amountradio form-check-input" id="payradio2">
-                                                                                <label for="payradio2">Pay full remaining amounts</label>
-                                                                            </div>
-                                                                            <div class="col-6 input-col-custom-padding-02 amountdiv3">
-                                                                                <input type="text" name="amount" disabled value="{{$booking->booking_payment->amount_balance}}"  class=" form-control "  id="">
-                                                                                <input type="hidden" name="amount[full]" id="amount_full" value="{{$booking->booking_payment->amount_balance}}">
-                                                                            </div>
-                                                                        </div>
-                                                                         </div>
-                                                                        </div>
-                                                                        </div>
-                                                                        <h6 class="pt-3 payh3">Payment Method</h6>
-                                                                            <div class="">
-                                                                        <div class="container mt-2 ">
-
-                                                                            @foreach($paymentMethods as $paymentmethod)
-
-                                                                            <div class="mt-2 showcardswithrd">
-                                                                    <div class="choosepaymemyrad newpaycrd">
-                                                                        <input type="radio" name="paymentmethod" value="{{$paymentmethod->id}}"  class="form-check-input payradio " id="payment-method{{$loop->index}}">
-                                                                        <label class="labelnewpay1" for="payment-method{{$loop->index}}">
-                                                                       <div>
-                                                                       <img src="{{asset('assets/front/img/'.$paymentmethod->card->brand.'.svg')}}" style="width:35px;height: auto;border-radius: 5px" class="imgcdpic">
-                                                                       </div>
-                                                                       <div>
-                                                                           <h2>{{ucfirst($paymentmethod->card->brand)}} ending in {{$paymentmethod->card->last4}}</h2>
-                                                                           <h6> Expiry (12/2024) </h6>
-                                                                           <p><span>Default</span> <a href="#">Edit</a></p>
-                                                                       </div>
-
-
-                                                                       </label>
-                                                                    </div>
-
-                                                                </div>
-                                                                            @endforeach
-
-                                                                            <div class="row  pt-2 pb-2 border-bottom-2">
-                                                                                <a class="p-1 addnewcrd" onclick="$('.stripe_form').toggle()">New Card</a>
-                                                                                <div class="col-12 stripe_form" style="display: none">
-                                                                                    <div class="row">
-                                                                                        <div class="col-12 mb-3">
-                                                                                            <label for="" class="form-label">Card Number</label>
-                                                                                            <div id="card-number" class="form-control">
-
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        <div class="col-6">
-                                                                                            <label for="" class="form-label">Expiration</label>
-                                                                                            <div id="card-expiry" class="form-control">
-
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        <div class="col-6">
-                                                                                            <label for="" class="form-label">CVC</label>
-                                                                                            <div id="card-cvc" class="form-control">
-
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-{{--                                                                                    <div id="card-element" class="mt-3 mb-3"></div>--}}
-                                                                                    <div id="card-errors" role="alert"></div>
-                                                                                    <input type="hidden" name="payment_method" class="payment-method">
-                                                                                </div>
-                                                                            </div>
-
-                                                                        </div>
-                                                                            </div>
-                                                                        <div class="row">
-
-                                                                            <div class="col-12 txtright">
-                                                                                <span class="newcardttl">Total: <span id="total_amount_payable">{{display_currency($booking->booking_payment->amount_balance)}}</span></span>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="row newcrdsmblrow">
-                                                                            <div class="col-6">
-                                                                                <button class="cancel newbtncncl">Cancel</button>
-                                                                            </div>
-                                                                            <div class="col-6">
-                                                                                <button class="pay btn_1 btngrad btnfull">Pay</button>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    </form>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @endif
-                                        </div>
-                                        @endif
-                                    @endforeach
-                                @endif
-{{--                                <div class="col-md-12 col-sm-12 col-12">--}}
-{{--                                    <div class="card mb-3 tripsdiv modaltripdetails1show">--}}
-{{--                                        <div>--}}
-{{--                                            <img src="{{asset('assets/front/img/tour_2.jpg')}}" class="card-img-top" alt="Trip Image" />--}}
-{{--                                        </div>--}}
-{{--                                        <div class="card-body">--}}
-{{--                                            <div class="tripsinfo1">--}}
-{{--                                                <h5 class="card-title">Malesuada consequat hac quis commodo vel. Pellentesque.</h5>--}}
-
-{{--                                            </div>--}}
-
-{{--                                        </div>--}}
-{{--                                    </div>--}}
-{{--                                </div>--}}
-
-                            </div>
 
 
                         </div>
@@ -1062,7 +769,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+
                     <div class="tab-pane fade {{isset(request()->tab)&&request()->tab=='password'?'active show':''}}" id="chpass" role="tabpanel" aria-labelledby="chpass-tab">
                         <div>
                             <div class="row justify-content-between align-items-center mb-5">
@@ -1245,7 +952,7 @@
                                 @endif
                         </div>
                     </div>
-
+            </div>
                 </div>
             </div>
         </div>
@@ -1392,15 +1099,24 @@
         let paymentMethod = null;
         let payment_field=$('.payment-method');
         let payment_form=$('.card-form');
-        let amount_type='full';
-        $('.payradio').change(function (){
+        let amount_type='full',installment_id=0;
+        $('.paymethod').change(function (){
             paymentMethod=$(this).val();
         });
         $('.amountradio').change(function (){
             amount_type=$(this).val();
         });
+        $('.installment').change(function (){
+            installment_id=$(this).val();
+            $('.full-payment').removeAttr('checked');
+            $('#total_amount_payable').html($("#installment_amount_"+installment_id).val());
+        });
         $('#amount_custom').change(function (){
             $('#total_amount_payable').html($(this).val());
+        });
+        $('.full-payment').change(function (){
+            $('.installment').removeAttr('checked');
+            $('#total_amount_payable').html($('#amount_'+amount_type).val());
         });
         let payment_method_only=false;
         $('.pay').on('click', function (e) {
@@ -1416,6 +1132,7 @@
                 payment_method_only=false;
                 payment_field=$('.payment-method');
                 payment_form=$('.card-form');
+
                 $('#pay_amount').val($('#amount_'+amount_type).val());
                 console.log($('#pay_amount').val());
             }

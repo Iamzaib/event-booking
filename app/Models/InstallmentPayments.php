@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use \DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -28,6 +29,7 @@ class InstallmentPayments extends Model
         'installment',
         'total_installments',
         'installment_no',
+        'due_date',
         'payment_method',
         'payment_details',
         'created_at',
@@ -39,7 +41,14 @@ class InstallmentPayments extends Model
     {
         return $this->belongsTo(Payment::class, 'payment_id');
     }
-
+    public function getDueDateAttribute($value)
+    {
+        return $value ? Carbon::parse($value)->format(config('panel.date_format')) : null;
+    }
+    public function setDueDateAttribute($value)
+    {
+        $this->attributes['due_date'] = $value ? Carbon::createFromFormat(config('panel.date_format'), $value)->format('Y-m-d') : null;
+    }
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->format('Y-m-d H:i:s');

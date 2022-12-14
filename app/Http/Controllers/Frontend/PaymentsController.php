@@ -8,6 +8,7 @@ use App\Http\Requests\StorePaymentRequest;
 use App\Http\Requests\UpdatePaymentRequest;
 use App\Models\Event;
 use App\Models\EventBooking;
+use App\Models\InstallmentPayments;
 use App\Models\Invoices;
 use App\Models\Payment;
 use App\Models\User;
@@ -28,8 +29,23 @@ class PaymentsController extends Controller
         return view('frontend.payments.index', compact('payments'));
     }
     public function trip_balance_payment(Payment $payment,Request $request){
+//        dd($request->all());
+        $amount_to_paid=0;
+        $installment_payment=false;
+        if(isset($request->paymentmethod_installment)){
+           $installment=InstallmentPayments::find($request->paymentmethod_installment);
+           if($installment){
+               $installment_payment=true;
+               $amount_to_paid=$installment->installment;
+           }
+        }
+        if($amount_to_paid<=0){
+            $amount_to_paid=$payment->amount_balance;
+        }
+
+
         $paymentMethod=$request->payment_method;
-        $amount_to_paid=(float)$request->pay_amount;
+//        $amount_to_paid=(float)$request->pay_amount;
         $paid=(float)$payment->amount_paid+$amount_to_paid;
         $balance=(float)$payment->amount_balance-$amount_to_paid;
         $user=Auth::user();
@@ -41,7 +57,7 @@ class PaymentsController extends Controller
 
         try {
             $user->createOrGetStripeCustomer();
-            $stripe_payment= $user->charge(($amount_to_paid*100), $paymentMethod);
+            $stripe_payment= $user->charge(($amount_to_paid*100), $request->payment_method);
         } catch (\Exception $exception) {
             //   return back()->with('error', );
 //            echo $exception->getMessage();
@@ -53,6 +69,14 @@ class PaymentsController extends Controller
             'amount_paid'=>$paid,
             'amount_balance'=>$balance,
         ]);
+        if($installment_payment){
+            $installment->update([
+                'amount_paid'=>$paid,
+                'amount_balance'=>$balance,
+                'payment_method'=>'CC',
+                'payment_details'=>json_encode($stripe_payment),
+            ]);
+        }
         Invoices::create([
             'payment_id'=>$payment->id,
             'amount_total'=>$payment->amount_total,
@@ -61,10 +85,11 @@ class PaymentsController extends Controller
             'payment_method'=>'CC',
             'payment_details'=>json_encode($stripe_payment),
             'deposit'=>$payment->deposit,
-            'installment'=>$payment->installment,
+            'installment'=>($installment_payment?$amount_to_paid:$payment->installment),
             'total_installments'=>$payment->total_installments,
             'amount_balance'=>$balance,
         ]);
+
         return redirect()->route('frontend.account.index',['tab'=>'payment'])->with('message','Payment Successful');
     }
     public function create()

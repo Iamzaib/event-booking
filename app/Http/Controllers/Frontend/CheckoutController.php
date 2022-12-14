@@ -339,6 +339,7 @@ class CheckoutController extends Controller
                     'installment'=>$this_installment['amount'],
                     'total_installments'=>$total_installment,
                     'installment_no'=>$num,
+                    'due_date'=>$this_installment['date'],
                     'payment_method'=>'',
                     'payment_details'=>'',
                 ]);

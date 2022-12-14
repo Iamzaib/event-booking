@@ -36,6 +36,7 @@ class Payment extends Model
         'coupon_code',
         'processing_fee',
         'subtotal',
+        'deposit',
         'installment',
         'total_installments',
         'amount_paid',
