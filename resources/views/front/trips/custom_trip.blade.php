@@ -540,9 +540,10 @@ position: relative;
                                                             <label for="shirt_size{{$t}}">Shirt Size</label>
                                                             <select name="shirt_size[{{$t}}]" class="form-select"  onchange="" id="shirt_size{{$t}}">
                                                                 <option value="0">--Please Select--</option>
-                                                                @for($i=10;$i<=30;$i++)
+{{--                                                                @for($i=10;$i<=30;$i++)--}}
+                                                                @foreach(explode(',',SHIRT_SIZES) as $i)
                                                                     <option value="{{$i}}" {{old('shirt_size.'.$t)&&old('shirt_size.'.$t)==$i?'selected':''}}>{{$i}} </option>
-                                                                @endfor
+                                                                @endforeach
                                                             </select>
                                                         </div>
                                                     </div>
@@ -575,11 +576,17 @@ position: relative;
                                                     <div class="card-body p-3 newcardform1 padmbl">
                                                         @if($payment_method!='')
                                                         <div class="row"><div class="col-12 col-md-6">Choose from already added Card(s)</div></div>
+                                                            @php $defaultpaymentMethod=[];  @endphp
+                                                        @if(auth()->user()->defaultPaymentMethod())
+                                                                @php $defaultpaymentMethod=auth()->user()->defaultPaymentMethod()->asStripePaymentMethod();  @endphp
+                                                        @endif
+
                                                             @foreach($payment_method as $paymentmethod)
 {{--                                                                @dd($paymentmethod)--}}
+                                                                @php if (isset($defaultpaymentMethod->id)&&$defaultpaymentMethod->id==$paymentmethod->id){$checked=true;}  else {$checked=false;}  @endphp
                                                                 <div class="mt-2 showcardswithrd">
                                                                     <div class="choosepaymemyrad newpaycrd">
-                                                                        <input type="radio" name="paymentmethod" value="{{$paymentmethod->id}}" {{old('paymentmethod')==$paymentmethod->id?'checked':''}}  class="payment_type form-check-input payradio" id="payment-method{{$paymentmethod->card->last4}}">
+                                                                        <input type="radio" name="paymentmethod" value="{{$paymentmethod->id}}" {{old('paymentmethod')==$paymentmethod->id||$checked?'checked':''}}  class="payment_type form-check-input payradio" id="payment-method{{$paymentmethod->card->last4}}">
                                                                         <label class="labelnewpay1" for="payment-method{{$paymentmethod->card->last4}}">
                                                                        <div>
                                                                        <img src="{{asset('assets/front/img/'.$paymentmethod->card->brand.'.svg')}}" style="width:35px;height: auto;border-radius: 5px" class="imgcdpic" />
@@ -587,7 +594,7 @@ position: relative;
                                                                        <div>
                                                                            <h2>  {{strtoupper($paymentmethod->card->brand)}} ending in {{$paymentmethod->card->last4}}</h2>
                                                                            <h6> Expiry ({{$paymentmethod->card->exp_month}}/{{$paymentmethod->card->exp_year}}) </h6>
-                                                                           <p><span>Set as default</span> <a href="#">Edit</a></p>
+{{--                                                                           <p><span>Set as default</span> <a href="#">Edit</a></p>--}}
                                                                        </div>
 
 

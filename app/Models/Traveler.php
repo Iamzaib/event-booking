@@ -50,6 +50,10 @@ class Traveler extends Model
     {
         return $this->belongsTo(Costume::class, 'costume_id');
     }
+    public function costume_attr()
+    {
+        return $this->hasMany(CostumeBookingAttribute::class);
+    }
 
     public function tickets()
     {

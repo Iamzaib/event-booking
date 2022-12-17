@@ -245,13 +245,15 @@ class CheckoutController extends Controller
             }
 
             if(isset($rq->ticket)&&count($rq->ticket)>0&&count($rq->ticket[$t])>0){
+                $tic_ids=[];
                 foreach ($rq->ticket[$t] as $ticket_id => $ticket){
                     $ticket_get=EventTicket::find($ticket_id);
                     if(isset($ticket_get->id)){
-                        $Traveler->tickets()->sync($ticket_get->id);
+                       $tic_ids[]=$ticket_get->id;
                         $subtotal+=(float)$ticket_get->ticket_price;
                     }
                 }
+                $Traveler->tickets()->sync($tic_ids);
             }
         }
 
