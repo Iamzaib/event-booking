@@ -244,6 +244,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     // Faq Category
     Route::delete('faq-categories/destroy', 'FaqCategoryController@massDestroy')->name('faq-categories.massDestroy');
+    Route::post('faq-categories/media', 'FaqCategoryController@storeMedia')->name('faq-categories.storeMedia');
+    Route::post('faq-categories/ckmedia', 'FaqCategoryController@storeCKEditorImages')->name('faq-categories.storeCKEditorImages');
     Route::resource('faq-categories', 'FaqCategoryController');
 
     // Faq Question

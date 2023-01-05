@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -175,7 +175,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.06);
+            box-shadow: 0px 1px 3px rgba(16, 24, 40, 0.1), 0px 1px 2px rgba(16, 24, 40, 0.06);
         }
 
         .main-menu>ul>li span>a {
@@ -191,6 +191,10 @@
             background-color: #fff !important;
             border-bottom: 1px solid #fff !important;
         }
+
+        header.sticky .hamburger-inner, header.sticky .hamburger-inner::before, header.sticky .hamburger-inner::after {
+    background-color: #000 !important;
+}
 
         @media(max-width:991px) {
             .btn_mobile {
@@ -228,6 +232,15 @@
             color: #ff027c !important;
         }
 
+        @media(max-width:576px){
+
+            .accimg {
+                top: 4px;
+            }
+
+
+        }
+
         @endif
 
         .border-bottom-1{
@@ -256,6 +269,7 @@
             <div id="logo">
                 <a href="{{route('home')}}}">
                     <img src="{{ asset('assets/front/img/home-page-logo.svg')}}" width="160" height="auto" alt="" class="logo_normal imgindexdesk" />
+                    <img src="{{ asset('assets/front/img/darklogo.svg')}}" width="160" height="auto" alt="" class="logo_normal newmblhomelogo" />
                     <img src="{{ asset('assets/front/img/mbllogo.svg')}}" width="60" height="36" alt="" class="logo_normal imgindexmbl" />
                     <img src="{{ asset('assets/front/img/home-page-logo.svg')}}" width="160" height="auto" alt="" class="logo_sticky" />
                 </a>
@@ -286,7 +300,8 @@
                     </li>
                     @else
                     <li>
-                        <span><a href="@if(auth()->check()&&auth()->user()->is_admin){{route('admin.home')}}@else{{route('frontend.account.index')}}@endif">Account</a></span>
+                        {{--<span><a href="@if(auth()->check()&&auth()->user()->is_admin){{route('admin.home')}}@else{{route('frontend.account.index')}}@endif">Account</a></span>--}}
+						<span><a href="{{route('frontend.account.index')}}">Account</a></span>
                     </li>
                      <li>
                         <span><a href="#" onclick="event.preventDefault(); document.getElementById('logoutform').submit();">Logout</a></span>
@@ -295,9 +310,12 @@
                 </ul>
             </nav>
             <div class="mblsdiv1">
-                <a href="#"><img src="{{ asset('assets/front/img/search-normal.svg')}}" /></a>
-                <a href="{{route('trips')}}"><img src="{{ asset('assets/front/img/briefcase.svg')}}" /></a>
-                <a href="@if(auth()->check()&&auth()->user()->is_admin){{route('admin.home')}}@else{{route('frontend.account.index')}}@endif"><svg style="width: 24px; height: 23px;"><path fill-rule="evenodd" fill="#fff" d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 3a3 3 0 110 6 3 3 0 010-6zM6 15.98a7.2 7.2 0 0012 0c-.03-1.99-4.01-3.08-6-3.08-2 0-5.97 1.09-6 3.08z" clip-rule="evenodd"></path></svg></a>
+                <a class="disno" href="#"><img src="{{ asset('assets/front/img/search-normal.svg')}}" /></a>
+                <a class="disno" href="{{route('trips')}}"><img src="{{ asset('assets/front/img/briefcase.svg')}}" /></a>
+
+                <a class="accimg" data-toggle="modal" data-target="#profileeModal" >
+                <img src="{{ asset('assets/front/img/user-profile.svg')}}" />
+                </a>
             </div>
         </div>
 
@@ -307,7 +325,7 @@
             <div class="container">
                 <div id="logo">
                     <a href="{{route('home')}}">
-                        <img src="{{asset('assets/front/img/darklogo.svg')}}" width="150" height="auto" alt="" class="logo_normal imgindexdesk" />
+                        <img src="{{asset('assets/front/img/darklogo.svg')}}" width="150" height="auto" alt="" class="logo_normal" />
                         <img src="{{asset('assets/front/img/mbllogo.svg')}}" width="60" height="36" alt="" class="logo_normal imgindexmbl" />
                         <img src="{{asset('assets/front/img/darklogo.svg')}}" width="150" height="auto" alt="" class="logo_sticky" />
                     </a>
@@ -337,22 +355,24 @@
                             </li>
                         @else
                             <li>
-                                <span><a href="@if(auth()->check()&&auth()->user()->is_admin){{route('admin.home')}}@else{{route('frontend.account.index')}}@endif"><img src="{{auth()->user()->profileimage?auth()->user()->profileimage->getUrl('thumb'):asset('assets/front/img/profile-placeholder.png')}}" class="userloginprofile" /></a></span>
+                                <span><a href="{{route('frontend.account.index')}}"><img src="{{auth()->user()->profileimage?auth()->user()->profileimage->getUrl('thumb'):asset('assets/front/img/profile-placeholder.svg')}}" class="userloginprofile" /></a></span>
                             </li>
                             <li>
                                 <span><a href="{{route('log-out')}}" {{--onclick="event.preventDefault(); document.getElementById('logoutform').submit();"--}}>Logout</a></span>
                             </li>
                         @endguest
 {{--                        <li>--}}
-{{--                            <span><a href="#"><img src="./img/profile-placeholder.png" class="userloginprofile" /></a></span>--}}
+{{--                            <span><a href="#"><img src="./img/profile-placeholder.svg" class="userloginprofile" /></a></span>--}}
 {{--                        </li>--}}
 
                     </ul>
                 </nav>
                 <div class="mblsdiv1">
-                    <a href="#"><img src="{{asset('assets/front/img/dar-search-normal.svg')}}" /></a>
-                    <a href="{{route('trips')}}"><img src="{{asset('assets/front/img/darkbriefcase.svg')}}" /></a>
-                    <a href="@if(auth()->check()&&auth()->user()->is_admin){{route('admin.home')}}@else{{route('frontend.account.index')}}@endif"><svg style="width: 24px; height: 23px;"><path fill-rule="evenodd" d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 3a3 3 0 110 6 3 3 0 010-6zM6 15.98a7.2 7.2 0 0012 0c-.03-1.99-4.01-3.08-6-3.08-2 0-5.97 1.09-6 3.08z" clip-rule="evenodd"></path></svg></a>
+                    <a href="#" class="disno"><img src="{{asset('assets/front/img/dar-search-normal.svg')}}" /></a>
+                    <a href="{{route('trips')}}" class="disno"><img src="{{asset('assets/front/img/darkbriefcase.svg')}}" /></a>
+                    <a class="accimg" data-toggle="modal" data-target="#profileeModal" >
+                    <img src="{{ asset('assets/front/img/user-profile.svg')}}" />
+                    </a>
                 </div>
             </div>
 
@@ -368,9 +388,12 @@
             <div class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" data-bs-autohide="false" aria-atomic="true">
                 <div class="d-flex">
                     <div class="toast-body">
-                        {!! session('message') !!}
+                        <img src="{{ asset('assets/front/img/check-circle-success.svg')}}" class="" />
+                        <span> {!! session('message') !!}</span>
                     </div>
-                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    <button type="button" class="bgtoastbtn me-2 m-auto" data-bs-dismiss="toast" aria-label="Close">
+                        <img src="{{ asset('assets/front/img/badge-green.svg')}}" class="" />
+                    </button>
                 </div>
             </div>
         @endif
@@ -388,9 +411,12 @@
             <div class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" data-bs-autohide="false" aria-atomic="true">
                 <div class="d-flex">
                     <div class="toast-body">
-                        {!! \Illuminate\Support\Facades\Session::get('error') !!}
+                        <img src="{{ asset('assets/front/img/alert-circle-danger.svg')}}" class="" />
+                        <span>{!! \Illuminate\Support\Facades\Session::get('error') !!}</span>
                     </div>
-                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    <button type="button" class="bgtoastbtn me-2 m-auto" data-bs-dismiss="toast" aria-label="Close">
+                        <img src="{{ asset('assets/front/img/badge-danger.svg')}}" class="" />
+                    </button>
                 </div>
             </div>
         @endif
@@ -399,9 +425,12 @@
                 <div class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" data-bs-autohide="false" aria-atomic="true">
                     <div class="d-flex">
                         <div class="toast-body">
-                            {{$error}}
+                            <img src="{{ asset('assets/front/img/alert-circle-danger.svg')}}" class="" />
+                            <span> {{$error}}</span>
                         </div>
-                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                        <button type="button" class="bgtoastbtn me-2 m-auto" data-bs-dismiss="toast" aria-label="Close">
+                            <img src="{{ asset('assets/front/img/badge-danger.svg')}}" class="" />
+                        </button>
                     </div>
                 </div>
             @endforeach
@@ -434,7 +463,7 @@
             <div class="row d-flex">
                 <div class="col-12 col-lg-6 justify-content-lg-start justify-content-center">
                     <h2 class="h2sss">
-                        Subcribe for discounts and latest<br> news
+                    Subscribe for discounts and latest<br> news
                     </h2>
                     <p class="csdkontent">
                         If you want to learn more about how we can help grow your business, click below to schedule a free
@@ -444,15 +473,10 @@
                 <div class="col-12 col-lg-6">
                     <form action="{{route('frontend.newsletter')}}" class="newsletter-form" method="post">
                         @csrf
-                        <div class="input-field"><svg xmlns="http://www.w3.org/2000/svg" width="17" height="14">
-                                <g fill="none" fill-rule="evenodd" stroke="#9CA9BA" stroke-linecap="round" stroke-linejoin="round"
-                                   stroke-width="2">
-                                    <path d="M3 1h11a2 2 0 012 2v8a2 2 0 01-2 2H3a2 2 0 01-2-2V3a2 2 0 012-2z">
-                                    </path>
-                                    <path d="M2 2l6.5 6L15 2"></path>
-                                </g>
-                            </svg><input class="input" type="email" name="email" placeholder="Enter an email address"
-                                         aria-label="Enter an email address" value=""><button class="btn_1  btngrad" type="submit"
+                        <div class="input-field">
+                        <img src="{{ asset('assets/front/img/email-ico.svg')}}" class="subscribeimg" />
+                            <input class="input" type="email" name="email" placeholder="Enter your email"
+                                         aria-label="Enter your email" value=""><button class="btn_1  btngrad" type="submit"
                                                                                               aria-label="Subscribe">
                                 Subscribe
                             </button></div>
@@ -466,7 +490,7 @@
             <div class="row">
                 <div class="col-lg-6 col-md-8 p-r-5">
                     <div class="footerwidtho">
-                        <p><img src="{{ asset('assets/front/img/home-page-logo.svg')}}" width="160" height="auto" alt="" style="margin-left: -16px;" /></p>
+                        <p><img src="{{ asset('assets/front/img/home-page-logo.svg')}}" width="160" height="auto" alt="" /></p>
                         <p>
                             Suspendisse ridiculus eu, morbi nibh odio duis. Imperdiet consectetur augue nam iaculis hendrerit nullam
                             purus facilisis et. Sit egestas vel massa nec, volutpat sit ac tortor neque.
@@ -479,10 +503,10 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#0"> <img src="{{ asset('assets/front/img/whatsapp.svg')}}" /></a>
+                                    <a href="#0"> <img src="{{ asset('assets/front/img/whatsapp-wht.svg')}}" /></a>
                                 </li>
                                 <li>
-                                    <a href="#0"> <img src="{{ asset('assets/front/img/facebook.svg')}}" /></a>
+                                    <a href="#0"> <img src="{{ asset('assets/front/img/facebook-wht.svg')}}" /></a>
                                 </li>
                                 <li>
                                     <a href="#0"> <img src="{{ asset('assets/front/img/ph_twitter-logo.svg')}}" /></a>
@@ -569,6 +593,38 @@
     </div>
 </div>
 
+
+<!-- Profile Modal -->
+<div class="modal fade modalprofile1" id="profileeModal" tabindex="-1" role="dialog" aria-labelledby="profileeModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+		  @guest
+         <div class="imgmdlprof">
+         <img  alt="" src="{{ asset('assets/front/img/Prize.svg')}}">
+         </div>
+        <h3>Save an average of 15% on thousands of hotels when you're signed in</h3>
+        <a class="btn_1  btngrad" href="{{route('login')}}">Sign in</a>
+        <a class="btnwhite" href="{{route('register')}}">Sign up, it’s free</a>
+ @endguest
+        <div class="notifidivmdl">
+			@guest
+			@else
+			<a href="{{route('frontend.account.index')}}">My Account</a>
+			<a href="{{route('log-out')}}" >Logout</a>
+			 @endguest
+        <a href="{{route('help_center')}}">Help center</a>
+        <a href="{{route('contact')}}">Contact us</a>
+        <a href="">Whatsapp us</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
 <form id="logoutform" action="{{ route('logout') }}" method="POST" style="display: none;">
     {{ csrf_field() }}
 </form>
@@ -591,10 +647,53 @@
     });
 </script>
 <script>
+        $('.owl-carousel').owlCarousel({
+    items:4,
+    loop:false,
+    margin:0,
+    dots: false,
+    nav: false,
+  responsive: {
+    0: {
+      items: 1
+    },
+
+    600: {
+      items: 1
+    },
+
+    1024: {
+      items: 4
+    },
+
+    1366: {
+      items: 4
+    }
+  }
+});
+        </script>
+<script>
+ $(".nav-itemhc").click(function() {
+     $('.hiddenhc').hide();
+     $(".nav-itemhc").removeClass("activehc");
+     $(this).addClass("activehc");
+     $(this.getAttribute('href')).fadeIn(650);
+     return false;
+   });
+</script>
+<script>
     var  options={
-        // autohide:false,
+        autohide:true,
         delay:5000
     }
+    // var toastElList = [].slice.call(document.querySelectorAll('.toast'))
+    // var toastList = toastElList.map(function(toastEl) {
+    //     // Creates an array of toasts (it only initializes them)
+    //     return new bootstrap.Toast(toastEl,options) // No need for options; use the default options
+    // });
+    //
+    // toastList.forEach(toast => toast.show()); // This show them
+
     @if(session('message')||session('error')||$errors->count() > 0)
 
     // document.getElementById("toastbtn").onclick = function() {
