@@ -216,6 +216,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::delete('permissions/destroy', 'PermissionsController@massDestroy')->name('permissions.massDestroy');
     Route::resource('permissions', 'PermissionsController');
 
+    //Coupons
+    Route::delete('coupons/destroy', 'CouponsController@massDestroy')->name('coupons.massDestroy');
+    Route::resource('coupons', 'CouponsController');
+
     // Roles
     Route::delete('roles/destroy', 'RolesController@massDestroy')->name('roles.massDestroy');
     Route::resource('roles', 'RolesController');

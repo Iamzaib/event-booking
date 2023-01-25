@@ -796,7 +796,7 @@ position: relative;
                                 </div>
                                 <div class="flex22">
                                     <img src="{{asset('assets/front/img/usd.svg')}}" />
-                                    <h4 class="finaltotal">{{display_currency($low_total+processing_fee($low_total))}}</h4>
+                                    <h4 class="" id="final_total">{{display_currency($low_total+processing_fee($low_total))}}</h4>
                                 </div>
                             </div>
                             <a href="#" class="pay">Book Now</a>
@@ -901,7 +901,7 @@ position: relative;
         var addons_titles=[],costumes_titles=[],rooms_titles=[],tickets_titles=[];
         var addons_added=[],costumes_added=[],rooms_added=[],tickets_added=[];
         var costume_total=0,addons_total=0,rooms_total=0,tickets_total=0,total=0,total_room_persons=0,duration_total= {{$low_total}};
-        var date_ranges=[],room_range_pricing=[],date_range_id=0,room_price_one=[];
+        var date_ranges=[],room_range_pricing=[],date_range_id=0,room_price_one=[],p_type='';
         @foreach($trip->date_ranges as $d_range)
         date_ranges[{{$d_range->id}}]={{$d_range->range_price}};
         @endforeach
@@ -916,6 +916,7 @@ for(var tr=1;tr<=total_travelers;tr++){
     ticket_trvlr[tr]=0;
     addon_trvlr[tr]=0;
 }
+        var deposit=0;
         @foreach($trip->addons as $addon)
             addons[{{$addon->id}}]='{{$addon->addon_price}}';
             addons_titles[{{$addon->id}}]='{{$addon->addon_title}}';
@@ -965,12 +966,15 @@ for(var tr=1;tr<=total_travelers;tr++){
                 var total=$('.finaltotal').html().replace('$','');
                 var Deposit={{$installments['deposit']}};
                 var totalinstallment_={{(int)$installments['total']}};
-
+                if(deposit>0){
+                    Deposit=deposit;
+                }
                 // Deposit=parseFloat(total)*Deposit;
                 var installment= {{(float)$installments['lowest']}};
 
                // console.log(payment_type+'$'+Deposit+' Deposit + $'+installment+' for '+totalinstallment_+' Months');
-                $('#install').html('$'+Deposit.toFixed(2)+' Deposit + $'+installment.toFixed(2)+' for '+totalinstallment_+' Months')
+                $('#install').html('$'+Deposit.toFixed(2)+' Deposit + $'+installment.toFixed(2)+' for '+totalinstallment_+' Months');
+                p_type=payment_type;
                 if(payment_type==='Installment'){//console.log(payment_type+'$'+Deposit+' Deposit + $'+installment+' for '+totalinstallment_+' Months');
                     $('#deposit-total').remove();
                     $('#installment-total').remove();
@@ -991,6 +995,7 @@ for(var tr=1;tr<=total_travelers;tr++){
                         '</div>';
                     $('#Installment').show();
                     $('#Installment').append(Installment_this);
+                    calculate_total();
                 }else{
                     $('#Installment').hide();
                     // $('#deposit-total').remove();
@@ -1376,13 +1381,7 @@ for(var tr=1;tr<=total_travelers;tr++){
             // total+=costume_total;
             // total+=addons_total;
 
-            var subtotal=total;
-            $('#subtotal').html('$'+subtotal.toFixed(2));
-            var processing=processing_fee(total);
 
-            total+=processing;
-            $('.finaltotal').html('$'+total.toFixed(2))
-            $('#processing_fee').html('$'+processing.toFixed(2))
             // console.log('total:'+total);
             {{--var Deposit={{(float)DEPOSIT_AMOUNT_PERCENT/100}};--}}
             {{--var totalinstallment_={{(int)TOTAL_INSTALLMENTS}};--}}
@@ -1395,7 +1394,28 @@ for(var tr=1;tr<=total_travelers;tr++){
             // Deposit=parseFloat(total)*Deposit;
             var installment= {{(float)$installments['lowest']}};
             // console.log(payment_type+'$'+Deposit+' Deposit + $'+installment+' for '+totalinstallment_+' Months');
-            get_installments();
+            var installments_data=get_installments();
+
+            var subtotal=total;
+            $('#subtotal').html('$'+subtotal.toFixed(2));
+            var processing=processing_fee(total);
+
+            total+=processing;
+            $('.finaltotal').html('$'+total.toFixed(2));
+            $('#final_total').html('$'+total.toFixed(2));
+            $('#processing_fee').html('$'+processing.toFixed(2));
+            console.log(installments_data);
+            if(p_type==='Installment'){
+                //$('#subtotal').html('$'+installments_data.deposit.toFixed(2));
+                setTimeout(function () {
+                    if(typeof $('#deposit_view') !=="undefined"){
+                        $('#final_total').html($('#deposit_view').html());
+                    }
+                },500);
+
+
+            }
+
             $('#install').html('$'+Deposit.toFixed(2)+' Deposit + $'+installment.toFixed(2)+' for '+totalinstallment_+' Months')
         }
         function processing_fee(total){
@@ -1426,10 +1446,12 @@ for(var tr=1;tr<=total_travelers;tr++){
             return trleft_;
         }
         function get_installments(){
+            var installment_data;
             var url_='{{route('frontend.get_installments',['trip'=>$trip->id,'amount'=>'0amount'])}}'.replace('0amount',total);
             $.get(url_,function (data){
                 console.log(data);
                 $('#deposit_view').html('$'+data.deposit);
+                deposit=data.deposit;
                 @foreach($installments['installment'] as $num => $instalment)
                     {{--console.log(data.installment{{$num}}.ajax_text);--}}
                    $('#installment_{{$num}}').html(data.installment{{$num}}.ajax_text);
@@ -1437,7 +1459,9 @@ for(var tr=1;tr<=total_travelers;tr++){
                 @endforeach
                 $('#deposit_value_only').html('$'+data.deposit);
                 $('#installment_starting').html('$'+data.lowest);
+                installment_data=data;
             });
+            return installment_data;
         }
     </script>
     <script>

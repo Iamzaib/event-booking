@@ -70,14 +70,19 @@
 <div class="helpcenterpage">
 
             <div class="helpcentermaintxt">
+
                 @if(isset($faq[$faq_category->id])&&count($faq[$faq_category->id])>0)
+                @else
+                    @php $faq[$faq_category->id]=\App\Models\FaqQuestion::where('category_id',$faq_category->id)->get(); @endphp
+                @endif
+{{--                @if(isset($faq[$faq_category->id])&&count($faq[$faq_category->id])>0)--}}
                     @foreach($faq[$faq_category->id] as $faq)
                         <details class="faq-card">
                             <summary>{{$faq->question}} <span class="faq-open-icon"><i class="fa fa-plus"></i></span></summary>
                             <span class="faq-card-spoiler">{{$faq->answer}}</span>
                         </details>
                     @endforeach
-                @endif
+{{--                @endif--}}
             </div>
 
     </div>

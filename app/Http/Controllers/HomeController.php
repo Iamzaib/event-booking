@@ -137,14 +137,17 @@ class HomeController extends Controller
     }
     public function help($name='',$category=null)
     {
+        $faq=[];
         $data['page_name']='help center';
-        $data['faq_categories']=$faq_categories=FaqCategory::when($category, function ($query, $category) {
-            return $query->where('id',$category);
-        })->get();
+//        $data['faq_categories']=$faq_categories=FaqCategory::when($category, function ($query, $category) {
+//            return $query->where('id',$category);
+//        })->get();
+        $data['faq_categories']=$faq_categories=FaqCategory::all();
         foreach ($faq_categories as $faq_category){
             $faq[$faq_category->id]=FaqQuestion::where('category_id',$faq_category->id)->get();
         }
         $data['faq']=$faq;
+//        dd([$faq_categories,$faq]);
         return view('front.home.help_center',$data);
     }
     public function page($page_name,$pID)

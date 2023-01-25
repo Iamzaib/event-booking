@@ -134,6 +134,16 @@
                             </a>
                         </li>
                     @endcan
+                        @can('event_access')
+                        <li class="nav-item">
+                            <a href="{{ route("admin.coupons.index") }}" class="nav-link {{ request()->is("admin/coupons") || request()->is("admin/coupons/*") ? "c-active" : "" }}">
+{{--                                <i class="fa-fw fas fa-cogs c-sidebar-nav-icon">--}}
+
+{{--                                </i>--}}
+                                {{ trans('cruds.coupon.title') }}
+                            </a>
+                        </li>
+                    @endcan
                     @can('booking_access')
                             <li class="nav-item ">
                                 <a class="nav-link" href="#booking" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="booking">
