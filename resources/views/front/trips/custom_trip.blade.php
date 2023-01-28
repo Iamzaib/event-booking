@@ -792,6 +792,35 @@ position: relative;
                             </div>
                             <div class="priceflex1">
                                 <div>
+                                    <p>Coupon</p>
+                                </div>
+                                <div class="flex22">
+                                    <span style="text-decoration: underline;font-size: 15px" onclick="$('#coupon_div').toggle()">Add Coupon</span>
+                                </div>
+                            </div>
+                            <div class="priceflex1" id="coupon_div" style="display: none">
+                                <div>
+                                    <input type="text" name="coupon" id="coupon-field" class="form-control " placeholder="Coupon Code" style="">
+                                    <div class="flex22">
+                                        <span id="coupon_error_view" style="color: red;font-size: 12px"></span>
+                                        <span id="coupon_success_view" style="color: green;font-size: 12px"></span>
+                                    </div>
+                                </div>
+                                <div class="flex22">
+                                    <span class="btn btn-secondary" onclick="apply_coupon('coupon-field')">Apply Coupon</span>
+                                </div>
+
+                            </div>
+                            <div class="priceflex1" id="coupon_discount_div" style="display: none">
+                                <div>
+                                    <p>Coupon Discount</p>
+                                </div>
+                                <div class="flex22" id="discount_view">
+
+                                </div>
+                            </div>
+                            <div class="priceflex1">
+                                <div>
                                     <p>Total</p>
                                 </div>
                                 <div class="flex22">
@@ -901,7 +930,7 @@ position: relative;
         var addons_titles=[],costumes_titles=[],rooms_titles=[],tickets_titles=[];
         var addons_added=[],costumes_added=[],rooms_added=[],tickets_added=[];
         var costume_total=0,addons_total=0,rooms_total=0,tickets_total=0,total=0,total_room_persons=0,duration_total= {{$low_total}};
-        var date_ranges=[],room_range_pricing=[],date_range_id=0,room_price_one=[],p_type='';
+        var date_ranges=[],room_range_pricing=[],date_range_id=0,room_price_one=[],p_type='',discount_coupon=0;
         @foreach($trip->date_ranges as $d_range)
         date_ranges[{{$d_range->id}}]={{$d_range->range_price}};
         @endforeach
@@ -1393,14 +1422,19 @@ for(var tr=1;tr<=total_travelers;tr++){
 
             // Deposit=parseFloat(total)*Deposit;
             var installment= {{(float)$installments['lowest']}};
-            // console.log(payment_type+'$'+Deposit+' Deposit + $'+installment+' for '+totalinstallment_+' Months');
-            var installments_data=get_installments();
-
+            // console.log(payment_type+'$'+Deposit+' Deposit + $'+installment+' for '+totalinstallment_+' Months')
             var subtotal=total;
             $('#subtotal').html('$'+subtotal.toFixed(2));
             var processing=processing_fee(total);
 
             total+=processing;
+
+            if(discount_coupon>0){
+                total-=discount_coupon;
+            }
+            var installments_data=get_installments();
+
+
             $('.finaltotal').html('$'+total.toFixed(2));
             $('#final_total').html('$'+total.toFixed(2));
             $('#processing_fee').html('$'+processing.toFixed(2));
@@ -1462,6 +1496,45 @@ for(var tr=1;tr<=total_travelers;tr++){
                 installment_data=data;
             });
             return installment_data;
+        }
+        function apply_coupon(coupon_field_id){
+            var coupon_code=$('#'+coupon_field_id).val();
+            if(coupon_code!==''){
+                var coupon_code_res;
+                var url_='{{route('frontend.verify_coupon',['trip'=>$trip->id,'amount'=>'0amount','code'=>'0code'])}}'.replace('0amount',total);
+                url_=url_.replace('0code',coupon_code);
+                $.get(url_,function (data){
+                    console.log(data);
+                    coupon_code_res=data;
+                    if($.trim(data.coupon_is_valid)==1){
+                        console.log('coupon valid');
+                        total=data.total;
+                        discount_coupon=data.discount.toFixed(2);
+                        $('#coupon_discount_div').show();
+                        $('#discount_view').html('$'+data.discount.toFixed(2));
+                        $('#coupon_error_view').html('');
+                        $('#coupon_success_view').html('Coupon is Valid');
+
+                        calculate_total();
+                    }else{
+                        $('#coupon_discount_div').hide();
+                        $('#discount_view').html('$0');
+                        $('#coupon_error_view').html(data.error);
+                        $('#coupon_success_view').html('');
+                    }
+                    {{--$('#deposit_view').html('$'+data.deposit);--}}
+                    {{--deposit=data.deposit;--}}
+                    {{--@foreach($installments['installment'] as $num => $instalment)--}}
+                    {{--console.log(data.installment{{$num}}.ajax_text);--}}
+                    {{--$('#installment_{{$num}}').html(data.installment{{$num}}.ajax_text);--}}
+
+                    {{--@endforeach--}}
+                    {{--$('#deposit_value_only').html('$'+data.deposit);--}}
+                    {{--$('#installment_starting').html('$'+data.lowest);--}}
+                    {{--installment_data=data;--}}
+                });
+                return coupon_code_res;
+            }
         }
     </script>
     <script>

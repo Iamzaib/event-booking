@@ -12,6 +12,7 @@ use App\Models\Costume;
 use App\Models\CostumeAttribute;
 use App\Models\CostumeBookingAttribute;
 use App\Models\Country;
+use App\Models\Coupon;
 use App\Models\Event;
 use App\Models\EventAddon;
 use App\Models\EventBooking;
@@ -258,6 +259,12 @@ class CheckoutController extends Controller
         }
 
         $total=$subtotal+processing_fee($subtotal);
+        if(isset($rq->coupon)){
+            $vC=$this->verify_coupon($total,$rq->coupon);
+            if($vC['discount']>0){
+               $total-= $vC['discount'];
+            }
+        }
         $booking->update([
             'booking_total'=>$total,
         ]);
@@ -372,6 +379,39 @@ class CheckoutController extends Controller
         $installments['all']=$all_text;
         $installments['lowest']=round(min($installment_low),2);
         return $installments;
+    }
+
+    public function verify_coupon($amount,$code){
+        $data=[];
+        $coupon_is_valid=false;
+         $coupon_q=Coupon::where('code','=',$code);
+        $data['coupon_is_valid']=0;
+        if($coupon_q->count()>0){
+            $coupon_q=$coupon_q->where('expiry','>=',now());
+            if($coupon_q->count()>0){
+                $coupon_q=$coupon_q->where('minimum_amount','<=',$amount);
+                if($coupon_q->count()>0){
+                    $coupon=$coupon_q->first();
+                    $coupon_is_valid=true;
+                    $data['coupon_is_valid']=1;
+                }
+            }else{
+                $data['error']='Coupon Code Expired';
+            }
+        }else{
+            $data['error']='Invalid Coupon Code';
+        }
+        $data['total']=$data['discount']=0;
+        if($coupon_is_valid){
+            if($coupon->type=='Percent'){
+                $data['discount']=$discount=(($coupon->value/100)*$amount);
+                $data['total']=$amount-$discount;
+            }else{
+                $data['discount']=$discount=$coupon->value;
+                $data['total']=$amount-$discount;
+            }
+        }
+        return $data;
     }
     public function checkout_review($step,Event $trip,HotelRoom $room){
         if(!isset($trip->id)){

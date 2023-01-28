@@ -65,6 +65,7 @@ Route::controller(CheckoutController::class)->group(function () {
             });
         Route::get('custom-trip/{trip_title}/{trip}', 'EventsController@customized_trip')->name('custom_trip');
         Route::get('get_installments/{trip}/{amount}', 'EventsController@get_installments')->name('get_installments');
+        Route::get('apply_coupon/{trip}/{amount}/{code}', 'EventsController@verify_coupon')->name('verify_coupon');
         Route::get('invoice/{invoice}', 'PaymentsController@invoice')->name('invoice_view');
         Route::post('new-payment/{payment}', 'PaymentsController@trip_balance_payment')->name('trip_balance_payment');
         Route::post('frontend/profile/password', 'ProfileController@password')->name('profile.password');

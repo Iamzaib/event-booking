@@ -10,6 +10,7 @@ use App\Http\Requests\UpdateEventRequest;
 use App\Models\City;
 use App\Models\Costume;
 use App\Models\Country;
+use App\Models\Coupon;
 use App\Models\Event;
 use App\Models\EventAddon;
 use App\Models\EventInstallment;
@@ -318,6 +319,50 @@ $data['avg_ratings']=0;
         }catch (\Exception $e){
             $data=$e;
         }
+            if($request->ajax()){
+                return \response()->json($data);
+            }
+            return $data;
+    }
+    public function verify_coupon(Request $request,Event $trip,$amount,$code){
+        $data=[];
+        $coupon_is_valid=false;
+//        $coupon=Coupon::where('code','=',$code)->where('minimum_amount','<=',$amount)->where('expiry','>=',now())->first();
+        $coupon_q=Coupon::where('code','=',$code);
+    $data['coupon_is_valid']=0;
+        if($coupon_q->count()>0){
+            $coupon_q=$coupon_q->where('expiry','>=',now());
+            if($coupon_q->count()>0){
+                $coupon_q=$coupon_q->where('minimum_amount','<=',$amount);
+                if($coupon_q->count()>0){
+                    $coupon=$coupon_q->first();
+                    $coupon_is_valid=true;
+                    $data['coupon_is_valid']=1;
+                }else{
+                    $coupon=Coupon::where('code','=',$code)->where('expiry','>=',now())->first();
+
+                    $data['error']='Minimum Total '.display_currency($coupon->minimum_amount).' is required for Coupon Code';
+                }
+            }else{
+                $data['error']='Coupon Code Expired';
+            }
+        }else{
+            $data['error']='Invalid Coupon Code';
+        }
+        if($coupon_is_valid){
+            if($coupon->type=='Percent'){
+                $data['discount']=$discount=(($coupon->value/100)*$amount);
+                $data['total']=$amount-$discount;
+            }else{
+                $data['discount']=$discount=$coupon->value;
+                $data['total']=$amount-$discount;
+            }
+        }
+//        try {
+//            $data=$this->calulate_installments($trip,$amount);
+//        }catch (\Exception $e){
+//            $data=$e;
+//        }
             if($request->ajax()){
                 return \response()->json($data);
             }
